@@ -7,6 +7,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/Dotnet.gitignore
 
+# 環境変数
+WebApi.Api/appsettings.Development.json
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
