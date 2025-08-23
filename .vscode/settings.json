@@ -1,0 +1,33 @@
+{
+  // フォーマット設定
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp"
+  },
+  // 拡張機能設定
+  "conventionalCommits.scopes": [
+    "api",
+    "application",
+    "domain",
+    "infrastructure",
+    "workspace",
+    "tests",
+    "package"
+  ],
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "db",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "DB",
+      "database": "db",
+      "username": "postgres",
+      "password": "postgres"
+    }
+  ]
+}

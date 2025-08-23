@@ -9,6 +9,7 @@
                 "ms-dotnettools.csdevkit",
                 "mtxr.sqltools",
                 "mtxr.sqltools-driver-pg",
+				"esbenp.prettier-vscode",
                 "streetsidesoftware.code-spell-checker"
             ]
 		}
