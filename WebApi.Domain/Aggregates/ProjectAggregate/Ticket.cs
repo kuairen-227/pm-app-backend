@@ -18,9 +18,24 @@ public sealed class Ticket : Entity
         ProjectId = projectId;
         Title = title;
         Deadline = deadline;
+        Status = Status.Create(Status.StatusType.Todo);
     }
 
-    public void Assign(Guid userId) => AssigneeId = userId;
+    public void Assign(Guid assigneeId)
+    {
+        if (assigneeId == Guid.Empty)
+            throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
+
+        AssigneeId = assigneeId;
+    }
 
     public void ChangeStatus(Status.StatusType status) => Status = Status.Create(status);
+
+    public void SetCompletionCriteria(string completionCriteria)
+    {
+        if (string.IsNullOrWhiteSpace(completionCriteria))
+            throw new DomainException("COMPLETION_CRITERIA_REQUIRED", "Completion criteria は必須です");
+
+        CompletionCriteria = completionCriteria;
+    }
 }
