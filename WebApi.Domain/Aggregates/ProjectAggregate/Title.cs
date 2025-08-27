@@ -9,7 +9,7 @@ public sealed class Title : ValueObject
     private Title(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("Title は必須です");
+            throw new DomainException("TITLE_REQUIRED", "Title は必須です");
 
         Value = value;
     }

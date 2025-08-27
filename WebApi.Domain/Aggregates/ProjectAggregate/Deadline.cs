@@ -9,7 +9,7 @@ public sealed class Deadline : ValueObject
     private Deadline(DateTime value)
     {
         if (value < DateTime.UtcNow.Date)
-            throw new ArgumentException("Deadline は過去にできません");
+            throw new DomainException("DEADLINE_PAST_NOT_ALLOWED", "Deadline は過去にできません");
 
         Value = value;
     }

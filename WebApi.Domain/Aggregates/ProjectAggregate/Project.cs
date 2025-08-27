@@ -14,9 +14,9 @@ public sealed class Project : Entity
     public Project(string name, string? description, Guid ownerId)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Name は必須です");
+            throw new DomainException("PROJECT_NAME_REQUIRED", "Name は必須です");
         if (ownerId == Guid.Empty)
-            throw new ArgumentException("OwnerId は必須です");
+            throw new DomainException("PROJECT_OWNER_ID_REQUIRED", "OwnerId は必須です");
 
         Name = name;
         Description = description;

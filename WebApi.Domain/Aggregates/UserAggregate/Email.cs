@@ -10,9 +10,9 @@ public sealed class Email : ValueObject
     private Email(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("Email は必須です");
+            throw new DomainException("EMAIL_REQUIRED", "Email は必須です");
         if (!Regex.IsMatch(value, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-            throw new ArgumentException("不正な Email です");
+            throw new DomainException("EMAIL_INVALID", "不正な Email です");
 
         Value = value;
     }

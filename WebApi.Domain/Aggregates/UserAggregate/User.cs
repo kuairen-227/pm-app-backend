@@ -16,7 +16,7 @@ public sealed class User : Entity
     public User(string name, Email email, Role role)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Name は必須です");
+            throw new DomainException("USER_NAME_REQUIRED", "Name は必須です");
 
         Name = name;
         Email = email;

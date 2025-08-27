@@ -10,8 +10,13 @@ public sealed class Notification : Entity
 
     public Notification(Guid userId, string message)
     {
+        if (userId == Guid.Empty)
+            throw new DomainException("NOTIFICATION_USER_ID_REQUIRED", "UserId は必須です");
+        if (string.IsNullOrWhiteSpace(message))
+            throw new DomainException("NOTIFICATION_MESSAGE_REQUIRED", "Message は必須です");
+
         UserId = userId;
-        Message = message ?? throw new ArgumentNullException(nameof(message));
+        Message = message;
         IsRead = false;
     }
 
