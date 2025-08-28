@@ -9,7 +9,7 @@ public sealed class Project : Entity
     public Guid OwnerId { get; private set; }
 
     private readonly List<Ticket> _tickets = new();
-    private IReadOnlyList<Ticket> Tickets => _tickets.AsReadOnly();
+    public IReadOnlyList<Ticket> Tickets => _tickets.AsReadOnly();
 
     public Project(string name, string? description, Guid ownerId)
     {
@@ -25,6 +25,9 @@ public sealed class Project : Entity
 
     public void AddTicket(Ticket ticket)
     {
+        if (ticket is null)
+            throw new DomainException("TICKET_REQUIRED", "Ticket は必須です");
+
         _tickets.Add(ticket);
     }
 }
