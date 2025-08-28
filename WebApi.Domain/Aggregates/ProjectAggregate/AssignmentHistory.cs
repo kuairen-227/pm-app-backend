@@ -2,16 +2,28 @@ using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.ProjectAggregate;
 
-public sealed class AssignmentHistory : Entity
+public sealed class AssignmentHistory : ValueObject
 {
-    public Guid TicketId { get; private set; }
     public Guid AssigneeId { get; private set; }
     public DateTime AssignedAt { get; private set; }
 
-    public AssignmentHistory(Guid ticketId, Guid assigneeId)
+    public AssignmentHistory(Guid assigneeId, DateTime? assignedAt = null)
     {
-        TicketId = ticketId;
+        if (assigneeId == Guid.Empty)
+            throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
+
         AssigneeId = assigneeId;
-        AssignedAt = DateTime.UtcNow;
+        AssignedAt = assignedAt ?? DateTime.UtcNow;
+    }
+
+    public static AssignmentHistory Create(Guid assigneeId, DateTime? assignedAt = null)
+    {
+        return new AssignmentHistory(assigneeId, assignedAt);
+    }
+
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        yield return AssigneeId;
+        yield return AssignedAt;
     }
 }
