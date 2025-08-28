@@ -8,7 +8,7 @@ public class TicketBuilder
     private string _title = "デフォルトチケット";
     private Guid? _assigneeId = null;
     private DateTime _deadline = DateTime.UtcNow.AddDays(1);
-    private Status.StatusType _status = Status.StatusType.Todo;
+    private TicketStatus.StatusType _status = TicketStatus.StatusType.Todo;
     private string? _completionCriteria = null;
 
     public TicketBuilder WithProjectId(Guid projectId)
@@ -35,7 +35,7 @@ public class TicketBuilder
         return this;
     }
 
-    public TicketBuilder WithStatus(Status.StatusType status)
+    public TicketBuilder WithStatus(TicketStatus.StatusType status)
     {
         _status = status;
         return this;
@@ -60,7 +60,7 @@ public class TicketBuilder
             ticket.Assign(_assigneeId.Value);
         }
 
-        if (_status != Status.StatusType.Todo)
+        if (_status != TicketStatus.StatusType.Todo)
         {
             ticket.ChangeStatus(_status);
         }

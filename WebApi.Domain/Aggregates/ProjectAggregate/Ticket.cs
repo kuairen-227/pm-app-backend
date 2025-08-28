@@ -8,7 +8,7 @@ public sealed class Ticket : Entity
     public Title Title { get; private set; } = null!;
     public Guid? AssigneeId { get; private set; }
     public Deadline Deadline { get; private set; } = null!;
-    public Status Status { get; private set; } = null!;
+    public TicketStatus Status { get; private set; } = null!;
     public string? CompletionCriteria { get; private set; }
 
     private Ticket() { } // EF Core 用
@@ -18,7 +18,7 @@ public sealed class Ticket : Entity
         ProjectId = projectId;
         Title = title;
         Deadline = deadline;
-        Status = Status.Create(Status.StatusType.Todo);
+        Status = TicketStatus.Create(TicketStatus.StatusType.Todo);
     }
 
     public void Assign(Guid assigneeId)
@@ -29,7 +29,7 @@ public sealed class Ticket : Entity
         AssigneeId = assigneeId;
     }
 
-    public void ChangeStatus(Status.StatusType status) => Status = Status.Create(status);
+    public void ChangeStatus(TicketStatus.StatusType status) => Status = TicketStatus.Create(status);
 
     public void SetCompletionCriteria(string completionCriteria)
     {

@@ -2,17 +2,17 @@ using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.ProjectAggregate;
 
-public sealed class Status : ValueObject
+public sealed class TicketStatus : ValueObject
 {
     public enum StatusType { Todo, InProgress, Resolved, Done }
     public StatusType Value { get; }
 
-    private Status(StatusType value)
+    private TicketStatus(StatusType value)
     {
         Value = value;
     }
 
-    public static Status Create(StatusType value) => new Status(value);
+    public static TicketStatus Create(StatusType value) => new TicketStatus(value);
 
     public override string ToString() => Value.ToString();
 
