@@ -16,7 +16,9 @@
     "infrastructure",
     "workspace",
     "tests",
-    "package"
+    "package",
+    "user",
+    "project"
   ],
   "sqltools.connections": [
     {
