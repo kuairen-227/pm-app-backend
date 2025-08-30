@@ -1,7 +1,8 @@
 using FluentAssertions;
+using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Common;
 
-namespace WebApi.Domain.Aggregates.ProjectAggregate;
+namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
 
 public class TicketTitleTests
 {
@@ -22,7 +23,7 @@ public class TicketTitleTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void 異常系_Titleが空の場合(string? title)
+    public void 異常系_インスタンス生成_Titleが空の場合(string? title)
     {
         // Act
         Action act = () => TicketTitle.Create(title!);
