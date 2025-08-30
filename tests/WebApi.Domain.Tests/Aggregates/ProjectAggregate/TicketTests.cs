@@ -146,4 +146,65 @@ public class TicketTests
         var ex = act.Should().Throw<DomainException>().Which;
         ex.ErrorCode.Should().Be("COMPLETION_CRITERIA_REQUIRED");
     }
+
+    [Fact]
+    public void 正常系_AddComment_1件()
+    {
+        // Arrange
+        var ticket = new TicketBuilder().Build();
+
+        // Act
+        ticket.AddComment(Guid.NewGuid(), "コメント");
+
+        // Assert
+        ticket.Comments.Should().ContainSingle();
+        ticket.Comments.First().Content.Should().Be("コメント");
+    }
+
+    [Fact]
+    public void 正常系_AddComment_2件()
+    {
+        // Arrange
+        var ticket = new TicketBuilder().Build();
+
+        // Act
+        ticket.AddComment(Guid.NewGuid(), "コメント1");
+        ticket.AddComment(Guid.NewGuid(), "コメント2");
+
+        // Assert
+        ticket.Comments.Should().HaveCount(2);
+        ticket.Comments.ElementAt(0).Content.Should().Be("コメント1");
+        ticket.Comments.ElementAt(1).Content.Should().Be("コメント2");
+    }
+
+    [Fact]
+    public void 正常系_RemoveComment()
+    {
+        // Arrange
+        var ticket = new TicketBuilder().Build();
+        var comment1 = ticket.AddComment(Guid.NewGuid(), "コメント1");
+        var comment2 = ticket.AddComment(Guid.NewGuid(), "コメント2");
+
+        // Act
+        ticket.RemoveComment(comment1);
+
+        // Assert
+        ticket.Comments.Should().ContainSingle();
+        ticket.Comments.First().Content.Should().Be("コメント2");
+    }
+
+    [Fact]
+    public void 異常系_RemoveComment_存在しないコメントの場合()
+    {
+        // Arrange
+        var ticket = new TicketBuilder().Build();
+        var comment = new TicketCommentBuilder().Build();
+
+        // Act
+        Action act = () => ticket.RemoveComment(comment);
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>().Which;
+        ex.ErrorCode.Should().Be("COMMENT_NOT_FOUND");
+    }
 }

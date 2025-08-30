@@ -11,6 +11,9 @@ public sealed class Ticket : Entity
     public TicketStatus Status { get; private set; } = null!;
     public string? CompletionCriteria { get; private set; }
 
+    private readonly List<TicketComment> _comments = new();
+    public IReadOnlyList<TicketComment> Comments => _comments.AsReadOnly();
+
     private readonly List<AssignmentHistory> _assignmentHistories = new();
     public IReadOnlyList<AssignmentHistory> AssignmentHistories => _assignmentHistories.AsReadOnly();
 
@@ -56,5 +59,20 @@ public sealed class Ticket : Entity
             throw new DomainException("COMPLETION_CRITERIA_REQUIRED", "Completion criteria は必須です");
 
         CompletionCriteria = completionCriteria;
+    }
+
+    public TicketComment AddComment(Guid authorId, string content)
+    {
+        var comment = TicketComment.Create(Id, authorId, content);
+        _comments.Add(comment);
+        return comment;
+    }
+
+    public void RemoveComment(TicketComment comment)
+    {
+        if (!_comments.Contains(comment))
+            throw new DomainException("COMMENT_NOT_FOUND", "コメントが見つかりません");
+
+        _comments.Remove(comment);
     }
 }
