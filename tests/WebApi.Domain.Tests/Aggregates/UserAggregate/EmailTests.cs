@@ -20,7 +20,7 @@ public class EmailTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void 異常系_Emailが空の場合(string? input)
+    public void 異常系_インスタンス生成_Emailが空の場合(string? input)
     {
         // Act
         Action act = () => Email.Create(input!);
@@ -36,7 +36,7 @@ public class EmailTests
     [InlineData("test@")]
     [InlineData("@example.com")]
     [InlineData("test@@example.com")]
-    public void 異常系_Emailが不正な場合(string input)
+    public void 異常系_インスタンス生成_Emailが不正な場合(string input)
     {
         // Act
         var act = () => Email.Create(input);

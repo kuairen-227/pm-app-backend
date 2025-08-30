@@ -7,7 +7,7 @@ namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
 public class DeadlineTests
 {
     [Fact]
-    public void 正常系_今日日付_インスタンス生成()
+    public void 正常系_インスタンス生成_今日日付()
     {
         // Arrange
         var today = DateTime.UtcNow.Date;
@@ -20,7 +20,7 @@ public class DeadlineTests
     }
 
     [Fact]
-    public void 正常系_未来日付_インスタンス生成()
+    public void 正常系_インスタンス生成_未来日付()
     {
         // Arrange
         var tomorrow = DateTime.UtcNow.Date.AddDays(1);
