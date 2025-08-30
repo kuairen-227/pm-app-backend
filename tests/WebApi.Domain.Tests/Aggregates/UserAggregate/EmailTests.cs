@@ -7,7 +7,7 @@ namespace WebApi.Domain.Tests.Aggregates.UserAggregate;
 public class EmailTests
 {
     [Fact]
-    public void 正常系_インスタンス作成()
+    public void 正常系_インスタンス生成()
     {
         // Act
         var email = Email.Create("test@example.com");
@@ -23,11 +23,11 @@ public class EmailTests
     public void 異常系_Emailが空の場合(string? input)
     {
         // Act
-        var act = () => Email.Create(input!);
+        Action act = () => Email.Create(input!);
 
         // Assert
-        act.Should().Throw<DomainException>()
-            .Where(e => e.ErrorCode == "EMAIL_REQUIRED");
+        var ex = act.Should().Throw<DomainException>().Which;
+        ex.ErrorCode.Should().Be("EMAIL_REQUIRED");
     }
 
     [Theory]
@@ -42,18 +42,18 @@ public class EmailTests
         var act = () => Email.Create(input);
 
         // Assert
-        act.Should().Throw<DomainException>()
-            .Where(e => e.ErrorCode == "EMAIL_INVALID");
+        var ex = act.Should().Throw<DomainException>().Which;
+        ex.ErrorCode.Should().Be("EMAIL_INVALID");
     }
 
     [Fact]
     public void 正常系_値が同じ場合()
     {
-        // Arrange
+        // Arrange & Act
         var email1 = Email.Create("test@example.com");
         var email2 = Email.Create("test@example.com");
 
-        // Then
+        // Act
         email1.Should().Be(email2);
         email1.GetHashCode().Should().Be(email2.GetHashCode());
         email1.Equals(email2).Should().BeTrue();
