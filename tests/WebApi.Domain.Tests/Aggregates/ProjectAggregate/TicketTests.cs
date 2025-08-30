@@ -41,6 +41,7 @@ public class TicketTests
 
         // Assert
         ticket.AssigneeId.Should().Be(user.Id);
+        ticket.AssignmentHistories.Should().HaveCount(1);
     }
 
     [Fact]
