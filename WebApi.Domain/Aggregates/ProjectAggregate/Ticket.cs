@@ -34,7 +34,7 @@ public sealed class Ticket : Entity
         if (AssigneeId == assigneeId)
             throw new DomainException("ALREADY_ASSIGNED_SAME_USER", "既に同じユーザーに割り当てられています");
 
-        var history = AssignmentHistory.Create(assigneeId, assignedAt);
+        var history = AssignmentHistory.Create(assigneeId, assignedAt ?? DateTime.UtcNow);
         _assignmentHistories.Add(history);
 
         AssigneeId = assigneeId;
