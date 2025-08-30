@@ -5,7 +5,7 @@ namespace WebApi.Domain.Aggregates.ProjectAggregate;
 public sealed class Ticket : Entity
 {
     public Guid ProjectId { get; private set; }
-    public Title Title { get; private set; } = null!;
+    public TicketTitle Title { get; private set; } = null!;
     public Guid? AssigneeId { get; private set; }
     public Deadline Deadline { get; private set; } = null!;
     public TicketStatus Status { get; private set; } = null!;
@@ -16,7 +16,7 @@ public sealed class Ticket : Entity
 
     private Ticket() { } // EF Core 用
 
-    public Ticket(Guid projectId, Title title, Deadline deadline)
+    public Ticket(Guid projectId, TicketTitle title, Deadline deadline)
     {
         if (projectId == Guid.Empty)
             throw new DomainException("PROJECT_ID_REQUIRED", "Project ID は必須です");

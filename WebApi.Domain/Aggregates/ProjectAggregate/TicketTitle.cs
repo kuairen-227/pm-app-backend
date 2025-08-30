@@ -2,19 +2,19 @@ using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.ProjectAggregate;
 
-public sealed class Title : ValueObject
+public sealed class TicketTitle : ValueObject
 {
     public string Value { get; }
 
-    private Title(string value)
+    private TicketTitle(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new DomainException("TITLE_REQUIRED", "Title は必須です");
+            throw new DomainException("TICKET_TITLE_REQUIRED", "TicketTitle は必須です");
 
         Value = value;
     }
 
-    public static Title Create(string value) => new Title(value);
+    public static TicketTitle Create(string value) => new TicketTitle(value);
 
     protected override IEnumerable<object?> GetEqualityComponents()
     {

@@ -51,7 +51,7 @@ public class TicketBuilder
     {
         var ticket = new Ticket(
             _projectId,
-            Title.Create(_title),
+            TicketTitle.Create(_title),
             Deadline.Create(_deadline)
         );
 
