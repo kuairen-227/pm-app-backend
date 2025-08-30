@@ -3,7 +3,17 @@
   "ignorePaths": [".devcontainer/devcontainer.json", "*.csproj", ".gitignore"],
   "dictionaryDefinitions": [],
   "dictionaries": [],
-  "words": ["appsettings", "Mediat", "Npgsql"],
+  "words": [
+    "appsettings",
+    "coveragereport",
+    "globaltool",
+    "marocchino",
+    "Mediat",
+    "Npgsql",
+    "reportgenerator",
+    "reporttypes",
+    "targetdir"
+  ],
   "ignoreWords": [],
   "import": []
 }
