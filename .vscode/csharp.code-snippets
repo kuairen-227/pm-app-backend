@@ -1,0 +1,34 @@
+{
+  "XUnit Fact AAA": {
+    "prefix": "fact",
+    "body": [
+      "[Fact]",
+      "public void ${1:MethodName}()",
+      "{",
+      "    // Arrange",
+      "",
+      "    // Act",
+      "",
+      "    // Assert",
+      "}"
+    ],
+    "description": "XUnit Fact test template with Arrange/Act/Assert comments"
+  },
+
+  "XUnit Theory AAA": {
+    "prefix": "theory",
+    "body": [
+      "[Theory]",
+      "[InlineData(${1:})]",
+      "public void ${2:MethodName}(${3:})",
+      "{",
+      "    // Arrange",
+      "",
+      "    // Act",
+      "",
+      "    // Assert",
+      "}"
+    ],
+    "description": "XUnit Theory test template with Arrange/Act/Assert comments"
+  }
+}
