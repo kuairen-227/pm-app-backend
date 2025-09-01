@@ -68,10 +68,24 @@ public sealed class Ticket : Entity
         return comment;
     }
 
-    public void RemoveComment(TicketComment comment)
+    public void EditComment(Guid commentId, Guid authorId, string newContent)
     {
-        if (!_comments.Contains(comment))
-            throw new DomainException("COMMENT_NOT_FOUND", "コメントが見つかりません");
+        var comment = _comments.FirstOrDefault(c => c.Id == commentId)
+            ?? throw new DomainException("TICKET_COMMENT_NOT_FOUND", "Ticket Comment が見つかりません");
+
+        if (comment.AuthorId != authorId)
+            throw new DomainException("NOT_TICKET_COMMENT_AUTHOR", "Ticket Comment の作成者のみが編集できます");
+
+        comment.UpdateContent(newContent);
+    }
+
+    public void RemoveComment(Guid commentId, Guid authorId)
+    {
+        var comment = _comments.FirstOrDefault(c => c.Id == commentId)
+            ?? throw new DomainException("TICKET_COMMENT_NOT_FOUND", "Ticket Comment が見つかりません");
+
+        if (comment.AuthorId != authorId)
+            throw new DomainException("NOT_TICKET_COMMENT_AUTHOR", "Ticket Comment の作成者のみが削除できます");
 
         _comments.Remove(comment);
     }

@@ -178,6 +178,51 @@ public class TicketTests
     }
 
     [Fact]
+    public void 正常系_EditComment()
+    {
+        // Arrange
+        var ticket = new TicketBuilder().Build();
+        var comment = ticket.AddComment(Guid.NewGuid(), "コメント1");
+
+        // Act
+        ticket.EditComment(comment.Id, comment.AuthorId, "コメント1-編集");
+
+        // Assert
+        ticket.Comments.Should().ContainSingle();
+        ticket.Comments.First().Content.Should().Be("コメント1-編集");
+    }
+
+    [Fact]
+    public void 異常系_EditComment_存在しないコメントの場合()
+    {
+        // Arrange
+        var ticket = new TicketBuilder().Build();
+        var comment = new TicketCommentBuilder().Build();
+
+        // Act
+        Action act = () => ticket.EditComment(comment.Id, comment.AuthorId, "コメント1-編集");
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>().Which;
+        ex.ErrorCode.Should().Be("TICKET_COMMENT_NOT_FOUND");
+    }
+
+    [Fact]
+    public void 異常系_EditComment_作成者以外が編集しようとした場合()
+    {
+        // Arrange
+        var ticket = new TicketBuilder().Build();
+        var comment = ticket.AddComment(Guid.NewGuid(), "コメント");
+
+        // Act
+        Action act = () => ticket.EditComment(comment.Id, Guid.NewGuid(), "コメント-編集");
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>().Which;
+        ex.ErrorCode.Should().Be("NOT_TICKET_COMMENT_AUTHOR");
+    }
+
+    [Fact]
     public void 正常系_RemoveComment()
     {
         // Arrange
@@ -186,7 +231,7 @@ public class TicketTests
         var comment2 = ticket.AddComment(Guid.NewGuid(), "コメント2");
 
         // Act
-        ticket.RemoveComment(comment1);
+        ticket.RemoveComment(comment1.Id, comment1.AuthorId);
 
         // Assert
         ticket.Comments.Should().ContainSingle();
@@ -201,10 +246,25 @@ public class TicketTests
         var comment = new TicketCommentBuilder().Build();
 
         // Act
-        Action act = () => ticket.RemoveComment(comment);
+        Action act = () => ticket.RemoveComment(comment.Id, comment.AuthorId);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("COMMENT_NOT_FOUND");
+        ex.ErrorCode.Should().Be("TICKET_COMMENT_NOT_FOUND");
+    }
+
+    [Fact]
+    public void 異常系_RemoveComment_作成者以外が削除しようとした場合()
+    {
+        // Arrange
+        var ticket = new TicketBuilder().Build();
+        var comment = ticket.AddComment(Guid.NewGuid(), "コメント");
+
+        // Act
+        Action act = () => ticket.RemoveComment(comment.Id, Guid.NewGuid());
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>().Which;
+        ex.ErrorCode.Should().Be("NOT_TICKET_COMMENT_AUTHOR");
     }
 }
