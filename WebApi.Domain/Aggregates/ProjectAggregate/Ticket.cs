@@ -37,17 +37,28 @@ public sealed class Ticket : Entity
         if (AssigneeId == assigneeId)
             throw new DomainException("ALREADY_ASSIGNED_SAME_USER", "既に同じユーザーに割り当てられています");
 
-        var history = AssignmentHistory.Create(assigneeId, assignedAt ?? DateTime.UtcNow);
-        _assignmentHistories.Add(history);
+        AssignmentHistory history;
+        var changedAt = assignedAt ?? DateTime.UtcNow;
+        if (AssigneeId is null)
+        {
+            history = AssignmentHistory.Assigned(assigneeId, changedAt);
+        }
+        else
+        {
+            history = AssignmentHistory.Changed(assigneeId, AssigneeId.Value, changedAt);
+        }
 
+        _assignmentHistories.Add(history);
         AssigneeId = assigneeId;
     }
 
-    public void UnAssign()
+    public void UnAssign(DateTime? unassignedAt = null)
     {
         if (AssigneeId is null)
             throw new DomainException("NOT_ASSIGNED", "現在割り当てられていません");
 
+        var history = AssignmentHistory.Unassigned(AssigneeId.Value, unassignedAt ?? DateTime.UtcNow);
+        _assignmentHistories.Add(history);
         AssigneeId = null;
     }
 
