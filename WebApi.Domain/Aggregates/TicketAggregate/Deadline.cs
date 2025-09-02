@@ -1,6 +1,6 @@
 using WebApi.Domain.Common;
 
-namespace WebApi.Domain.Aggregates.ProjectAggregate;
+namespace WebApi.Domain.Aggregates.TicketAggregate;
 
 public sealed class Deadline : ValueObject
 {

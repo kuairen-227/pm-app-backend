@@ -1,8 +1,8 @@
 using FluentAssertions;
-using WebApi.Domain.Aggregates.ProjectAggregate;
+using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Common;
 
-namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
+namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
 public class DeadlineTests
 {

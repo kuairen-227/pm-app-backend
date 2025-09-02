@@ -1,8 +1,7 @@
-using System.Runtime.InteropServices;
 using FluentAssertions;
-using WebApi.Domain.Aggregates.ProjectAggregate;
+using WebApi.Domain.Aggregates.TicketAggregate;
 
-namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
+namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
 public class TicketStatusTests
 {

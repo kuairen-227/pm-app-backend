@@ -1,3 +1,4 @@
+using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.ProjectAggregate;
@@ -7,9 +8,6 @@ public sealed class Project : Entity
     public string Name { get; private set; }
     public string? Description { get; private set; }
     public Guid OwnerId { get; private set; }
-
-    private readonly List<Ticket> _tickets = new();
-    public IReadOnlyList<Ticket> Tickets => _tickets.AsReadOnly();
 
     public Project(string name, string? description, Guid ownerId)
     {
@@ -23,11 +21,8 @@ public sealed class Project : Entity
         OwnerId = ownerId;
     }
 
-    public void AddTicket(Ticket ticket)
+    public Ticket CreateTicket(TicketTitle title, Deadline deadline)
     {
-        if (ticket is null)
-            throw new DomainException("TICKET_REQUIRED", "Ticket は必須です");
-
-        _tickets.Add(ticket);
+        return new Ticket(Id, title, deadline);
     }
 }

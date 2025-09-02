@@ -1,4 +1,5 @@
 using WebApi.Domain.Aggregates.ProjectAggregate;
+using WebApi.Domain.Aggregates.TicketAggregate;
 
 namespace WebApi.Domain.Tests.Helpers;
 

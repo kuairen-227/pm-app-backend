@@ -1,9 +1,9 @@
 using FluentAssertions;
-using WebApi.Domain.Aggregates.ProjectAggregate;
+using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Common;
 using WebApi.Domain.Tests.Helpers;
 
-namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
+namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
 public class TicketTests
 {
