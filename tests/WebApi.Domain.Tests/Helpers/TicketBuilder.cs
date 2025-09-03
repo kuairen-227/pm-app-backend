@@ -7,7 +7,7 @@ public class TicketBuilder
     private Guid _projectId = Guid.NewGuid();
     private string _title = "デフォルトチケット";
     private Guid? _assigneeId = null;
-    private DateTime _deadline = DateTime.UtcNow.AddDays(1);
+    private DateTimeOffset _deadline = DateTimeOffset.UtcNow.AddDays(1);
     private TicketStatus.StatusType _status = TicketStatus.StatusType.Todo;
     private string? _completionCriteria = null;
 
@@ -29,7 +29,7 @@ public class TicketBuilder
         return this;
     }
 
-    public TicketBuilder WithDeadline(DateTime deadline)
+    public TicketBuilder WithDeadline(DateTimeOffset deadline)
     {
         _deadline = deadline;
         return this;

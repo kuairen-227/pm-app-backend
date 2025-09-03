@@ -8,13 +8,13 @@ public sealed class AssignmentHistory : ValueObject
     public AssignmentChangeType ChangeType { get; private set; }
     public Guid? AssigneeId { get; private set; }
     public Guid? PreviousAssigneeId { get; private set; }
-    public DateTime ChangedAt { get; private set; }
+    public DateTimeOffset ChangedAt { get; private set; }
 
     private AssignmentHistory(
         AssignmentChangeType changeType,
         Guid? assigneeId,
         Guid? previousAssigneeId,
-        DateTime changedAt)
+        DateTimeOffset changedAt)
     {
         ChangeType = changeType;
         AssigneeId = assigneeId;
@@ -22,7 +22,7 @@ public sealed class AssignmentHistory : ValueObject
         ChangedAt = changedAt;
     }
 
-    public static AssignmentHistory Assigned(Guid assigneeId, DateTime assignedAt)
+    public static AssignmentHistory Assigned(Guid assigneeId, DateTimeOffset assignedAt)
     {
         if (assigneeId == Guid.Empty)
             throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
@@ -34,7 +34,7 @@ public sealed class AssignmentHistory : ValueObject
             assignedAt);
     }
 
-    public static AssignmentHistory Changed(Guid assigneeId, Guid previousAssigneeId, DateTime changedAt)
+    public static AssignmentHistory Changed(Guid assigneeId, Guid previousAssigneeId, DateTimeOffset changedAt)
     {
         if (assigneeId == Guid.Empty)
             throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
@@ -48,7 +48,7 @@ public sealed class AssignmentHistory : ValueObject
             changedAt);
     }
 
-    public static AssignmentHistory Unassigned(Guid previousAssigneeId, DateTime unassignedAt)
+    public static AssignmentHistory Unassigned(Guid previousAssigneeId, DateTimeOffset unassignedAt)
     {
         if (previousAssigneeId == Guid.Empty)
             throw new DomainException("PREVIOUS_ASSIGNEE_ID_REQUIRED", "Previous Assignee ID は必須です");
