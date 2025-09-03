@@ -2,9 +2,9 @@ namespace WebApi.Domain.Aggregates.ProjectAggregate;
 
 public interface IProjectRepository
 {
-    Task<IEnumerable<Project>> GetAllAsync();
-    Task<Project?> GetByIdAsync(Guid projectId);
-    Task AddAsync(Project project);
-    Task UpdateAsync(Project project);
-    Task DeleteAsync(Project project);
+    Task<IEnumerable<Project>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<Project?> GetByIdAsync(Guid projectId, CancellationToken cancellationToken = default);
+    Task AddAsync(Project project, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Project project, CancellationToken cancellationToken = default);
+    Task DeleteAsync(Project project, CancellationToken cancellationToken = default);
 }
