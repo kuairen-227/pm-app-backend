@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using WebApi.Application.Common;
+using WebApi.Infrastructure.Contexts;
 using WebApi.Infrastructure.Database;
 
 namespace WebApi.Infrastructure;
@@ -10,6 +12,9 @@ public static class DependencyInjection
     {
         // DbContext 登録
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+
+        // UserContext 登録
+        services.AddScoped<IUserContext, UserContext>();
 
         return services;
     }
