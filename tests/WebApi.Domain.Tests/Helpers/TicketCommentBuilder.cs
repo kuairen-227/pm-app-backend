@@ -1,9 +1,9 @@
-using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Aggregates.TicketAggregate;
+using WebApi.Domain.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Helpers;
 
-public class TicketCommentBuilder
+public class TicketCommentBuilder : BaseBuilder<TicketCommentBuilder, TicketComment>
 {
     private Guid _ticketId = Guid.NewGuid();
     private Guid _authorId = Guid.NewGuid();
@@ -27,12 +27,14 @@ public class TicketCommentBuilder
         return this;
     }
 
-    public TicketComment Build()
+    public override TicketComment Build()
     {
         return TicketComment.Create(
             _ticketId,
             _authorId,
-            _content
+            _content,
+            _createdBy,
+            _clock
         );
     }
 }

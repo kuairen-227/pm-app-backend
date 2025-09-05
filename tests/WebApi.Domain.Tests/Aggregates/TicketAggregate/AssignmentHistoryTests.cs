@@ -10,13 +10,13 @@ public class AssignmentHistoryTests
     public void 正常系_Assigned()
     {
         // Arrange & Act
-        var assignmentHistory = AssignmentHistory.Assigned(Guid.NewGuid(), DateTime.UtcNow);
+        var result = AssignmentHistory.Assigned(Guid.NewGuid(), DateTime.UtcNow);
 
         // Assert
-        assignmentHistory.Should().NotBeNull();
-        assignmentHistory.ChangeType.Should().Be(AssignmentHistory.AssignmentChangeType.Assigned);
-        assignmentHistory.AssigneeId.Should().NotBeNull();
-        assignmentHistory.PreviousAssigneeId.Should().BeNull();
+        result.Should().NotBeNull();
+        result.ChangeType.Should().Be(AssignmentHistory.AssignmentChangeType.Assigned);
+        result.AssigneeId.Should().NotBeNull();
+        result.PreviousAssigneeId.Should().BeNull();
     }
 
     [Fact]
@@ -34,13 +34,13 @@ public class AssignmentHistoryTests
     public void 正常系_Changed()
     {
         // Arrange & Act
-        var assignmentHistory = AssignmentHistory.Changed(Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+        var result = AssignmentHistory.Changed(Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
 
         // Assert
-        assignmentHistory.Should().NotBeNull();
-        assignmentHistory.ChangeType.Should().Be(AssignmentHistory.AssignmentChangeType.Changed);
-        assignmentHistory.AssigneeId.Should().NotBeNull();
-        assignmentHistory.PreviousAssigneeId.Should().NotBeNull();
+        result.Should().NotBeNull();
+        result.ChangeType.Should().Be(AssignmentHistory.AssignmentChangeType.Changed);
+        result.AssigneeId.Should().NotBeNull();
+        result.PreviousAssigneeId.Should().NotBeNull();
     }
 
     [Fact]
@@ -69,13 +69,13 @@ public class AssignmentHistoryTests
     public void 正常系_Unassigned()
     {
         // Arrange & Act
-        var assignmentHistory = AssignmentHistory.Unassigned(Guid.NewGuid(), DateTime.UtcNow);
+        var result = AssignmentHistory.Unassigned(Guid.NewGuid(), DateTime.UtcNow);
 
         // Assert
-        assignmentHistory.Should().NotBeNull();
-        assignmentHistory.ChangeType.Should().Be(AssignmentHistory.AssignmentChangeType.Unassigned);
-        assignmentHistory.AssigneeId.Should().BeNull();
-        assignmentHistory.PreviousAssigneeId.Should().NotBeNull();
+        result.Should().NotBeNull();
+        result.ChangeType.Should().Be(AssignmentHistory.AssignmentChangeType.Unassigned);
+        result.AssigneeId.Should().BeNull();
+        result.PreviousAssigneeId.Should().NotBeNull();
     }
 
     [Fact]
@@ -97,25 +97,25 @@ public class AssignmentHistoryTests
         var assignedAt = DateTime.UtcNow;
 
         // Act
-        var assignmentHistory1 = AssignmentHistory.Assigned(assigneeId, assignedAt);
-        var assignmentHistory2 = AssignmentHistory.Assigned(assigneeId, assignedAt);
+        var result1 = AssignmentHistory.Assigned(assigneeId, assignedAt);
+        var result2 = AssignmentHistory.Assigned(assigneeId, assignedAt);
 
         // Assert
-        assignmentHistory1.Should().Be(assignmentHistory2);
-        assignmentHistory1.GetHashCode().Should().Be(assignmentHistory2.GetHashCode());
-        assignmentHistory1.Equals(assignmentHistory2).Should().BeTrue();
+        result1.Should().Be(result2);
+        result1.GetHashCode().Should().Be(result2.GetHashCode());
+        result1.Equals(result2).Should().BeTrue();
     }
 
     [Fact]
     public void 正常系_値が異なる場合()
     {
         // Arrange & Act
-        var assignmentHistory1 = AssignmentHistory.Assigned(Guid.NewGuid(), DateTime.UtcNow);
-        var assignmentHistory2 = AssignmentHistory.Assigned(Guid.NewGuid(), DateTime.UtcNow.AddMinutes(1));
+        var result1 = AssignmentHistory.Assigned(Guid.NewGuid(), DateTime.UtcNow);
+        var result2 = AssignmentHistory.Assigned(Guid.NewGuid(), DateTime.UtcNow.AddMinutes(1));
 
         // Assert
-        assignmentHistory1.Should().NotBe(assignmentHistory2);
-        assignmentHistory1.GetHashCode().Should().NotBe(assignmentHistory2.GetHashCode());
-        assignmentHistory1.Equals(assignmentHistory2).Should().BeFalse();
+        result1.Should().NotBe(result2);
+        result1.GetHashCode().Should().NotBe(result2.GetHashCode());
+        result1.Equals(result2).Should().BeFalse();
     }
 }

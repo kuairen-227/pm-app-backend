@@ -1,8 +1,9 @@
 using WebApi.Domain.Aggregates.UserAggregate;
+using WebApi.Domain.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Helpers;
 
-public class NotificationBuilder
+public class NotificationBuilder : BaseBuilder<NotificationBuilder, Notification>
 {
     private Guid _userId = Guid.NewGuid();
     private string _message = "デフォルトメッセージ";
@@ -26,11 +27,13 @@ public class NotificationBuilder
         return this;
     }
 
-    public Notification Build()
+    public override Notification Build()
     {
         var notification = new Notification(
             _userId,
-            _message
+            _message,
+            _createdBy,
+            _clock
         );
 
         if (_isRead)

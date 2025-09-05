@@ -6,21 +6,28 @@ namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
 public class TicketCommentTests
 {
+    private readonly TicketCommentBuilder _commentBuilder;
+
+    public TicketCommentTests()
+    {
+        _commentBuilder = new TicketCommentBuilder();
+    }
+
     [Fact]
     public void 正常系_インスタンス生成()
     {
         // Arrange & Act
-        var ticketComment = new TicketCommentBuilder().Build();
+        var result = _commentBuilder.Build();
 
         // Assert
-        ticketComment.Should().NotBeNull();
+        result.Should().NotBeNull();
     }
 
     [Fact]
     public void 異常系_インスタンス生成_TicketIdが空の場合()
     {
         // Arrange & Act
-        Action act = () => new TicketCommentBuilder().WithTicketId(Guid.Empty).Build();
+        Action act = () => _commentBuilder.WithTicketId(Guid.Empty).Build();
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -31,7 +38,7 @@ public class TicketCommentTests
     public void 異常系_インスタンス生成_AuthorIdが空の場合()
     {
         // Arrange & Act
-        Action act = () => new TicketCommentBuilder().WithAuthorId(Guid.Empty).Build();
+        Action act = () => _commentBuilder.WithAuthorId(Guid.Empty).Build();
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -45,7 +52,7 @@ public class TicketCommentTests
     public void 異常系_インスタンス生成_Contentが空の場合(string? content)
     {
         // Arrange & Act
-        Action act = () => new TicketCommentBuilder().WithContent(content!).Build();
+        Action act = () => _commentBuilder.WithContent(content!).Build();
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -56,13 +63,13 @@ public class TicketCommentTests
     public void 正常系_UpdateContent()
     {
         // Arrange
-        var ticketComment = new TicketCommentBuilder().Build();
+        var result = _commentBuilder.Build();
 
         // Act
-        ticketComment.UpdateContent("編集コメント");
+        result.UpdateContent("編集コメント");
 
         // Assert
-        ticketComment.Content.Should().Be("編集コメント");
+        result.Content.Should().Be("編集コメント");
     }
 
     [Theory]
@@ -72,7 +79,7 @@ public class TicketCommentTests
     public void 異常系_UpdateContent_Contentが空の場合(string? content)
     {
         // Arrange
-        var ticketComment = new TicketCommentBuilder().Build();
+        var ticketComment = _commentBuilder.Build();
 
         // Act
         Action act = () => ticketComment.UpdateContent(content!);

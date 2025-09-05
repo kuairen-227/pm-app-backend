@@ -2,27 +2,41 @@ using FluentAssertions;
 using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Common;
 using WebApi.Domain.Tests.Helpers;
+using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
 public class TicketTests
 {
+    private readonly TicketBuilder _ticketBuilder;
+    private readonly UserBuilder _userBuilder;
+    private readonly TicketCommentBuilder _commentBuilder;
+    private readonly FakeDateTimeProvider _clock;
+
+    public TicketTests()
+    {
+        _ticketBuilder = new TicketBuilder();
+        _userBuilder = new UserBuilder();
+        _commentBuilder = new TicketCommentBuilder();
+        _clock = new FakeDateTimeProvider();
+    }
+
     [Fact]
     public void 正常系_インスタンス生成()
     {
         // Arrange & Act
-        var ticket = new TicketBuilder().Build();
+        var result = _ticketBuilder.Build();
 
         // Assert
-        ticket.Should().NotBeNull();
-        ticket.Status.Value.Should().Be(TicketStatus.StatusType.Todo);
+        result.Should().NotBeNull();
+        result.Status.Value.Should().Be(TicketStatus.StatusType.Todo);
     }
 
     [Fact]
     public void 異常系_インスタンス生成_ProjectIdが空の場合()
     {
         // Assert & Build
-        Action act = () => new TicketBuilder().WithProjectId(Guid.Empty).Build();
+        Action act = () => _ticketBuilder.WithProjectId(Guid.Empty).Build();
 
         // Then
         var ex = act.Should().Throw<DomainException>().Which;
@@ -33,25 +47,25 @@ public class TicketTests
     public void 正常系_Assign()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
-        var user = new UserBuilder().Build();
+        var user = _userBuilder.Build();
 
         // Act
-        ticket.Assign(user.Id);
+        var result = _ticketBuilder.Build();
+        result.Assign(user.Id, _clock);
 
         // Assert
-        ticket.AssigneeId.Should().Be(user.Id);
-        ticket.AssignmentHistories.Should().HaveCount(1);
+        result.AssigneeId.Should().Be(user.Id);
+        result.AssignmentHistories.Should().HaveCount(1);
     }
 
     [Fact]
     public void 異常系_Assign_AssigneeIdが空の場合()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
+        var ticket = _ticketBuilder.Build();
 
         // Act
-        Action act = () => ticket.Assign(Guid.Empty);
+        Action act = () => ticket.Assign(Guid.Empty, _clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -62,12 +76,12 @@ public class TicketTests
     public void 異常系_Assign_アサイン済のユーザーの場合()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
-        var user = new UserBuilder().Build();
-        ticket.Assign(user.Id);
+        var ticket = _ticketBuilder.Build();
+        var user = _userBuilder.Build();
+        ticket.Assign(user.Id, _clock);
 
         // Act
-        Action act = () => ticket.Assign(user.Id);
+        Action act = () => ticket.Assign(user.Id, _clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -78,12 +92,12 @@ public class TicketTests
     public void 正常系_UnAssign()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
-        var user = new UserBuilder().Build();
-        ticket.Assign(user.Id);
+        var ticket = _ticketBuilder.Build();
+        var user = _userBuilder.Build();
+        ticket.Assign(user.Id, _clock);
 
         // Act
-        ticket.UnAssign();
+        ticket.UnAssign(_clock);
 
         // Assert
         ticket.AssigneeId.Should().BeNull();
@@ -93,10 +107,10 @@ public class TicketTests
     public void 異常系_UnAssign_未アサインの場合()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
+        var ticket = _ticketBuilder.Build();
 
         // Act
-        Action act = () => ticket.UnAssign();
+        Action act = () => ticket.UnAssign(_clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -107,7 +121,7 @@ public class TicketTests
     public void 正常系_ChangeStatus()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
+        var ticket = _ticketBuilder.Build();
 
         // Act
         ticket.ChangeStatus(TicketStatus.StatusType.InProgress);
@@ -120,7 +134,7 @@ public class TicketTests
     public void 正常系_SetCompletionCriteria()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
+        var ticket = _ticketBuilder.Build();
         var criteria = "完了条件";
 
         // Act
@@ -137,7 +151,7 @@ public class TicketTests
     public void 異常系_SetCompletionCriteria_空の場合(string? criteria)
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
+        var ticket = _ticketBuilder.Build();
 
         // Act
         Action act = () => ticket.SetCompletionCriteria(criteria!);
@@ -151,38 +165,53 @@ public class TicketTests
     public void 正常系_AddComment_1件()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
+        var ticket = _ticketBuilder.Build();
+        var author = _userBuilder.Build();
+        var content = "コメント";
+        var createdBy = author.Id;
 
         // Act
-        ticket.AddComment(Guid.NewGuid(), "コメント");
+        ticket.AddComment(author.Id, content, createdBy, _clock);
 
         // Assert
         ticket.Comments.Should().ContainSingle();
-        ticket.Comments.First().Content.Should().Be("コメント");
+        ticket.Comments.First().AuthorId.Should().Be(author.Id);
+        ticket.Comments.First().Content.Should().Be(content);
+        ticket.Comments.First().CreatedBy.Should().Be(createdBy);
+        ticket.Comments.First().CreatedAt.Should().Be(_clock.Now);
     }
 
     [Fact]
     public void 正常系_AddComment_2件()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
+        var ticket = _ticketBuilder.Build();
+        var authors = new[] { _userBuilder.Build(), _userBuilder.Build() };
+        var contents = new[] { "コメント1", "コメント2" };
+        var createdBys = new[] { authors[0].Id, authors[1].Id };
 
         // Act
-        ticket.AddComment(Guid.NewGuid(), "コメント1");
-        ticket.AddComment(Guid.NewGuid(), "コメント2");
+        ticket.AddComment(authors[0].Id, contents[0], createdBys[0], _clock);
+        ticket.AddComment(authors[1].Id, contents[1], createdBys[1], _clock);
 
         // Assert
         ticket.Comments.Should().HaveCount(2);
-        ticket.Comments.ElementAt(0).Content.Should().Be("コメント1");
-        ticket.Comments.ElementAt(1).Content.Should().Be("コメント2");
+        ticket.Comments.ElementAt(0).AuthorId.Should().Be(authors[0].Id);
+        ticket.Comments.ElementAt(1).AuthorId.Should().Be(authors[1].Id);
+        ticket.Comments.ElementAt(0).Content.Should().Be(contents[0]);
+        ticket.Comments.ElementAt(1).Content.Should().Be(contents[1]);
+        ticket.Comments.ElementAt(0).CreatedBy.Should().Be(createdBys[0]);
+        ticket.Comments.ElementAt(1).CreatedBy.Should().Be(createdBys[1]);
+        ticket.Comments.ElementAt(0).CreatedAt.Should().Be(_clock.Now);
+        ticket.Comments.ElementAt(1).CreatedAt.Should().Be(_clock.Now);
     }
 
     [Fact]
     public void 正常系_EditComment()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
-        var comment = ticket.AddComment(Guid.NewGuid(), "コメント1");
+        var ticket = _ticketBuilder.Build();
+        var comment = ticket.AddComment(Guid.NewGuid(), "コメント1", Guid.NewGuid(), _clock);
 
         // Act
         ticket.EditComment(comment.Id, comment.AuthorId, "コメント1-編集");
@@ -196,8 +225,8 @@ public class TicketTests
     public void 異常系_EditComment_存在しないコメントの場合()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
-        var comment = new TicketCommentBuilder().Build();
+        var ticket = _ticketBuilder.Build();
+        var comment = _commentBuilder.Build();
 
         // Act
         Action act = () => ticket.EditComment(comment.Id, comment.AuthorId, "コメント1-編集");
@@ -211,8 +240,8 @@ public class TicketTests
     public void 異常系_EditComment_作成者以外が編集しようとした場合()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
-        var comment = ticket.AddComment(Guid.NewGuid(), "コメント");
+        var ticket = _ticketBuilder.Build();
+        var comment = ticket.AddComment(Guid.NewGuid(), "コメント", Guid.NewGuid(), _clock);
 
         // Act
         Action act = () => ticket.EditComment(comment.Id, Guid.NewGuid(), "コメント-編集");
@@ -226,9 +255,9 @@ public class TicketTests
     public void 正常系_RemoveComment()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
-        var comment1 = ticket.AddComment(Guid.NewGuid(), "コメント1");
-        var comment2 = ticket.AddComment(Guid.NewGuid(), "コメント2");
+        var ticket = _ticketBuilder.Build();
+        var comment1 = ticket.AddComment(Guid.NewGuid(), "コメント1", Guid.NewGuid(), _clock);
+        var comment2 = ticket.AddComment(Guid.NewGuid(), "コメント2", Guid.NewGuid(), _clock);
 
         // Act
         ticket.RemoveComment(comment1.Id, comment1.AuthorId);
@@ -242,8 +271,8 @@ public class TicketTests
     public void 異常系_RemoveComment_存在しないコメントの場合()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
-        var comment = new TicketCommentBuilder().Build();
+        var ticket = _ticketBuilder.Build();
+        var comment = _commentBuilder.Build();
 
         // Act
         Action act = () => ticket.RemoveComment(comment.Id, comment.AuthorId);
@@ -257,8 +286,8 @@ public class TicketTests
     public void 異常系_RemoveComment_作成者以外が削除しようとした場合()
     {
         // Arrange
-        var ticket = new TicketBuilder().Build();
-        var comment = ticket.AddComment(Guid.NewGuid(), "コメント");
+        var ticket = _ticketBuilder.Build();
+        var comment = ticket.AddComment(Guid.NewGuid(), "コメント", Guid.NewGuid(), _clock);
 
         // Act
         Action act = () => ticket.RemoveComment(comment.Id, Guid.NewGuid());

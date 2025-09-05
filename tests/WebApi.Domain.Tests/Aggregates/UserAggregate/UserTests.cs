@@ -6,14 +6,23 @@ namespace WebApi.Domain.Tests.Aggregates.UserAggregate;
 
 public class UserTests
 {
+    private readonly UserBuilder _userBuilder;
+    private readonly NotificationBuilder _notificationBuilder;
+
+    public UserTests()
+    {
+        _userBuilder = new UserBuilder();
+        _notificationBuilder = new NotificationBuilder();
+    }
+
     [Fact]
     public void 正常系_インスタンス生成()
     {
         // Arrange & Act
-        var user = new UserBuilder().Build();
+        var result = _userBuilder.Build();
 
         // Assert
-        user.Should().NotBeNull();
+        result.Should().NotBeNull();
     }
 
     [Theory]
@@ -23,7 +32,7 @@ public class UserTests
     public void 異常系_インスタンス生成_Nameが空の場合(string? name)
     {
         // Arrange & Act
-        Action act = () => new UserBuilder().WithName(name!).Build();
+        Action act = () => _userBuilder.WithName(name!).Build();
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -34,29 +43,29 @@ public class UserTests
     public void 正常系_AddNotification_1件()
     {
         // Arrange
-        var user = new UserBuilder().Build();
         var notification = new NotificationBuilder().Build();
 
         // Act
-        user.AddNotification(notification);
+        var result = _userBuilder.Build();
+        result.AddNotification(notification);
 
         // Assert
-        user.Notifications.Should().Contain(notification);
+        result.Notifications.Should().Contain(notification);
     }
 
     [Fact]
     public void 正常系_AddNotification_2件()
     {
         // Arrange
-        var user = new UserBuilder().Build();
         var notification1 = new NotificationBuilder().Build();
         var notification2 = new NotificationBuilder().Build();
 
         // Act
-        user.AddNotification(notification1);
-        user.AddNotification(notification2);
+        var result = _userBuilder.Build();
+        result.AddNotification(notification1);
+        result.AddNotification(notification2);
 
         // Assert
-        user.Notifications.Should().Contain(new[] { notification1, notification2 });
+        result.Notifications.Should().Contain([notification1, notification2]);
     }
 }

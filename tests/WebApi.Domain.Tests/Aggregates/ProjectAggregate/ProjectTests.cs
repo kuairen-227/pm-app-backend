@@ -1,7 +1,7 @@
 using FluentAssertions;
-using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Common;
 using WebApi.Domain.Tests.Helpers;
+using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
 
@@ -11,10 +11,10 @@ public class ProjectTests
     public void 正常系_インスタンス生成()
     {
         // Arrange & Act
-        var project = new ProjectBuilder().Build();
+        var result = new ProjectBuilder().Build();
 
         // Assert
-        project.Should().NotBeNull();
+        result.Should().NotBeNull();
     }
 
     [Theory]
@@ -47,15 +47,21 @@ public class ProjectTests
     {
         // Arrange
         var project = new ProjectBuilder().Build();
-        var ticketTitle = TicketTitle.Create("チケットタイトル");
-        var ticketDeadline = Deadline.Create(DateTime.UtcNow.AddDays(7));
+        var ticket = new TicketBuilder().WithProjectId(project.Id).Build();
+        var clock = new FakeDateTimeProvider();
 
         // Act
-        var ticket = project.CreateTicket(ticketTitle, ticketDeadline);
+        var result = project.CreateTicket(ticket.Title, ticket.Deadline, ticket.CreatedBy, clock);
 
         // Assert
-        ticket.Should().NotBeNull();
-        ticket.Title.Should().Be(ticketTitle);
-        ticket.Deadline.Should().Be(ticketDeadline);
+        result.Should().NotBeNull();
+        result.ProjectId.Should().Be(project.Id);
+        result.Title.Should().Be(ticket.Title);
+        result.AssigneeId.Should().Be(ticket.AssigneeId);
+        result.Deadline.Should().Be(ticket.Deadline);
+        result.Status.Should().Be(ticket.Status);
+        result.CompletionCriteria.Should().Be(ticket.CompletionCriteria);
+        result.CreatedBy.Should().Be(ticket.CreatedBy);
+        result.CreatedAt.Should().Be(ticket.CreatedAt);
     }
 }

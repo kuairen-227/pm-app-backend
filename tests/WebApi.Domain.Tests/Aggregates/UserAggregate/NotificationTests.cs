@@ -6,22 +6,29 @@ namespace WebApi.Domain.Tests.Aggregates.UserAggregate;
 
 public class NotificationTests
 {
+    private readonly NotificationBuilder _notificationBuilder;
+
+    public NotificationTests()
+    {
+        _notificationBuilder = new NotificationBuilder();
+    }
+
     [Fact]
     public void 正常系_インスタンス生成()
     {
         // Arrange & Act
-        var notification = new NotificationBuilder().Build();
+        var result = _notificationBuilder.Build();
 
         // Assertion
-        notification.Should().NotBeNull();
-        notification.IsRead.Should().BeFalse();
+        result.Should().NotBeNull();
+        result.IsRead.Should().BeFalse();
     }
 
     [Fact]
     public void 異常系_インスタンス生成_UserIdが空の場合()
     {
         // Arrange
-        var builder = new NotificationBuilder().WithUserId(Guid.Empty);
+        var builder = _notificationBuilder.WithUserId(Guid.Empty);
 
         // Act
         Action act = () => builder.Build();
@@ -38,7 +45,7 @@ public class NotificationTests
     public void 異常系_インスタンス生成_Messageが空の場合(string? message)
     {
         // Arrange
-        var builder = new NotificationBuilder().WithMessage(message!);
+        var builder = _notificationBuilder.WithMessage(message!);
 
         // Act
         Action act = () => builder.Build();
@@ -52,12 +59,12 @@ public class NotificationTests
     public void 正常系_MarkAsRead()
     {
         // Arrange
-        var notification = new NotificationBuilder().Build();
+        var result = _notificationBuilder.Build();
 
         // Act
-        notification.MarkAsRead();
+        result.MarkAsRead();
 
         // Assert
-        notification.IsRead.Should().BeTrue();
+        result.IsRead.Should().BeTrue();
     }
 }

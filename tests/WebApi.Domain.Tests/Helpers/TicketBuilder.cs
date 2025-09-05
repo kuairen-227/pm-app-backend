@@ -1,8 +1,9 @@
 using WebApi.Domain.Aggregates.TicketAggregate;
+using WebApi.Domain.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Helpers;
 
-public class TicketBuilder
+public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
 {
     private Guid _projectId = Guid.NewGuid();
     private string _title = "デフォルトチケット";
@@ -47,17 +48,19 @@ public class TicketBuilder
         return this;
     }
 
-    public Ticket Build()
+    public override Ticket Build()
     {
         var ticket = new Ticket(
             _projectId,
             TicketTitle.Create(_title),
-            Deadline.Create(_deadline)
+            Deadline.Create(_deadline, _clock),
+            _createdBy,
+            _clock
         );
 
         if (_assigneeId.HasValue)
         {
-            ticket.Assign(_assigneeId.Value);
+            ticket.Assign(_assigneeId.Value, _clock);
         }
 
         if (_status != TicketStatus.StatusType.Todo)

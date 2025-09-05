@@ -13,10 +13,10 @@ public class TicketTitleTests
         var title = "テストチケット";
 
         // Act
-        var ticketTitle = TicketTitle.Create(title);
+        var result = TicketTitle.Create(title);
 
         // Assert
-        ticketTitle.Value.Should().Be(title);
+        result.Value.Should().Be(title);
     }
 
     [Theory]
@@ -37,25 +37,25 @@ public class TicketTitleTests
     public void 正常系_値が同じ場合()
     {
         // Arrange & Act
-        var title1 = TicketTitle.Create("テストチケット");
-        var title2 = TicketTitle.Create("テストチケット");
+        var result1 = TicketTitle.Create("テストチケット");
+        var result2 = TicketTitle.Create("テストチケット");
 
         // Assert
-        title1.Should().Be(title2);
-        title1.GetHashCode().Should().Be(title2.GetHashCode());
-        title1.Equals(title2).Should().BeTrue();
+        result1.Should().Be(result2);
+        result1.GetHashCode().Should().Be(result2.GetHashCode());
+        result1.Equals(result2).Should().BeTrue();
     }
 
     [Fact]
     public void 正常系_値が異なる場合()
     {
         // Arrange
-        var title1 = TicketTitle.Create("テストチケット");
-        var title2 = TicketTitle.Create("テストチケット2");
+        var result1 = TicketTitle.Create("テストチケット");
+        var result2 = TicketTitle.Create("テストチケット2");
 
         // Assert
-        title1.Should().NotBe(title2);
-        title1.GetHashCode().Should().NotBe(title2.GetHashCode());
-        title1.Equals(title2).Should().BeFalse();
+        result1.Should().NotBe(result2);
+        result1.GetHashCode().Should().NotBe(result2.GetHashCode());
+        result1.Equals(result2).Should().BeFalse();
     }
 }

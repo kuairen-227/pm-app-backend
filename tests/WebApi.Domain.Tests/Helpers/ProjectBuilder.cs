@@ -1,8 +1,9 @@
 using WebApi.Domain.Aggregates.ProjectAggregate;
+using WebApi.Domain.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Helpers;
 
-public class ProjectBuilder
+public class ProjectBuilder : BaseBuilder<ProjectBuilder, Project>
 {
     private string _name = "デフォルトプロジェクト";
     private string? _description;
@@ -26,12 +27,14 @@ public class ProjectBuilder
         return this;
     }
 
-    public Project Build()
+    public override Project Build()
     {
         return new Project(
             _name,
             _description,
-            _ownerId
+            _ownerId,
+            _createdBy,
+            _clock
         );
     }
 }

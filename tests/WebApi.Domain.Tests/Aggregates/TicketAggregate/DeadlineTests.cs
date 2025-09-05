@@ -1,45 +1,55 @@
 using FluentAssertions;
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Common;
+using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
 public class DeadlineTests
 {
-    [Fact]
-    public void 正常系_インスタンス生成_今日日付()
+    private readonly IDateTimeProvider _clock;
+
+    public DeadlineTests()
     {
-        // Arrange
-        var today = DateTime.UtcNow.Date;
-
-        // Act
-        var deadline = Deadline.Create(today);
-
-        // Assert
-        deadline.Value.Should().Be(today);
+        _clock = new FakeDateTimeProvider();
     }
 
     [Fact]
     public void 正常系_インスタンス生成_未来日付()
     {
         // Arrange
-        var tomorrow = DateTime.UtcNow.Date.AddDays(1);
+        var tomorrow = _clock.Now.Date.AddDays(1);
 
         // Act
-        var deadline = Deadline.Create(tomorrow);
+        var result = Deadline.Create(tomorrow, _clock);
 
         // Assert
-        deadline.Value.Should().Be(tomorrow);
+        result.Value.Should().Be(tomorrow);
+    }
+
+    [Fact]
+    public void 異常系_インスタンス生成_現在時刻()
+    {
+        // Arrange
+        var now = _clock.Now;
+
+        // Act
+        Action act = () => Deadline.Create(now, _clock);
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>().Which;
+        ex.ErrorCode.Should().Be("DEADLINE_PAST_NOT_ALLOWED");
     }
 
     [Fact]
     public void 異常系_インスタンス生成_過去日付()
     {
         // Arrange
-        var yesterday = DateTime.UtcNow.Date.AddDays(-1);
+        var yesterday = _clock.Now.Date.AddDays(-1);
 
         // Act
-        Action act = () => Deadline.Create(yesterday);
+        Action act = () => Deadline.Create(yesterday, _clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -50,25 +60,25 @@ public class DeadlineTests
     public void 正常系_値が同じ場合()
     {
         // Arrange & Act
-        var deadline1 = Deadline.Create(DateTime.UtcNow.Date.AddDays(1));
-        var deadline2 = Deadline.Create(DateTime.UtcNow.Date.AddDays(1));
+        var result1 = Deadline.Create(_clock.Now.Date.AddDays(1), _clock);
+        var result2 = Deadline.Create(_clock.Now.Date.AddDays(1), _clock);
 
         // Then
-        deadline1.Should().Be(deadline2);
-        deadline1.GetHashCode().Should().Be(deadline2.GetHashCode());
-        deadline1.Equals(deadline2).Should().BeTrue();
+        result1.Should().Be(result2);
+        result1.GetHashCode().Should().Be(result2.GetHashCode());
+        result1.Equals(result2).Should().BeTrue();
     }
 
     [Fact]
     public void 正常系_値が異なる場合()
     {
         // Assert & Act
-        var deadline1 = Deadline.Create(DateTime.UtcNow.Date.AddDays(1));
-        var deadline2 = Deadline.Create(DateTime.UtcNow.Date.AddDays(2));
+        var result1 = Deadline.Create(_clock.Now.Date.AddDays(1), _clock);
+        var result2 = Deadline.Create(_clock.Now.Date.AddDays(2), _clock);
 
         // Assert
-        deadline1.Should().NotBe(deadline2);
-        deadline1.GetHashCode().Should().NotBe(deadline2.GetHashCode());
-        deadline1.Equals(deadline2).Should().BeFalse();
+        result1.Should().NotBe(result2);
+        result1.GetHashCode().Should().NotBe(result2.GetHashCode());
+        result1.Equals(result2).Should().BeFalse();
     }
 }

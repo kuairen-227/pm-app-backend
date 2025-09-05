@@ -12,35 +12,35 @@ public class RoleTests
     public void 正常系_インスタンス生成(Role.RoleType roleType)
     {
         // Act
-        var role = Role.Create(roleType);
+        var result = Role.Create(roleType);
 
         // Assert
-        role.Value.Should().Be(roleType);
+        result.Value.Should().Be(roleType);
     }
 
     [Fact]
     public void 正常系_値が同じ場合()
     {
         // Arrange & Act
-        var role1 = Role.Create(Role.RoleType.Admin);
-        var role2 = Role.Create(Role.RoleType.Admin);
+        var result1 = Role.Create(Role.RoleType.Admin);
+        var result2 = Role.Create(Role.RoleType.Admin);
 
         // Assert
-        role1.Should().Be(role2);
-        role1.GetHashCode().Should().Be(role2.GetHashCode());
-        role1.Equals(role2).Should().BeTrue();
+        result1.Should().Be(result2);
+        result1.GetHashCode().Should().Be(result2.GetHashCode());
+        result1.Equals(result2).Should().BeTrue();
     }
 
     [Fact]
     public void 正常系_値が異なる場合()
     {
         // Arrange & Act
-        var role1 = Role.Create(Role.RoleType.Admin);
-        var role2 = Role.Create(Role.RoleType.Manager);
+        var result1 = Role.Create(Role.RoleType.Admin);
+        var result2 = Role.Create(Role.RoleType.Manager);
 
         // Assert
-        role1.Should().NotBe(role2);
-        role1.GetHashCode().Should().NotBe(role2.GetHashCode());
-        role1.Equals(role2).Should().BeFalse();
+        result1.Should().NotBe(result2);
+        result1.GetHashCode().Should().NotBe(result2.GetHashCode());
+        result1.Equals(result2).Should().BeFalse();
     }
 }
