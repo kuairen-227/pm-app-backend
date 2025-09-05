@@ -1,3 +1,4 @@
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.UserAggregate;
@@ -13,7 +14,8 @@ public sealed class User : Entity
 
     private User() { } // EF Core 用
 
-    public User(string name, Email email, Role role)
+    public User(string name, Email email, Role role, Guid createdBy, IDateTimeProvider clock)
+        : base(createdBy, clock)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new DomainException("USER_NAME_REQUIRED", "Name は必須です");

@@ -1,3 +1,4 @@
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.UserAggregate;
@@ -8,7 +9,8 @@ public sealed class Notification : Entity
     public string Message { get; private set; }
     public bool IsRead { get; private set; }
 
-    public Notification(Guid userId, string message)
+    public Notification(Guid userId, string message, Guid createdBy, IDateTimeProvider clock)
+        : base(createdBy, clock)
     {
         if (userId == Guid.Empty)
             throw new DomainException("NOTIFICATION_USER_ID_REQUIRED", "UserId は必須です");

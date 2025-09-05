@@ -1,3 +1,4 @@
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.TicketAggregate;
@@ -19,7 +20,9 @@ public sealed class Ticket : Entity
 
     private Ticket() { } // EF Core 用
 
-    public Ticket(Guid projectId, TicketTitle title, Deadline deadline)
+    public Ticket(
+        Guid projectId, TicketTitle title, Deadline deadline, Guid createdBy, IDateTimeProvider clock)
+        : base(createdBy, clock)
     {
         if (projectId == Guid.Empty)
             throw new DomainException("PROJECT_ID_REQUIRED", "Project ID は必須です");
@@ -30,7 +33,7 @@ public sealed class Ticket : Entity
         Status = TicketStatus.Create(TicketStatus.StatusType.Todo);
     }
 
-    public void Assign(Guid assigneeId, DateTime? assignedAt = null)
+    public void Assign(Guid assigneeId, IDateTimeProvider clock)
     {
         if (assigneeId == Guid.Empty)
             throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
@@ -38,26 +41,25 @@ public sealed class Ticket : Entity
             throw new DomainException("ALREADY_ASSIGNED_SAME_USER", "既に同じユーザーに割り当てられています");
 
         AssignmentHistory history;
-        var changedAt = assignedAt ?? DateTime.UtcNow;
         if (AssigneeId is null)
         {
-            history = AssignmentHistory.Assigned(assigneeId, changedAt);
+            history = AssignmentHistory.Assigned(assigneeId, clock.Now);
         }
         else
         {
-            history = AssignmentHistory.Changed(assigneeId, AssigneeId.Value, changedAt);
+            history = AssignmentHistory.Changed(assigneeId, AssigneeId.Value, clock.Now);
         }
 
         _assignmentHistories.Add(history);
         AssigneeId = assigneeId;
     }
 
-    public void UnAssign(DateTime? unassignedAt = null)
+    public void UnAssign(IDateTimeProvider clock)
     {
         if (AssigneeId is null)
             throw new DomainException("NOT_ASSIGNED", "現在割り当てられていません");
 
-        var history = AssignmentHistory.Unassigned(AssigneeId.Value, unassignedAt ?? DateTime.UtcNow);
+        var history = AssignmentHistory.Unassigned(AssigneeId.Value, clock.Now);
         _assignmentHistories.Add(history);
         AssigneeId = null;
     }
@@ -72,9 +74,9 @@ public sealed class Ticket : Entity
         CompletionCriteria = completionCriteria;
     }
 
-    public TicketComment AddComment(Guid authorId, string content)
+    public TicketComment AddComment(Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
     {
-        var comment = TicketComment.Create(Id, authorId, content);
+        var comment = TicketComment.Create(Id, authorId, content, createdBy, clock);
         _comments.Add(comment);
         return comment;
     }

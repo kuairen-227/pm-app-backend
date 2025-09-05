@@ -1,3 +1,4 @@
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.TicketAggregate;
@@ -10,7 +11,8 @@ public sealed class TicketComment : Entity
 
     private TicketComment() { } // EF Core 用
 
-    private TicketComment(Guid ticketId, Guid authorId, string content)
+    private TicketComment(Guid ticketId, Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
+        : base(createdBy, clock)
     {
         if (ticketId == Guid.Empty)
             throw new DomainException("TICKET_ID_REQUIRED", "Ticket ID は必須です");
@@ -24,9 +26,9 @@ public sealed class TicketComment : Entity
         Content = content;
     }
 
-    public static TicketComment Create(Guid ticketId, Guid authorId, string content)
+    public static TicketComment Create(Guid ticketId, Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
     {
-        return new TicketComment(ticketId, authorId, content);
+        return new TicketComment(ticketId, authorId, content, createdBy, clock);
     }
 
     public void UpdateContent(string content)
