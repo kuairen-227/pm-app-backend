@@ -6,17 +6,14 @@ using WebApi.Domain.Aggregates.ProjectAggregate;
 
 namespace WebApi.Application.Commands.Projects.CreateProject;
 
-public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, Guid>
+public class CreateProjectHandler : BaseHandler, IRequestHandler<CreateProjectCommand, Guid>
 {
     private readonly IProjectRepository _projectRepository;
-    private readonly IUserContext _userContext;
-    private readonly IDateTimeProvider _clock;
 
     public CreateProjectHandler(IProjectRepository projectRepository, IUserContext userContext, IDateTimeProvider clock)
+        : base(userContext, clock)
     {
         _projectRepository = projectRepository;
-        _userContext = userContext;
-        _clock = clock;
     }
 
     public async Task<Guid> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
@@ -25,8 +22,8 @@ public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, Guid>
             request.Name,
             request.Description,
             request.OwnerId,
-            _userContext.Id,
-            _clock
+            UserContext.Id,
+            Clock
         );
         await _projectRepository.AddAsync(project, cancellationToken);
 
