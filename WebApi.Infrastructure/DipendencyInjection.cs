@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Application.Common;
+using WebApi.Domain.Abstractions;
+using WebApi.Infrastructure.Common;
 using WebApi.Infrastructure.Contexts;
 using WebApi.Infrastructure.Database;
 
@@ -15,6 +17,9 @@ public static class DependencyInjection
 
         // UserContext 登録
         services.AddScoped<IUserContext, UserContext>();
+
+        // DateTimeProvider 登録
+        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         return services;
     }
