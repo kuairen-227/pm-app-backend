@@ -13,7 +13,7 @@ public class UserContext : IUserContext
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public Guid id
+    public Guid Id
     {
         get
         {
