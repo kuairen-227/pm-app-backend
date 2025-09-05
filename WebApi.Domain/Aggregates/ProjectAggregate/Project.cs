@@ -24,6 +24,30 @@ public sealed class Project : Entity
         OwnerId = ownerId;
     }
 
+    public void Rename(string newName, Guid updatedBy, IDateTimeProvider clock)
+    {
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new DomainException("PROJECT_NAME_REQUIRED", "Project Name は必須です");
+
+        Name = newName;
+        UpdateAuditInfo(updatedBy, clock);
+    }
+
+    public void ChangeDescription(string? newDescription, Guid updatedBy, IDateTimeProvider clock)
+    {
+        Description = newDescription;
+        UpdateAuditInfo(updatedBy, clock);
+    }
+
+    public void ChangeOwner(Guid newOwnerId, Guid updatedBy, IDateTimeProvider clock)
+    {
+        if (newOwnerId == Guid.Empty)
+            throw new DomainException("PROJECT_OWNER_ID_REQUIRED", "Project OwnerId は必須です");
+
+        OwnerId = newOwnerId;
+        UpdateAuditInfo(updatedBy, clock);
+    }
+
     public Ticket CreateTicket(TicketTitle title, Deadline deadline, Guid createdBy, IDateTimeProvider clock)
     {
         return new Ticket(Id, title, deadline, createdBy, clock);
