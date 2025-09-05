@@ -5,17 +5,15 @@ using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
 
-public class ProjectTests
+public class ProjectTests : TestBase
 {
     private readonly ProjectBuilder _projectBuilder;
     private readonly TicketBuilder _ticketBuilder;
-    private readonly FakeDateTimeProvider _clock;
 
     public ProjectTests()
     {
         _projectBuilder = new ProjectBuilder();
         _ticketBuilder = new TicketBuilder();
-        _clock = new FakeDateTimeProvider();
     }
 
     [Fact]
@@ -61,7 +59,7 @@ public class ProjectTests
 
         // Act
         var result = _projectBuilder.Build();
-        result.Rename(newName, Guid.NewGuid(), _clock);
+        result.Rename(newName, Guid.NewGuid(), Clock);
 
         // Assert
         result.Name.Should().Be(newName);
@@ -77,7 +75,7 @@ public class ProjectTests
         var project = _projectBuilder.Build();
 
         // Act
-        Action act = () => project.Rename(newName!, Guid.NewGuid(), _clock);
+        Action act = () => project.Rename(newName!, Guid.NewGuid(), Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -92,7 +90,7 @@ public class ProjectTests
 
         // Act
         var result = _projectBuilder.Build();
-        result.ChangeDescription(newDescription, Guid.NewGuid(), _clock);
+        result.ChangeDescription(newDescription, Guid.NewGuid(), Clock);
 
         // Assert
         result.Description.Should().Be(newDescription);
@@ -106,7 +104,7 @@ public class ProjectTests
 
         // Act
         var result = _projectBuilder.Build();
-        result.ChangeOwner(newOwnerId, Guid.NewGuid(), _clock);
+        result.ChangeOwner(newOwnerId, Guid.NewGuid(), Clock);
 
         // Assert
         result.OwnerId.Should().Be(newOwnerId);
@@ -120,7 +118,7 @@ public class ProjectTests
         var ticket = _ticketBuilder.WithProjectId(project.Id).Build();
 
         // Act
-        var result = project.CreateTicket(ticket.Title, ticket.Deadline, ticket.CreatedBy, _clock);
+        var result = project.CreateTicket(ticket.Title, ticket.Deadline, ticket.CreatedBy, Clock);
 
         // Assert
         result.Should().NotBeNull();

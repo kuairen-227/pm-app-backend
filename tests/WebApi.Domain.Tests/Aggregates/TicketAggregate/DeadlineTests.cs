@@ -6,23 +6,16 @@ using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
-public class DeadlineTests
+public class DeadlineTests : TestBase
 {
-    private readonly IDateTimeProvider _clock;
-
-    public DeadlineTests()
-    {
-        _clock = new FakeDateTimeProvider();
-    }
-
     [Fact]
     public void 正常系_インスタンス生成_未来日付()
     {
         // Arrange
-        var tomorrow = _clock.Now.Date.AddDays(1);
+        var tomorrow = Clock.Now.Date.AddDays(1);
 
         // Act
-        var result = Deadline.Create(tomorrow, _clock);
+        var result = Deadline.Create(tomorrow, Clock);
 
         // Assert
         result.Value.Should().Be(tomorrow);
@@ -32,10 +25,10 @@ public class DeadlineTests
     public void 異常系_インスタンス生成_現在時刻()
     {
         // Arrange
-        var now = _clock.Now;
+        var now = Clock.Now;
 
         // Act
-        Action act = () => Deadline.Create(now, _clock);
+        Action act = () => Deadline.Create(now, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -46,10 +39,10 @@ public class DeadlineTests
     public void 異常系_インスタンス生成_過去日付()
     {
         // Arrange
-        var yesterday = _clock.Now.Date.AddDays(-1);
+        var yesterday = Clock.Now.Date.AddDays(-1);
 
         // Act
-        Action act = () => Deadline.Create(yesterday, _clock);
+        Action act = () => Deadline.Create(yesterday, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -60,8 +53,8 @@ public class DeadlineTests
     public void 正常系_値が同じ場合()
     {
         // Arrange & Act
-        var result1 = Deadline.Create(_clock.Now.Date.AddDays(1), _clock);
-        var result2 = Deadline.Create(_clock.Now.Date.AddDays(1), _clock);
+        var result1 = Deadline.Create(Clock.Now.Date.AddDays(1), Clock);
+        var result2 = Deadline.Create(Clock.Now.Date.AddDays(1), Clock);
 
         // Then
         result1.Should().Be(result2);
@@ -73,8 +66,8 @@ public class DeadlineTests
     public void 正常系_値が異なる場合()
     {
         // Assert & Act
-        var result1 = Deadline.Create(_clock.Now.Date.AddDays(1), _clock);
-        var result2 = Deadline.Create(_clock.Now.Date.AddDays(2), _clock);
+        var result1 = Deadline.Create(Clock.Now.Date.AddDays(1), Clock);
+        var result2 = Deadline.Create(Clock.Now.Date.AddDays(2), Clock);
 
         // Assert
         result1.Should().NotBe(result2);

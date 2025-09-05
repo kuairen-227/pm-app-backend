@@ -6,19 +6,17 @@ using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
-public class TicketTests
+public class TicketTests : TestBase
 {
     private readonly TicketBuilder _ticketBuilder;
     private readonly UserBuilder _userBuilder;
     private readonly TicketCommentBuilder _commentBuilder;
-    private readonly FakeDateTimeProvider _clock;
 
     public TicketTests()
     {
         _ticketBuilder = new TicketBuilder();
         _userBuilder = new UserBuilder();
         _commentBuilder = new TicketCommentBuilder();
-        _clock = new FakeDateTimeProvider();
     }
 
     [Fact]
@@ -51,7 +49,7 @@ public class TicketTests
 
         // Act
         var result = _ticketBuilder.Build();
-        result.Assign(user.Id, _clock);
+        result.Assign(user.Id, Clock);
 
         // Assert
         result.AssigneeId.Should().Be(user.Id);
@@ -65,7 +63,7 @@ public class TicketTests
         var ticket = _ticketBuilder.Build();
 
         // Act
-        Action act = () => ticket.Assign(Guid.Empty, _clock);
+        Action act = () => ticket.Assign(Guid.Empty, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -78,10 +76,10 @@ public class TicketTests
         // Arrange
         var ticket = _ticketBuilder.Build();
         var user = _userBuilder.Build();
-        ticket.Assign(user.Id, _clock);
+        ticket.Assign(user.Id, Clock);
 
         // Act
-        Action act = () => ticket.Assign(user.Id, _clock);
+        Action act = () => ticket.Assign(user.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -94,10 +92,10 @@ public class TicketTests
         // Arrange
         var ticket = _ticketBuilder.Build();
         var user = _userBuilder.Build();
-        ticket.Assign(user.Id, _clock);
+        ticket.Assign(user.Id, Clock);
 
         // Act
-        ticket.UnAssign(_clock);
+        ticket.UnAssign(Clock);
 
         // Assert
         ticket.AssigneeId.Should().BeNull();
@@ -110,7 +108,7 @@ public class TicketTests
         var ticket = _ticketBuilder.Build();
 
         // Act
-        Action act = () => ticket.UnAssign(_clock);
+        Action act = () => ticket.UnAssign(Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>().Which;
@@ -171,14 +169,14 @@ public class TicketTests
         var createdBy = author.Id;
 
         // Act
-        ticket.AddComment(author.Id, content, createdBy, _clock);
+        ticket.AddComment(author.Id, content, createdBy, Clock);
 
         // Assert
         ticket.Comments.Should().ContainSingle();
         ticket.Comments.First().AuthorId.Should().Be(author.Id);
         ticket.Comments.First().Content.Should().Be(content);
         ticket.Comments.First().CreatedBy.Should().Be(createdBy);
-        ticket.Comments.First().CreatedAt.Should().Be(_clock.Now);
+        ticket.Comments.First().CreatedAt.Should().Be(Clock.Now);
     }
 
     [Fact]
@@ -191,8 +189,8 @@ public class TicketTests
         var createdBys = new[] { authors[0].Id, authors[1].Id };
 
         // Act
-        ticket.AddComment(authors[0].Id, contents[0], createdBys[0], _clock);
-        ticket.AddComment(authors[1].Id, contents[1], createdBys[1], _clock);
+        ticket.AddComment(authors[0].Id, contents[0], createdBys[0], Clock);
+        ticket.AddComment(authors[1].Id, contents[1], createdBys[1], Clock);
 
         // Assert
         ticket.Comments.Should().HaveCount(2);
@@ -202,8 +200,8 @@ public class TicketTests
         ticket.Comments.ElementAt(1).Content.Should().Be(contents[1]);
         ticket.Comments.ElementAt(0).CreatedBy.Should().Be(createdBys[0]);
         ticket.Comments.ElementAt(1).CreatedBy.Should().Be(createdBys[1]);
-        ticket.Comments.ElementAt(0).CreatedAt.Should().Be(_clock.Now);
-        ticket.Comments.ElementAt(1).CreatedAt.Should().Be(_clock.Now);
+        ticket.Comments.ElementAt(0).CreatedAt.Should().Be(Clock.Now);
+        ticket.Comments.ElementAt(1).CreatedAt.Should().Be(Clock.Now);
     }
 
     [Fact]
@@ -211,7 +209,7 @@ public class TicketTests
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        var comment = ticket.AddComment(Guid.NewGuid(), "コメント1", Guid.NewGuid(), _clock);
+        var comment = ticket.AddComment(Guid.NewGuid(), "コメント1", Guid.NewGuid(), Clock);
 
         // Act
         ticket.EditComment(comment.Id, comment.AuthorId, "コメント1-編集");
@@ -241,7 +239,7 @@ public class TicketTests
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        var comment = ticket.AddComment(Guid.NewGuid(), "コメント", Guid.NewGuid(), _clock);
+        var comment = ticket.AddComment(Guid.NewGuid(), "コメント", Guid.NewGuid(), Clock);
 
         // Act
         Action act = () => ticket.EditComment(comment.Id, Guid.NewGuid(), "コメント-編集");
@@ -256,8 +254,8 @@ public class TicketTests
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        var comment1 = ticket.AddComment(Guid.NewGuid(), "コメント1", Guid.NewGuid(), _clock);
-        var comment2 = ticket.AddComment(Guid.NewGuid(), "コメント2", Guid.NewGuid(), _clock);
+        var comment1 = ticket.AddComment(Guid.NewGuid(), "コメント1", Guid.NewGuid(), Clock);
+        var comment2 = ticket.AddComment(Guid.NewGuid(), "コメント2", Guid.NewGuid(), Clock);
 
         // Act
         ticket.RemoveComment(comment1.Id, comment1.AuthorId);
@@ -287,7 +285,7 @@ public class TicketTests
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        var comment = ticket.AddComment(Guid.NewGuid(), "コメント", Guid.NewGuid(), _clock);
+        var comment = ticket.AddComment(Guid.NewGuid(), "コメント", Guid.NewGuid(), Clock);
 
         // Act
         Action act = () => ticket.RemoveComment(comment.Id, Guid.NewGuid());

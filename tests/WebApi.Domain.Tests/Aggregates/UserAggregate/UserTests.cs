@@ -7,12 +7,10 @@ namespace WebApi.Domain.Tests.Aggregates.UserAggregate;
 public class UserTests
 {
     private readonly UserBuilder _userBuilder;
-    private readonly NotificationBuilder _notificationBuilder;
 
     public UserTests()
     {
         _userBuilder = new UserBuilder();
-        _notificationBuilder = new NotificationBuilder();
     }
 
     [Fact]
