@@ -1,10 +1,18 @@
 using MediatR;
+using WebApi.Application.Commands.Projects.UpdateProject;
 
 namespace WebApi.Application.Commands.Projects.CreateProject;
 
 public class CreateProjectCommand : IRequest<Guid>
 {
-    public required string Name { get; set; }
-    public string? Description { get; set; }
-    public Guid OwnerId { get; set; }
+    public string Name { get; }
+    public string? Description { get; }
+    public Guid OwnerId { get; }
+
+    public CreateProjectCommand(string name, string? description, Guid ownerId)
+    {
+        Name = name;
+        Description = description;
+        OwnerId = ownerId;
+    }
 }

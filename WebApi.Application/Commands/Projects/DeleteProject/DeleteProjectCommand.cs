@@ -4,5 +4,10 @@ namespace WebApi.Application.Commands.Projects.DeleteProject;
 
 public class DeleteProjectCommand : IRequest<Unit>
 {
-    public required Guid Id { get; set; }
+    public Guid Id { get; }
+
+    public DeleteProjectCommand(Guid id)
+    {
+        Id = id;
+    }
 }
