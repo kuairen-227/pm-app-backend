@@ -18,7 +18,7 @@ public class DeleteProjectHandler : BaseHandler, IRequestHandler<DeleteProjectCo
     public async Task<Unit> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
     {
         var project = await _projectRepository.GetByIdAsync(request.Id, cancellationToken)
-            ?? throw new Exception("Project が見つかりません");
+            ?? throw new NotFoundException("PROJECT_NOT_FOUND", "Project が見つかりません");
         project.EnsureDeletable(UserContext.Id);
 
         await _projectRepository.DeleteAsync(project, cancellationToken);
