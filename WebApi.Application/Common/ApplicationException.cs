@@ -2,16 +2,16 @@ namespace WebApi.Application.Common;
 
 public abstract class ApplicationException : Exception
 {
-    public string Code { get; }
+    public string ErrorCode { get; }
 
-    public ApplicationException(string code, string message) : base(message)
+    public ApplicationException(string errorCode, string message) : base(message)
     {
-        Code = code;
+        ErrorCode = errorCode;
     }
 }
 
 public sealed class NotFoundException : ApplicationException
 {
-    public NotFoundException(string code, string message)
-        : base(code, message) { }
+    public NotFoundException(string errorCode, string message)
+        : base(errorCode, message) { }
 }
