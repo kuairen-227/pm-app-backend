@@ -5,7 +5,7 @@ namespace WebApi.Application.Queries.Projects.GetProjectById;
 
 public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, ProjectDto?>
 {
-    public readonly IProjectRepository _projectRepository;
+    private readonly IProjectRepository _projectRepository;
 
     public GetProjectByIdHandler(IProjectRepository projectRepository)
     {
