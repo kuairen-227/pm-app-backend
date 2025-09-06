@@ -36,8 +36,8 @@ public class ProjectTests : TestBase
         Action act = () => _projectBuilder.WithName(name!).Build();
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("PROJECT_NAME_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("PROJECT_NAME_REQUIRED");
     }
 
     [Fact]
@@ -47,8 +47,8 @@ public class ProjectTests : TestBase
         Action act = () => _projectBuilder.WithOwnerId(Guid.Empty).Build();
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("PROJECT_OWNER_ID_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("PROJECT_OWNER_ID_REQUIRED");
     }
 
     [Fact]
@@ -78,8 +78,8 @@ public class ProjectTests : TestBase
         Action act = () => project.Rename(newName!, Guid.NewGuid(), Clock);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("PROJECT_NAME_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("PROJECT_NAME_REQUIRED");
     }
 
     [Fact]

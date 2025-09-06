@@ -33,8 +33,8 @@ public class UserTests
         Action act = () => _userBuilder.WithName(name!).Build();
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("USER_NAME_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("USER_NAME_REQUIRED");
     }
 
     [Fact]

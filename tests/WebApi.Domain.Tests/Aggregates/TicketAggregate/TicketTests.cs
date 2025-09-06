@@ -37,8 +37,8 @@ public class TicketTests : TestBase
         Action act = () => _ticketBuilder.WithProjectId(Guid.Empty).Build();
 
         // Then
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("PROJECT_ID_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("PROJECT_ID_REQUIRED");
     }
 
     [Fact]
@@ -66,8 +66,8 @@ public class TicketTests : TestBase
         Action act = () => ticket.Assign(Guid.Empty, Clock);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("ASSIGNEE_ID_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("ASSIGNEE_ID_REQUIRED");
     }
 
     [Fact]
@@ -82,8 +82,8 @@ public class TicketTests : TestBase
         Action act = () => ticket.Assign(user.Id, Clock);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("ALREADY_ASSIGNED_SAME_USER");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("ALREADY_ASSIGNED_SAME_USER");
     }
 
     [Fact]
@@ -111,8 +111,8 @@ public class TicketTests : TestBase
         Action act = () => ticket.UnAssign(Clock);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("NOT_ASSIGNED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("NOT_ASSIGNED");
     }
 
     [Fact]
@@ -155,8 +155,8 @@ public class TicketTests : TestBase
         Action act = () => ticket.SetCompletionCriteria(criteria!);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("COMPLETION_CRITERIA_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("COMPLETION_CRITERIA_REQUIRED");
     }
 
     [Fact]
@@ -230,8 +230,8 @@ public class TicketTests : TestBase
         Action act = () => ticket.EditComment(comment.Id, comment.AuthorId, "コメント1-編集");
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("TICKET_COMMENT_NOT_FOUND");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("TICKET_COMMENT_NOT_FOUND");
     }
 
     [Fact]
@@ -245,8 +245,8 @@ public class TicketTests : TestBase
         Action act = () => ticket.EditComment(comment.Id, Guid.NewGuid(), "コメント-編集");
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("NOT_TICKET_COMMENT_AUTHOR");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("NOT_TICKET_COMMENT_AUTHOR");
     }
 
     [Fact]
@@ -276,8 +276,8 @@ public class TicketTests : TestBase
         Action act = () => ticket.RemoveComment(comment.Id, comment.AuthorId);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("TICKET_COMMENT_NOT_FOUND");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("TICKET_COMMENT_NOT_FOUND");
     }
 
     [Fact]
@@ -291,7 +291,7 @@ public class TicketTests : TestBase
         Action act = () => ticket.RemoveComment(comment.Id, Guid.NewGuid());
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("NOT_TICKET_COMMENT_AUTHOR");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("NOT_TICKET_COMMENT_AUTHOR");
     }
 }

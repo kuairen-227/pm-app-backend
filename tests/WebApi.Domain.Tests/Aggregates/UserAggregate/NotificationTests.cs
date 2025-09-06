@@ -34,8 +34,8 @@ public class NotificationTests
         Action act = () => builder.Build();
 
         // Then
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("NOTIFICATION_USER_ID_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("NOTIFICATION_USER_ID_REQUIRED");
     }
 
     [Theory]
@@ -51,8 +51,8 @@ public class NotificationTests
         Action act = () => builder.Build();
 
         // Then
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("NOTIFICATION_MESSAGE_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("NOTIFICATION_MESSAGE_REQUIRED");
     }
 
     [Fact]

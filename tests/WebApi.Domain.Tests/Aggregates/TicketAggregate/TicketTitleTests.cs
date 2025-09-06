@@ -29,8 +29,8 @@ public class TicketTitleTests
         Action act = () => TicketTitle.Create(title!);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("TICKET_TITLE_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("TICKET_TITLE_REQUIRED");
     }
 
     [Fact]

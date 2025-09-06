@@ -30,8 +30,8 @@ public class TicketCommentTests
         Action act = () => _commentBuilder.WithTicketId(Guid.Empty).Build();
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("TICKET_ID_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("TICKET_ID_REQUIRED");
     }
 
     [Fact]
@@ -41,8 +41,8 @@ public class TicketCommentTests
         Action act = () => _commentBuilder.WithAuthorId(Guid.Empty).Build();
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("AUTHOR_ID_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("AUTHOR_ID_REQUIRED");
     }
 
     [Theory]
@@ -55,8 +55,8 @@ public class TicketCommentTests
         Action act = () => _commentBuilder.WithContent(content!).Build();
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("CONTENT_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("CONTENT_REQUIRED");
     }
 
     [Fact]
@@ -85,7 +85,7 @@ public class TicketCommentTests
         Action act = () => ticketComment.UpdateContent(content!);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("CONTENT_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("CONTENT_REQUIRED");
     }
 }

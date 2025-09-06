@@ -31,8 +31,8 @@ public class DeadlineTests : TestBase
         Action act = () => Deadline.Create(now, Clock);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("DEADLINE_PAST_NOT_ALLOWED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("DEADLINE_PAST_NOT_ALLOWED");
     }
 
     [Fact]
@@ -45,8 +45,8 @@ public class DeadlineTests : TestBase
         Action act = () => Deadline.Create(yesterday, Clock);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("DEADLINE_PAST_NOT_ALLOWED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("DEADLINE_PAST_NOT_ALLOWED");
     }
 
     [Fact]

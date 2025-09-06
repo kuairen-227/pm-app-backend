@@ -26,8 +26,8 @@ public class AssignmentHistoryTests
         Action act = () => AssignmentHistory.Assigned(Guid.Empty, DateTime.UtcNow);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("ASSIGNEE_ID_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("ASSIGNEE_ID_REQUIRED");
     }
 
     [Fact]
@@ -50,8 +50,8 @@ public class AssignmentHistoryTests
         Action act = () => AssignmentHistory.Changed(Guid.Empty, Guid.NewGuid(), DateTime.UtcNow);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("ASSIGNEE_ID_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("ASSIGNEE_ID_REQUIRED");
     }
 
     [Fact]
@@ -61,8 +61,8 @@ public class AssignmentHistoryTests
         Action act = () => AssignmentHistory.Changed(Guid.NewGuid(), Guid.Empty, DateTime.UtcNow);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("PREVIOUS_ASSIGNEE_ID_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("PREVIOUS_ASSIGNEE_ID_REQUIRED");
     }
 
     [Fact]
@@ -85,8 +85,8 @@ public class AssignmentHistoryTests
         Action act = () => AssignmentHistory.Unassigned(Guid.Empty, DateTime.UtcNow);
 
         // Assert
-        var ex = act.Should().Throw<DomainException>().Which;
-        ex.ErrorCode.Should().Be("PREVIOUS_ASSIGNEE_ID_REQUIRED");
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("PREVIOUS_ASSIGNEE_ID_REQUIRED");
     }
 
     [Fact]
