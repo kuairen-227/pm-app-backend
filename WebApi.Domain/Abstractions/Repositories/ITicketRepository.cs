@@ -1,6 +1,6 @@
 using WebApi.Domain.Aggregates.TicketAggregate;
 
-namespace WebApi.Domain.Aggregates.ProjectAggregate;
+namespace WebApi.Domain.Abstractions.Repositories;
 
 public interface ITicketRepository
 {

@@ -1,4 +1,6 @@
-namespace WebApi.Domain.Aggregates.UserAggregate;
+using WebApi.Domain.Aggregates.UserAggregate;
+
+namespace WebApi.Domain.Abstractions.Repositories;
 
 public interface IUserRepository
 {
