@@ -1,5 +1,4 @@
 using MediatR;
-using WebApi.Application.Commands.Projects.UpdateProject;
 
 namespace WebApi.Application.Commands.Projects.CreateProject;
 
