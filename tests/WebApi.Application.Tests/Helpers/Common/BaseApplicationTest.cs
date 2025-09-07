@@ -5,12 +5,12 @@ using WebApi.Domain.Abstractions;
 
 namespace WebApi.Domain.Tests.Helpers.Common;
 
-public abstract class BaseTest
+public abstract class BaseApplicationTest
 {
     protected readonly Mock<IUserContext> UserContext;
     protected readonly Mock<IDateTimeProvider> Clock;
 
-    protected BaseTest()
+    protected BaseApplicationTest()
     {
         UserContext = TestHelpers.CreateUserContext();
         Clock = TestHelpers.CreateClock();

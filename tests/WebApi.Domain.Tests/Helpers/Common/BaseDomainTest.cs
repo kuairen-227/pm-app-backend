@@ -1,10 +1,10 @@
 namespace WebApi.Domain.Tests.Helpers.Common;
 
-public abstract class BaseTest
+public abstract class BaseDomainTest
 {
     protected readonly FakeDateTimeProvider Clock;
 
-    protected BaseTest()
+    protected BaseDomainTest()
     {
         Clock = new FakeDateTimeProvider();
     }

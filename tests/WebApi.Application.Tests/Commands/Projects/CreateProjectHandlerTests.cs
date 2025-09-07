@@ -8,7 +8,7 @@ using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Application.Tests.Commands.Projects;
 
-public class CreateProjectHandlerTests : BaseTest
+public class CreateProjectHandlerTests : BaseApplicationTest
 {
     private readonly CreateProjectHandler _handler;
     private readonly Mock<IProjectRepository> _projectRepository;

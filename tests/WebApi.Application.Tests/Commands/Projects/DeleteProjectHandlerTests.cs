@@ -10,7 +10,7 @@ using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Application.Tests.Commands.Projects;
 
-public class DeleteProjectHandlerTests : BaseTest
+public class DeleteProjectHandlerTests : BaseApplicationTest
 {
     private readonly DeleteProjectHandler _handler;
     private readonly Mock<IProjectRepository> _projectRepository;

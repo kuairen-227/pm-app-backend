@@ -10,7 +10,7 @@ using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Application.Tests.Commands.Projects;
 
-public class UpdateProjectHandlerTests : BaseTest
+public class UpdateProjectHandlerTests : BaseApplicationTest
 {
     private readonly UpdateProjectHandler _handler;
     private readonly Mock<IProjectRepository> _projectRepository;
