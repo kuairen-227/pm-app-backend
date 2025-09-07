@@ -13,13 +13,13 @@ namespace WebApi.Application.Tests.Commands.Projects;
 public class DeleteProjectHandlerTests : BaseTest
 {
     private readonly DeleteProjectHandler _handler;
-    private readonly ProjectBuilder _projectBuilder;
     private readonly Mock<IProjectRepository> _projectRepository;
+    private readonly ProjectBuilder _projectBuilder;
 
     public DeleteProjectHandlerTests()
     {
-        _projectBuilder = new ProjectBuilder();
         _projectRepository = new Mock<IProjectRepository>();
+        _projectBuilder = new ProjectBuilder();
 
         _handler = new DeleteProjectHandler(
             _projectRepository.Object,
