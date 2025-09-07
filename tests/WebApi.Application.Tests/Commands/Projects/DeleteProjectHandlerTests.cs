@@ -2,7 +2,6 @@ using FluentAssertions;
 using Moq;
 using WebApi.Application.Commands.Projects.DeleteProject;
 using WebApi.Application.Common;
-using WebApi.Application.Tests.Helpers;
 using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
