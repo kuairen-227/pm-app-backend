@@ -37,9 +37,9 @@ public class DeleteProjectHandlerTests : BaseTest
             .WithCreatedBy(UserContext.Object.Id)
             .WithClock(Clock.Object)
             .Build();
-        var command = new DeleteProjectCommand(project.Id);
         _projectRepository.Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
+        var command = new DeleteProjectCommand(project.Id);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
