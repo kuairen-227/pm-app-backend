@@ -6,7 +6,7 @@ using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
-public class DeadlineTests : TestBase
+public class DeadlineTests : BaseTest
 {
     [Fact]
     public void 正常系_インスタンス生成_未来日付()

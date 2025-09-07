@@ -5,7 +5,7 @@ using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
 
-public class ProjectTests : TestBase
+public class ProjectTests : BaseTest
 {
     private readonly ProjectBuilder _projectBuilder;
     private readonly TicketBuilder _ticketBuilder;

@@ -6,7 +6,7 @@ using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
-public class TicketTests : TestBase
+public class TicketTests : BaseTest
 {
     private readonly TicketBuilder _ticketBuilder;
     private readonly UserBuilder _userBuilder;
