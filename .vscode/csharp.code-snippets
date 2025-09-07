@@ -30,5 +30,38 @@
       "}"
     ],
     "description": "XUnit Theory test template with Arrange/Act/Assert comments"
+  },
+
+  "XUnit FactAsync AAA": {
+    "prefix": "factasync",
+    "body": [
+      "[Fact]",
+      "public async Task ${1:MethodName}()",
+      "{",
+      "    // Arrange",
+      "",
+      "    // Act",
+      "",
+      "    // Assert",
+      "}"
+    ],
+    "description": "XUnit Fact test template with Arrange/Act/Assert comments"
+  },
+
+  "XUnit TheoryAsync AAA": {
+    "prefix": "theoryasync",
+    "body": [
+      "[Theory]",
+      "[InlineData(${1:})]",
+      "public async Task ${2:MethodName}(${3:})",
+      "{",
+      "    // Arrange",
+      "",
+      "    // Act",
+      "",
+      "    // Assert",
+      "}"
+    ],
+    "description": "XUnit Theory test template with Arrange/Act/Assert comments"
   }
 }
