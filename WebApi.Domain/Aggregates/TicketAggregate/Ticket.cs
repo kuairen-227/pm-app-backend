@@ -8,7 +8,7 @@ public sealed class Ticket : Entity
     public Guid ProjectId { get; private set; }
     public TicketTitle Title { get; private set; } = null!;
     public Guid? AssigneeId { get; private set; }
-    public Deadline Deadline { get; private set; } = null!;
+    public Deadline? Deadline { get; private set; } = null!;
     public TicketStatus Status { get; private set; } = null!;
     public string? CompletionCriteria { get; private set; }
 
@@ -21,16 +21,24 @@ public sealed class Ticket : Entity
     private Ticket() { } // EF Core 用
 
     public Ticket(
-        Guid projectId, TicketTitle title, Deadline deadline, Guid createdBy, IDateTimeProvider clock)
-        : base(createdBy, clock)
+        Guid projectId,
+        TicketTitle title,
+        Guid? assigneeId,
+        Deadline? deadline,
+        string? completionCriteria,
+        Guid createdBy,
+        IDateTimeProvider clock
+    ) : base(createdBy, clock)
     {
         if (projectId == Guid.Empty)
             throw new DomainException("PROJECT_ID_REQUIRED", "Project ID は必須です");
 
         ProjectId = projectId;
         Title = title;
+        AssigneeId = assigneeId;
         Deadline = deadline;
         Status = TicketStatus.Create(TicketStatus.StatusType.Todo);
+        CompletionCriteria = completionCriteria;
     }
 
     public void Assign(Guid assigneeId, IDateTimeProvider clock)

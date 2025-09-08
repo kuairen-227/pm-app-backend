@@ -18,6 +18,12 @@ public sealed class Deadline : ValueObject
     public static Deadline Create(DateTimeOffset value, IDateTimeProvider clock)
         => new Deadline(value, clock.Now);
 
+    public static Deadline? CreateNullable(DateTimeOffset? value, IDateTimeProvider clock)
+    {
+        if (value is null) return null;
+        return new Deadline(value.Value, clock.Now);
+    }
+
     protected override IEnumerable<object?> GetEqualityComponents()
     {
         yield return Value;
