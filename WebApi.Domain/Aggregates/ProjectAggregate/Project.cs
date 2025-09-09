@@ -48,12 +48,6 @@ public sealed class Project : Entity
         UpdateAuditInfo(updatedBy, clock);
     }
 
-    public Ticket CreateTicket(
-        TicketTitle title, Guid? assigneeId, Deadline? deadline, string? completionCriteria, Guid createdBy, IDateTimeProvider clock)
-    {
-        return new Ticket(Id, title, assigneeId, deadline, completionCriteria, createdBy, clock);
-    }
-
     public void EnsureDeletable(Guid requesterId)
     {
         if (OwnerId != requesterId)

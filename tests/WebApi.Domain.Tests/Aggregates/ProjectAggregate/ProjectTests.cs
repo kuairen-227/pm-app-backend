@@ -109,32 +109,4 @@ public class ProjectTests : BaseDomainTest
         // Assert
         result.OwnerId.Should().Be(newOwnerId);
     }
-
-    [Fact]
-    public void 正常系_CreateTicket()
-    {
-        // Arrange
-        var project = _projectBuilder.Build();
-        var ticket = _ticketBuilder.WithProjectId(project.Id).Build();
-
-        // Act
-        var result = project.CreateTicket(
-            ticket.Title,
-            ticket.AssigneeId,
-            ticket.Deadline,
-            ticket.CompletionCriteria,
-            ticket.CreatedBy, Clock
-        );
-
-        // Assert
-        result.Should().NotBeNull();
-        result.ProjectId.Should().Be(project.Id);
-        result.Title.Should().Be(ticket.Title);
-        result.AssigneeId.Should().Be(ticket.AssigneeId);
-        result.Deadline.Should().Be(ticket.Deadline);
-        result.Status.Should().Be(ticket.Status);
-        result.CompletionCriteria.Should().Be(ticket.CompletionCriteria);
-        result.CreatedBy.Should().Be(ticket.CreatedBy);
-        result.CreatedAt.Should().Be(ticket.CreatedAt);
-    }
 }
