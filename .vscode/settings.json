@@ -18,7 +18,8 @@
     "tests",
     "package",
     "user",
-    "project"
+    "project",
+    "ticket"
   ],
   "sqltools.connections": [
     {
