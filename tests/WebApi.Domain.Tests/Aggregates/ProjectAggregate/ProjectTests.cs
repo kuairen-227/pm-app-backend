@@ -118,7 +118,13 @@ public class ProjectTests : BaseDomainTest
         var ticket = _ticketBuilder.WithProjectId(project.Id).Build();
 
         // Act
-        var result = project.CreateTicket(ticket.Title, ticket.Deadline, ticket.CreatedBy, Clock);
+        var result = project.CreateTicket(
+            ticket.Title,
+            ticket.AssigneeId,
+            ticket.Deadline,
+            ticket.CompletionCriteria,
+            ticket.CreatedBy, Clock
+        );
 
         // Assert
         result.Should().NotBeNull();

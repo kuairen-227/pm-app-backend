@@ -53,24 +53,16 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
         var ticket = new Ticket(
             _projectId,
             TicketTitle.Create(_title),
+            _assigneeId,
             Deadline.Create(_deadline, _clock),
+            _completionCriteria,
             _createdBy,
             _clock
         );
 
-        if (_assigneeId.HasValue)
-        {
-            ticket.Assign(_assigneeId.Value, _clock);
-        }
-
         if (_status != TicketStatus.StatusType.Todo)
         {
             ticket.ChangeStatus(_status);
-        }
-
-        if (!string.IsNullOrWhiteSpace(_completionCriteria))
-        {
-            ticket.SetCompletionCriteria(_completionCriteria);
         }
 
         return ticket;
