@@ -1,8 +1,8 @@
 using MediatR;
 
-namespace WebApi.Application.Commands.Tickets.CreateTicket;
+namespace WebApi.Application.Commands.Tickets.RaiseTicket;
 
-public class CreateTicketCommand : IRequest<Guid>
+public class RaiseTicketCommand : IRequest<Guid>
 {
     public Guid ProjectId { get; }
     public string Title { get; }
@@ -10,7 +10,7 @@ public class CreateTicketCommand : IRequest<Guid>
     public DateTimeOffset? Deadline { get; }
     public string? CompletionCriteria { get; private set; }
 
-    public CreateTicketCommand(
+    public RaiseTicketCommand(
         Guid projectId, string title, Guid? assigneeId, DateTimeOffset? deadline, string? completionCriteria
     )
     {
