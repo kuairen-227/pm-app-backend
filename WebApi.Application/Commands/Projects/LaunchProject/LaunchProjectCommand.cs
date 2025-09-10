@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace WebApi.Application.Commands.Projects.CreateProject;
+namespace WebApi.Application.Commands.Projects.LaunchProject;
 
 public class LaunchProjectCommand : IRequest<Guid>
 {

@@ -4,7 +4,7 @@ using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.ProjectAggregate;
 
-namespace WebApi.Application.Commands.Projects.CreateProject;
+namespace WebApi.Application.Commands.Projects.LaunchProject;
 
 public class LaunchProjectHandler : BaseHandler, IRequestHandler<LaunchProjectCommand, Guid>
 {

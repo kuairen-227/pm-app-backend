@@ -1,6 +1,6 @@
 using FluentAssertions;
 using Moq;
-using WebApi.Application.Commands.Projects.CreateProject;
+using WebApi.Application.Commands.Projects.LaunchProject;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Tests.Helpers;
@@ -10,7 +10,7 @@ namespace WebApi.Application.Tests.Commands.Projects;
 
 public class CreateProjectHandlerTests : BaseApplicationTest
 {
-    private readonly CreateProjectHandler _handler;
+    private readonly LaunchProjectHandler _handler;
     private readonly Mock<IProjectRepository> _projectRepository;
     private readonly ProjectBuilder _projectBuilder;
 
@@ -19,7 +19,7 @@ public class CreateProjectHandlerTests : BaseApplicationTest
         _projectRepository = new Mock<IProjectRepository>();
         _projectBuilder = new ProjectBuilder();
 
-        _handler = new CreateProjectHandler(
+        _handler = new LaunchProjectHandler(
             _projectRepository.Object,
             UserContext.Object,
             Clock.Object
@@ -31,7 +31,7 @@ public class CreateProjectHandlerTests : BaseApplicationTest
     {
         // Arrange
         var project = _projectBuilder.Build();
-        var command = new CreateProjectCommand(
+        var command = new LaunchProjectCommand(
             project.Name,
             project.Description,
             project.OwnerId
