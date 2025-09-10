@@ -1,6 +1,6 @@
 namespace WebApi.Domain.Common.Security;
 
-public sealed class Permission
+public sealed class Permission : ValueObject
 {
     public string Code { get; }
 
@@ -11,4 +11,8 @@ public sealed class Permission
 
     public static Permission Create(string code) => new Permission(code);
     public override string ToString() => Code;
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        yield return Code;
+    }
 }
