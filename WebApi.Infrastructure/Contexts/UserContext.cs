@@ -18,9 +18,9 @@ public class UserContext : IUserContext
         get
         {
             var user = _httpContextAccessor.HttpContext?.User
-                ?? throw new UnauthorizedAccessException("UserContext が取得できません");
+                ?? throw new AuthenticationException("HTTP_CONTEXT_NOT_EXIT", "UserContext が取得できません");
             var sub = user.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                ?? throw new UnauthorizedAccessException("ユーザーID が見つかりません");
+                ?? throw new AuthenticationException("USER_ID_NOT_EXIT", "ユーザーID が見つかりません");
 
             return Guid.Parse(sub);
         }

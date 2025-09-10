@@ -10,6 +10,18 @@ public abstract class ApplicationException : Exception
     }
 }
 
+public sealed class AuthenticationException : ApplicationException
+{
+    public AuthenticationException(string errorCode, string message)
+        : base(errorCode, message) { }
+}
+
+public sealed class AuthorizationException : ApplicationException
+{
+    public AuthorizationException(string errorCode, string message)
+        : base(errorCode, message) { }
+}
+
 public sealed class NotFoundException : ApplicationException
 {
     public NotFoundException(string errorCode, string message)
