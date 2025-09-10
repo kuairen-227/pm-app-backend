@@ -1,7 +1,10 @@
 using MediatR;
+using WebApi.Application.Common.Security;
+using WebApi.Application.Common.Security.Permissions;
 
 namespace WebApi.Application.Commands.Projects.LaunchProject;
 
+[RequiresPermission(ProjectPermissions.Launch)]
 public class LaunchProjectCommand : IRequest<Guid>
 {
     public string Name { get; }
