@@ -5,13 +5,13 @@ namespace WebApi.Application.Common;
 
 public abstract class BaseHandler
 {
-    protected readonly IAuthorizationService AuthService;
+    protected readonly IPermissionService PermissionService;
     protected readonly IUserContext UserContext;
     protected readonly IDateTimeProvider Clock;
 
-    protected BaseHandler(IAuthorizationService authService, IUserContext userContext, IDateTimeProvider clock)
+    protected BaseHandler(IPermissionService permissionService, IUserContext userContext, IDateTimeProvider clock)
     {
-        AuthService = authService;
+        PermissionService = permissionService;
         UserContext = userContext;
         Clock = clock;
     }

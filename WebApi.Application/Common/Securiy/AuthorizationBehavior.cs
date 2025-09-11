@@ -7,14 +7,14 @@ namespace WebApi.Application.Common.Security;
 public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
-    private readonly IAuthorizationService _authorizationService;
+    private readonly IPermissionService _permissionService;
     private readonly IUserContext _userContext;
     private readonly IUserRepository _userRepository;
 
     public AuthorizationBehavior(
-        IAuthorizationService authorizationService, IUserContext userContext, IUserRepository userRepository)
+        IPermissionService permissionService, IUserContext userContext, IUserRepository userRepository)
     {
-        _authorizationService = authorizationService;
+        _permissionService = permissionService;
         _userContext = userContext;
         _userRepository = userRepository;
     }
@@ -34,7 +34,7 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
             foreach (var attr in attributes)
             {
                 var permission = Permission.Create(attr.PermissionCode);
-                _authorizationService.EnsurePermission(user, permission);
+                _permissionService.EnsurePermission(user, permission);
             }
         }
 
