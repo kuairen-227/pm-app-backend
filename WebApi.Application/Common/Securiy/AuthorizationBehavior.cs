@@ -1,5 +1,6 @@
 using MediatR;
 using WebApi.Domain.Abstractions.Repositories;
+using WebApi.Domain.Common;
 using WebApi.Domain.Common.Security;
 
 namespace WebApi.Application.Common.Security;
@@ -34,7 +35,15 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
             foreach (var attr in attributes)
             {
                 var permission = Permission.Create(attr.PermissionCode);
-                _permissionService.EnsurePermission(user, permission);
+
+                try
+                {
+                    _permissionService.EnsurePermission(user, permission);
+                }
+                catch (DomainException ex)
+                {
+                    throw new AuthorizationException("FORBIDDEN", ex.Message);
+                }
             }
         }
 
