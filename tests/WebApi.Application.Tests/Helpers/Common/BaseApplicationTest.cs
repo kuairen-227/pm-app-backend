@@ -1,9 +1,8 @@
 using Moq;
 using WebApi.Application.Common;
-using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions;
 
-namespace WebApi.Domain.Tests.Helpers.Common;
+namespace WebApi.Application.Tests.Helpers.Common;
 
 public abstract class BaseApplicationTest
 {
