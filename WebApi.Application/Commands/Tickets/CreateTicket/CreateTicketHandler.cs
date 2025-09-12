@@ -4,19 +4,19 @@ using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.TicketAggregate;
 
-namespace WebApi.Application.Commands.Tickets.RaiseTicket;
+namespace WebApi.Application.Commands.Tickets.CreateTicket;
 
-public class RaiseTicketHandler : BaseHandler, IRequestHandler<RaiseTicketCommand, Guid>
+public class CreateTicketHandler : BaseHandler, IRequestHandler<CreateTicketCommand, Guid>
 {
     private readonly ITicketRepository _ticketRepository;
 
-    public RaiseTicketHandler(ITicketRepository ticketRepository, IUserContext userContext, IDateTimeProvider clock)
+    public CreateTicketHandler(ITicketRepository ticketRepository, IUserContext userContext, IDateTimeProvider clock)
         : base(userContext, clock)
     {
         _ticketRepository = ticketRepository;
     }
 
-    public async Task<Guid> Handle(RaiseTicketCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateTicketCommand request, CancellationToken cancellationToken)
     {
         var ticket = new Ticket(
             request.ProjectId,

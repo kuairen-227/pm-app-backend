@@ -2,10 +2,10 @@ using MediatR;
 using WebApi.Application.Common.Security;
 using WebApi.Application.Common.Security.Permissions;
 
-namespace WebApi.Application.Commands.Tickets.RaiseTicket;
+namespace WebApi.Application.Commands.Tickets.CreateTicket;
 
-[RequiresPermission(TicketPermissions.Raise)]
-public class RaiseTicketCommand : IRequest<Guid>
+[RequiresPermission(TicketPermissions.Create)]
+public class CreateTicketCommand : IRequest<Guid>
 {
     public Guid ProjectId { get; }
     public string Title { get; }
@@ -13,7 +13,7 @@ public class RaiseTicketCommand : IRequest<Guid>
     public DateTimeOffset? Deadline { get; }
     public string? CompletionCriteria { get; private set; }
 
-    public RaiseTicketCommand(
+    public CreateTicketCommand(
         Guid projectId, string title, Guid? assigneeId, DateTimeOffset? deadline, string? completionCriteria
     )
     {
