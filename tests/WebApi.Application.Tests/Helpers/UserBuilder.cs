@@ -1,7 +1,7 @@
 using WebApi.Application.Helpers.Common;
 using WebApi.Domain.Aggregates.UserAggregate;
 
-namespace WebApi.Domain.Tests.Helpers;
+namespace WebApi.Application.Tests.Helpers;
 
 public class UserBuilder : BaseBuilder<UserBuilder, User>
 {

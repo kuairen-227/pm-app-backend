@@ -1,7 +1,7 @@
 using WebApi.Application.Helpers.Common;
 using WebApi.Domain.Aggregates.TicketAggregate;
 
-namespace WebApi.Domain.Tests.Helpers;
+namespace WebApi.Application.Tests.Helpers;
 
 public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
 {
