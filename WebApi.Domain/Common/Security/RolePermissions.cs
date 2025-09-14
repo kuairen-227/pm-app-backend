@@ -26,6 +26,7 @@ public static class RolePermissions
             {
                 Role.RoleType.Member, new []
                 {
+                    // TODO: 1つ以上必要なため仮で設定
                     ProjectPermissions.Create
                 }
             }
