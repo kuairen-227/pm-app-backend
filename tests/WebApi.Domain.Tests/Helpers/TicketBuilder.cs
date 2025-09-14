@@ -8,7 +8,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
     private Guid _projectId = Guid.NewGuid();
     private string _title = "デフォルトチケット";
     private Guid? _assigneeId = null;
-    private DateTimeOffset _deadline = DateTimeOffset.UtcNow.AddDays(1);
+    private DateTimeOffset? _deadline = null;
     private TicketStatus.StatusType _status = TicketStatus.StatusType.Todo;
     private string? _completionCriteria = null;
 
@@ -54,7 +54,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
             _projectId,
             TicketTitle.Create(_title),
             _assigneeId,
-            Deadline.Create(_deadline, _clock),
+            Deadline.CreateNullable(_deadline, _clock),
             _completionCriteria,
             _createdBy,
             _clock
