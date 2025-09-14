@@ -1,4 +1,5 @@
 using MediatR;
+using WebApi.Application.Queries.Tickets.Dtos;
 
 namespace WebApi.Application.Queries.Tickets.GetTicketById;
 

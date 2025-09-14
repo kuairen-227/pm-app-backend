@@ -1,4 +1,4 @@
-namespace WebApi.Application.Queries.Tickets;
+namespace WebApi.Application.Queries.Tickets.Dtos;
 
 public sealed class AssignmentHistoryDto
 {
