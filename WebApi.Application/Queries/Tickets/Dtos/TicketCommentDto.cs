@@ -1,7 +1,7 @@
 namespace WebApi.Application.Queries.Tickets;
 
-public class TicketCommentDto
+public sealed class TicketCommentDto
 {
-    public Guid AuthorId { get; set; }
-    public string Content { get; set; } = null!;
+    public Guid AuthorId { get; init; }
+    public string Content { get; init; } = string.Empty;
 }

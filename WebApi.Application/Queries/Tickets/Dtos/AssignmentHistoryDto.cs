@@ -1,9 +1,9 @@
 namespace WebApi.Application.Queries.Tickets;
 
-public class AssignmentHistoryDto
+public sealed class AssignmentHistoryDto
 {
-    public string ChangeType { get; set; } = null!;
-    public Guid? AssigneeId { get; set; }
-    public Guid? PreviousAssigneeId { get; set; }
-    public DateTimeOffset ChangedAt { get; set; }
+    public string ChangeType { get; init; } = string.Empty;
+    public Guid? AssigneeId { get; init; }
+    public Guid? PreviousAssigneeId { get; init; }
+    public DateTimeOffset ChangedAt { get; init; }
 }
