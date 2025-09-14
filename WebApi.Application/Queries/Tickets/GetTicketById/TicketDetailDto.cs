@@ -1,3 +1,4 @@
+using System.Reflection;
 using WebApi.Application.Queries.Tickets;
 using WebApi.Application.Queries.Tickets.Dtos;
 
@@ -10,8 +11,10 @@ public class TicketDetailDto
     public string Status { get; set; } = null!;
     public string? CompletionCriteria { get; set; }
     public IReadOnlyList<TicketCommentDto> Comments { get; set; } = null!;
+    public IReadOnlyList<AssignmentHistoryDto> AssignmentHistories { get; set; } = null!;
 
-    public static TicketDetailDto From(TicketDto ticket, IEnumerable<TicketCommentDto> comments)
+    public static TicketDetailDto From(
+        TicketDto ticket, IEnumerable<TicketCommentDto> comments, IEnumerable<AssignmentHistoryDto> assignmentHistories)
     {
         return new TicketDetailDto
         {
@@ -21,7 +24,8 @@ public class TicketDetailDto
             Deadline = ticket.Deadline,
             Status = ticket.Status,
             CompletionCriteria = ticket.CompletionCriteria,
-            Comments = [.. comments]
+            Comments = [.. comments],
+            AssignmentHistories = [.. assignmentHistories],
         };
     }
 }

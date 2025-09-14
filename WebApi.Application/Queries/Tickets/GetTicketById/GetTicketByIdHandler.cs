@@ -36,6 +36,16 @@ public class GetTicketByIdHandler : IRequestHandler<GetTicketByIdQuery, TicketDe
             })
             .ToList();
 
-        return TicketDetailDto.From(ticketDto, commentsDto);
+        var assignmentHistoryDto = ticket.AssignmentHistories
+            .Select(a => new AssignmentHistoryDto
+            {
+                ChangeType = a.ChangeType.ToString(),
+                AssigneeId = a.AssigneeId,
+                PreviousAssigneeId = a.PreviousAssigneeId,
+                ChangedAt = a.ChangedAt,
+            })
+            .ToList();
+
+        return TicketDetailDto.From(ticketDto, commentsDto, assignmentHistoryDto);
     }
 }
