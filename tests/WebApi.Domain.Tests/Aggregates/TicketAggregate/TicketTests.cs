@@ -42,6 +42,37 @@ public class TicketTests : BaseDomainTest
     }
 
     [Fact]
+    public void 正常系_ChangeTitle()
+    {
+        // Arrange
+        var title = TicketTitle.Create("タイトル - 編集");
+
+        // Act
+        var result = _ticketBuilder.Build();
+        result.ChangeTitle(title);
+
+        // Assert
+        result.Title.Should().Be(title);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void 異常系_ChangeTitle_タイトルが空の場合(string? title)
+    {
+        // Arrange
+        var ticket = _ticketBuilder.Build();
+
+        // Act
+        Action act = () => ticket.ChangeTitle(TicketTitle.Create(title!));
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("TICKET_TITLE_REQUIRED");
+    }
+
+    [Fact]
     public void 正常系_Assign()
     {
         // Arrange

@@ -41,6 +41,11 @@ public sealed class Ticket : Entity
         CompletionCriteria = completionCriteria;
     }
 
+    public void ChangeTitle(TicketTitle title)
+    {
+        Title = title;
+    }
+
     public void Assign(Guid assigneeId, IDateTimeProvider clock)
     {
         if (assigneeId == Guid.Empty)
