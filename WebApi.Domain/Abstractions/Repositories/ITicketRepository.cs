@@ -7,6 +7,5 @@ public interface ITicketRepository
     Task<IEnumerable<Ticket>> GetByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default);
     Task<Ticket?> GetByIdAsync(Guid ticketId, CancellationToken cancellationToken = default);
     Task AddAsync(Ticket ticket, CancellationToken cancellationToken = default);
-    Task UpdateAsync(Ticket ticket, CancellationToken cancellationToken = default);
     Task DeleteAsync(Ticket ticket, CancellationToken cancellationToken = default);
 }

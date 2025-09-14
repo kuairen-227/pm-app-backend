@@ -6,12 +6,13 @@ using WebApi.Domain.Abstractions.Repositories;
 
 namespace WebApi.Application.Commands.Projects.UpdateProject;
 
-public class UpdateProjectHandler : BaseHandler, IRequestHandler<UpdateProjectCommand, Unit>
+public class UpdateProjectHandler : BaseCommandHandler, IRequestHandler<UpdateProjectCommand, Unit>
 {
     private readonly IProjectRepository _projectRepository;
 
-    public UpdateProjectHandler(IProjectRepository projectRepository, IUserContext userContext, IDateTimeProvider clock)
-        : base(userContext, clock)
+    public UpdateProjectHandler(
+        IProjectRepository projectRepository, IUnitOfWork unitOfWork, IUserContext userContext, IDateTimeProvider clock)
+        : base(unitOfWork, userContext, clock)
     {
         _projectRepository = projectRepository;
     }
@@ -24,8 +25,8 @@ public class UpdateProjectHandler : BaseHandler, IRequestHandler<UpdateProjectCo
         project.Rename(request.Name, UserContext.Id, Clock);
         project.ChangeDescription(request.Description, UserContext.Id, Clock);
         project.ChangeOwner(request.OwnerId, UserContext.Id, Clock);
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _projectRepository.UpdateAsync(project, cancellationToken);
         return Unit.Value;
     }
 }

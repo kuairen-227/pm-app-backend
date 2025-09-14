@@ -7,12 +7,13 @@ using WebApi.Domain.Aggregates.ProjectAggregate;
 
 namespace WebApi.Application.Commands.Projects.LaunchProject;
 
-public class LaunchProjectHandler : BaseHandler, IRequestHandler<LaunchProjectCommand, Guid>
+public class LaunchProjectHandler : BaseCommandHandler, IRequestHandler<LaunchProjectCommand, Guid>
 {
     private readonly IProjectRepository _projectRepository;
 
-    public LaunchProjectHandler(IProjectRepository projectRepository, IUserContext userContext, IDateTimeProvider clock)
-        : base(userContext, clock)
+    public LaunchProjectHandler(
+        IProjectRepository projectRepository, IUnitOfWork unitOfWork, IUserContext userContext, IDateTimeProvider clock)
+        : base(unitOfWork, userContext, clock)
     {
         _projectRepository = projectRepository;
     }
@@ -26,7 +27,9 @@ public class LaunchProjectHandler : BaseHandler, IRequestHandler<LaunchProjectCo
             UserContext.Id,
             Clock
         );
+
         await _projectRepository.AddAsync(project, cancellationToken);
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return project.Id;
     }

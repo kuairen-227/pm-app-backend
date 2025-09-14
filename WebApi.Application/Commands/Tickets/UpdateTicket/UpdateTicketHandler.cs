@@ -7,12 +7,13 @@ using WebApi.Domain.Aggregates.TicketAggregate;
 
 namespace WebApi.Application.Commands.Tickets.UpdateTicket;
 
-public class UpdateTicketHandler : BaseHandler, IRequestHandler<UpdateTicketCommand, Unit>
+public class UpdateTicketHandler : BaseCommandHandler, IRequestHandler<UpdateTicketCommand, Unit>
 {
     private readonly ITicketRepository _ticketRepository;
 
-    public UpdateTicketHandler(ITicketRepository ticketRepository, IUserContext userContext, IDateTimeProvider clock)
-        : base(userContext, clock)
+    public UpdateTicketHandler(
+        ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IUserContext userContext, IDateTimeProvider clock)
+        : base(unitOfWork, userContext, clock)
     {
         _ticketRepository = ticketRepository;
     }
@@ -24,8 +25,7 @@ public class UpdateTicketHandler : BaseHandler, IRequestHandler<UpdateTicketComm
 
         var title = TicketTitle.Create(request.Title);
         ticket.ChangeTitle(title);
-
-        await _ticketRepository.UpdateAsync(ticket, cancellationToken);
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

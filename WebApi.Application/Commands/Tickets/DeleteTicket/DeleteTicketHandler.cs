@@ -6,12 +6,13 @@ using WebApi.Domain.Abstractions.Repositories;
 
 namespace WebApi.Application.Commands.Tickets.DeleteTicket;
 
-public class DeleteTicketHandler : BaseHandler, IRequestHandler<DeleteTicketCommand, Unit>
+public class DeleteTicketHandler : BaseCommandHandler, IRequestHandler<DeleteTicketCommand, Unit>
 {
     private readonly ITicketRepository _ticketRepository;
 
-    public DeleteTicketHandler(ITicketRepository ticketRepository, IUserContext userContext, IDateTimeProvider clock)
-        : base(userContext, clock)
+    public DeleteTicketHandler(
+        ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IUserContext userContext, IDateTimeProvider clock)
+        : base(unitOfWork, userContext, clock)
     {
         _ticketRepository = ticketRepository;
     }
@@ -22,6 +23,7 @@ public class DeleteTicketHandler : BaseHandler, IRequestHandler<DeleteTicketComm
             ?? throw new NotFoundException("TICKET_NOT_FOUND", "Ticket が見つかりません");
 
         await _ticketRepository.DeleteAsync(ticket, cancellationToken);
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

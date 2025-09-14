@@ -3,13 +3,15 @@ using WebApi.Domain.Abstractions;
 
 namespace WebApi.Application.Common;
 
-public abstract class BaseHandler
+public abstract class BaseCommandHandler
 {
+    protected readonly IUnitOfWork UnitOfWork;
     protected readonly IUserContext UserContext;
     protected readonly IDateTimeProvider Clock;
 
-    protected BaseHandler(IUserContext userContext, IDateTimeProvider clock)
+    protected BaseCommandHandler(IUnitOfWork unitOfWork, IUserContext userContext, IDateTimeProvider clock)
     {
+        UnitOfWork = unitOfWork;
         UserContext = userContext;
         Clock = clock;
     }
