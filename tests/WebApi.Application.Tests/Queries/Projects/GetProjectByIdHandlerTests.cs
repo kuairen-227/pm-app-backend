@@ -1,10 +1,10 @@
 using FluentAssertions;
 using Moq;
 using WebApi.Application.Queries.Projects.GetProjectById;
+using WebApi.Application.Tests.Helpers;
+using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.ProjectAggregate;
-using WebApi.Domain.Tests.Helpers;
-using WebApi.Domain.Tests.Helpers.Common;
 
 namespace WebApi.Application.Tests.Queries.Projects;
 
