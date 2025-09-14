@@ -1,4 +1,5 @@
 using MediatR;
+using WebApi.Application.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Common;
 using WebApi.Domain.Common.Security;

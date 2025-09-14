@@ -1,4 +1,4 @@
-namespace WebApi.Application.Common;
+namespace WebApi.Application.Abstractions;
 
 public interface IUserContext
 {

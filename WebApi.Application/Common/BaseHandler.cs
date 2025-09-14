@@ -1,3 +1,4 @@
+using WebApi.Application.Abstractions;
 using WebApi.Domain.Abstractions;
 
 namespace WebApi.Application.Common;
