@@ -1,4 +1,4 @@
-namespace WebApi.Application.Queries.Projects;
+namespace WebApi.Application.Queries.Projects.Dtos;
 
 public class ProjectDto
 {

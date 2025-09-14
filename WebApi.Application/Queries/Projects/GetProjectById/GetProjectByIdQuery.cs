@@ -1,4 +1,5 @@
 using MediatR;
+using WebApi.Application.Queries.Projects.Dtos;
 
 namespace WebApi.Application.Queries.Projects.GetProjectById;
 

@@ -1,11 +1,16 @@
 {
   "version": "0.2",
-  "ignorePaths": [".devcontainer/devcontainer.json", "*.csproj", ".gitignore"],
+  "ignorePaths": [
+    ".devcontainer/devcontainer.json",
+    "*.csproj",
+    ".gitignore"
+  ],
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": [
     "appsettings",
     "coveragereport",
+    "Dtos",
     "globaltool",
     "marocchino",
     "Mediat",
