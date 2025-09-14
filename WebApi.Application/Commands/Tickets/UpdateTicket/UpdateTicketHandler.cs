@@ -25,6 +25,7 @@ public class UpdateTicketHandler : BaseHandler, IRequestHandler<UpdateTicketComm
         ticket.ChangeTitle(title);
 
         await _ticketRepository.UpdateAsync(ticket, cancellationToken);
+
         return Unit.Value;
     }
 }
