@@ -13,14 +13,16 @@ public static class RolePermissions
                 {
                     UserPermissions.Manage,
                     ProjectPermissions.Create, ProjectPermissions.Update, ProjectPermissions.Delete,
-                    TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete
+                    TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
+                    TicketPermissions.Assign, TicketPermissions.Unassign,
                 }
             },
             {
                 Role.RoleType.Manager, new []
                 {
                     ProjectPermissions.Create, ProjectPermissions.Update, ProjectPermissions.Delete,
-                    TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete
+                    TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
+                    TicketPermissions.Assign, TicketPermissions.Unassign,
                 }
             },
             {
