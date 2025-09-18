@@ -4,5 +4,5 @@ namespace WebApi.Domain.Common.Security;
 
 public interface IPermissionService
 {
-    void EnsurePermission(User user, Permission permission, object? context = null);
+    void EnsurePermission(User user, string permission, object? context = null);
 }

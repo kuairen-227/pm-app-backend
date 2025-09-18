@@ -13,18 +13,17 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
     private readonly IUserContext _userContext;
     private readonly IUserRepository _userRepository;
 
-    public AuthorizationBehavior(
-        IPermissionService permissionService, IUserContext userContext, IUserRepository userRepository)
+    public AuthorizationBehavior(IPermissionService permissionService, IUserContext userContext, IUserRepository userRepository)
     {
         _permissionService = permissionService;
         _userContext = userContext;
         _userRepository = userRepository;
     }
 
-    public async Task<TResponse> Handle(
-        TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        var attributes = request.GetType().GetCustomAttributes(typeof(RequiresPermissionAttribute), true)
+        var attributes = request.GetType()
+            .GetCustomAttributes(typeof(RequiresPermissionAttribute), true)
             .Cast<RequiresPermissionAttribute>()
             .ToList();
 
@@ -35,16 +34,7 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
 
             foreach (var attr in attributes)
             {
-                var permission = Permission.Create(attr.PermissionCode);
-
-                try
-                {
-                    _permissionService.EnsurePermission(user, permission);
-                }
-                catch (DomainException ex)
-                {
-                    throw new AuthorizationException("FORBIDDEN", ex.Message);
-                }
+                _permissionService.EnsurePermission(user, attr.PermissionCode);
             }
         }
 

@@ -5,8 +5,8 @@ public class RequiresPermissionAttribute : Attribute
 {
     public string PermissionCode { get; }
 
-    public RequiresPermissionAttribute(string code)
+    public RequiresPermissionAttribute(string permissionCode)
     {
-        PermissionCode = code;
+        PermissionCode = permissionCode;
     }
 }

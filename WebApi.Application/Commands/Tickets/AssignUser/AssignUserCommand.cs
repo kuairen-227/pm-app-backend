@@ -1,6 +1,6 @@
 using MediatR;
 using WebApi.Application.Common.Security;
-using WebApi.Application.Common.Security.Permissions;
+using WebApi.Domain.Common.Security.Permissions;
 
 namespace WebApi.Application.Commands.Tickets.AssignUser;
 

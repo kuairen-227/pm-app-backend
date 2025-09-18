@@ -5,8 +5,8 @@ namespace WebApi.Domain.Common.Security;
 
 public static class RolePermissions
 {
-    public static readonly IReadOnlyDictionary<Role.RoleType, IReadOnlyCollection<Permission>> Map =
-        new Dictionary<Role.RoleType, IReadOnlyCollection<Permission>>
+    public static readonly IReadOnlyDictionary<Role.RoleType, IReadOnlyCollection<string>> Map =
+        new Dictionary<Role.RoleType, IReadOnlyCollection<string>>
         {
             {
                 Role.RoleType.Admin, new []

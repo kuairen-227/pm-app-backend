@@ -2,9 +2,9 @@ namespace WebApi.Domain.Common.Security.Permissions;
 
 public static class TicketPermissions
 {
-    public static readonly Permission Create = Permission.Create("TICKET_CREATE");
-    public static readonly Permission Update = Permission.Create("TICKET_UPDATE");
-    public static readonly Permission Delete = Permission.Create("TICKET_DELETE");
-    public static readonly Permission Assign = Permission.Create("TICKET_ASSIGN");
-    public static readonly Permission Unassign = Permission.Create("TICKET_UNASSIGN");
+    public const string Create = "TICKET_CREATE";
+    public const string Update = "TICKET_UPDATE";
+    public const string Delete = "TICKET_DELETE";
+    public const string Assign = "TICKET_ASSIGN";
+    public const string Unassign = "TICKET_UNASSIGN";
 }
