@@ -20,7 +20,7 @@ public static class RolePermissions
             {
                 Role.RoleType.Manager, new []
                 {
-                    ProjectPermissions.Create, ProjectPermissions.Update, ProjectPermissions.Delete,
+                    ProjectPermissions.Update,
                     TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
                     TicketPermissions.Assign, TicketPermissions.Unassign,
                 }
