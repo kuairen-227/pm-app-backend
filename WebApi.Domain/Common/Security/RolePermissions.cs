@@ -12,7 +12,7 @@ public static class RolePermissions
                 Role.RoleType.Admin, new []
                 {
                     UserPermissions.Manage,
-                    ProjectPermissions.Create, ProjectPermissions.Update, ProjectPermissions.Delete,
+                    ProjectPermissions.Launch, ProjectPermissions.Update, ProjectPermissions.Delete,
                     TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
                     TicketPermissions.Assign, TicketPermissions.Unassign,
                 }
@@ -29,7 +29,7 @@ public static class RolePermissions
                 Role.RoleType.Member, new []
                 {
                     // TODO: 1つ以上必要なため仮で設定
-                    ProjectPermissions.Create
+                    ProjectPermissions.Launch
                 }
             }
         };
