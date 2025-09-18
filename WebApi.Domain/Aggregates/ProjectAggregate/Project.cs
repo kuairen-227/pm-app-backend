@@ -1,5 +1,4 @@
 using WebApi.Domain.Abstractions;
-using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.ProjectAggregate;
