@@ -10,10 +10,12 @@ public class AssignUserHandler : BaseCommandHandler, IRequestHandler<AssignUserC
 {
     private readonly ITicketRepository _ticketRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IProjectRepository _projectRepository;
 
     public AssignUserHandler(
         ITicketRepository ticketRepository,
         IUserRepository userRepository,
+        IProjectRepository projectRepository,
         IUnitOfWork unitOfWork,
         IUserContext userContext,
         IDateTimeProvider clock)
@@ -21,6 +23,7 @@ public class AssignUserHandler : BaseCommandHandler, IRequestHandler<AssignUserC
     {
         _ticketRepository = ticketRepository;
         _userRepository = userRepository;
+        _projectRepository = projectRepository;
     }
 
     public async Task<Unit> Handle(AssignUserCommand request, CancellationToken cancellationToken)
@@ -30,7 +33,9 @@ public class AssignUserHandler : BaseCommandHandler, IRequestHandler<AssignUserC
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken)
             ?? throw new NotFoundException("USER_NOT_FOUND", "User が見つかりません");
 
-        // TODO: アサイン可能かどうかのチェック（ex: プロジェクトに所属するユーザーか）
+        var project = await _projectRepository.GetByIdAsync(request.ProjectId, cancellationToken)
+            ?? throw new NotFoundException("PROJECT_NOT_FOUND", "Project が見つかりません");
+        project.EnsureMember(user.Id);
 
         ticket.Assign(user.Id, UserContext.Id, Clock);
         await UnitOfWork.SaveChangesAsync(cancellationToken);

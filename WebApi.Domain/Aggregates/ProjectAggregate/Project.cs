@@ -40,7 +40,7 @@ public sealed class Project : Entity
     public void AddMember(Guid userId, ProjectRole role)
     {
         if (_members.Any(m => m.UserId == userId))
-            throw new DomainException("USER_ALREADY_JOINED", "User はすでにプロジェクト参画済です");
+            throw new DomainException("USER_ALREADY_JOINED", "User はすでにプロジェクトメンバーです");
 
         var member = ProjectMember.Create(userId, role);
         _members.Add(member);
@@ -50,8 +50,14 @@ public sealed class Project : Entity
     {
         var index = _members.FindIndex(m => m.UserId == userId);
         if (index < 0)
-            throw new DomainException("USER_NOT_EXIST", "User はプロジェクトに所属していません");
+            throw new DomainException("USER_NOT_PROJECT_MEMBER", "User はプロジェクトメンバーではありません");
 
         _members[index] = ProjectMember.Create(userId, newRole);
+    }
+
+    public void EnsureMember(Guid userId)
+    {
+        if (!_members.Any(m => m.UserId == userId))
+            throw new DomainException("USER_NOT_PROJECT_MEMBER", "User はプロジェクトメンバーではありません");
     }
 }

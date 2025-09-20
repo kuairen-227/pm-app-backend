@@ -138,4 +138,34 @@ public class ProjectTests : BaseDomainTest
         result.Members.Count.Should().Be(1);
         result.Members[0].Should().Be(member);
     }
+
+    [Fact]
+    public void 正常系_EnsureMember()
+    {
+        // Arrange
+        var project = _projectBuilder.Build();
+        var user = _userBuilder.Build();
+        var role = ProjectRole.Create(ProjectRole.RoleType.Member);
+        project.AddMember(user.Id, role);
+
+        // Act
+        Action act = () => project.EnsureMember(user.Id);
+
+        // Assert
+        act.Should().NotThrow();
+    }
+
+    [Fact]
+    public void 異常系_EnsureMember()
+    {
+        // Arrange
+        var project = _projectBuilder.Build();
+
+        // Act
+        Action act = () => project.EnsureMember(Guid.NewGuid());
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("USER_NOT_PROJECT_MEMBER");
+    }
 }
