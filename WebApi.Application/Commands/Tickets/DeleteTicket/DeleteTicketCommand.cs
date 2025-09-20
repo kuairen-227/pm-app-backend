@@ -1,6 +1,6 @@
 using MediatR;
-using WebApi.Application.Common.Security;
-using WebApi.Domain.Common.Security.Permissions;
+using WebApi.Application.Common.Authorization;
+using WebApi.Domain.Common.Authorization.Permissions;
 
 namespace WebApi.Application.Commands.Tickets.DeleteTicket;
 

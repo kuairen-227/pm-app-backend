@@ -1,4 +1,4 @@
-namespace WebApi.Application.Common.Security;
+namespace WebApi.Application.Common.Authorization;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class RequiresPermissionAttribute : Attribute

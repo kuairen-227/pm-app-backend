@@ -1,9 +1,9 @@
 using MediatR;
 using WebApi.Application.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
-using WebApi.Domain.Common.Security;
+using WebApi.Domain.Common.Authorization;
 
-namespace WebApi.Application.Common.Security;
+namespace WebApi.Application.Common.Authorization;
 
 public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull

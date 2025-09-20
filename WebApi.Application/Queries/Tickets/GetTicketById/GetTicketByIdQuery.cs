@@ -1,7 +1,7 @@
 using MediatR;
-using WebApi.Application.Common.Security;
+using WebApi.Application.Common.Authorization;
 using WebApi.Application.Queries.Tickets.Dtos;
-using WebApi.Domain.Common.Security.Permissions;
+using WebApi.Domain.Common.Authorization.Permissions;
 
 namespace WebApi.Application.Queries.Tickets.GetTicketById;
 

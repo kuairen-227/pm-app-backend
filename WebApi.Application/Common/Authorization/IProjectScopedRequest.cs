@@ -1,4 +1,4 @@
-namespace WebApi.Application.Common.Security;
+namespace WebApi.Application.Common.Authorization;
 
 public interface IProjectScopedRequest
 {

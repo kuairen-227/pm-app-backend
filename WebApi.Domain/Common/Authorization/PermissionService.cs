@@ -1,7 +1,7 @@
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.UserAggregate;
 
-namespace WebApi.Domain.Common.Security;
+namespace WebApi.Domain.Common.Authorization;
 
 public class PermissionService : IPermissionService
 {

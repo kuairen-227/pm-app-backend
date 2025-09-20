@@ -1,7 +1,7 @@
 using WebApi.Domain.Aggregates.ProjectAggregate;
-using WebApi.Domain.Common.Security.Permissions;
+using WebApi.Domain.Common.Authorization.Permissions;
 
-namespace WebApi.Domain.Common.Security;
+namespace WebApi.Domain.Common.Authorization;
 
 public static class ProjectRolePermissions
 {
