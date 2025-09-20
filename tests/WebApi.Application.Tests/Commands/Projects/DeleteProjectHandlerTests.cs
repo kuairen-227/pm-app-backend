@@ -46,7 +46,7 @@ public class DeleteProjectHandlerTests : BaseCommandHandlerTest
         // Assert
         result.Should().Be(MediatR.Unit.Value);
         _projectRepository.Verify(x => x.DeleteAsync(project, It.IsAny<CancellationToken>()), Times.Once);
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()));
+        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]

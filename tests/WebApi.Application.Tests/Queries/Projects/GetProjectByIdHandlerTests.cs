@@ -61,7 +61,7 @@ public class GetProjectByIdHandlerTests : BaseQueryHandlerTest
         result.UpdatedBy.Should().Be(project.UpdatedBy);
         result.UpdatedAt.Should().Be(project.UpdatedAt);
 
-        _projectRepository.Verify(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()));
+        _projectRepository.Verify(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -78,6 +78,6 @@ public class GetProjectByIdHandlerTests : BaseQueryHandlerTest
 
         // Assert
         result.Should().BeNull();
-        _projectRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()));
+        _projectRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }
