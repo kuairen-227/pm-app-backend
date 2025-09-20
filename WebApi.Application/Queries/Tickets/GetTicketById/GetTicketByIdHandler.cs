@@ -18,7 +18,7 @@ public class GetTicketByIdHandler : IRequestHandler<GetTicketByIdQuery, TicketDe
 
     public async Task<TicketDetailDto?> Handle(GetTicketByIdQuery request, CancellationToken cancellationToken)
     {
-        var ticket = await _ticketRepository.GetByIdAsync(request.Id, cancellationToken);
+        var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken);
         if (ticket is null) return null;
 
         return _mapper.Map<TicketDetailDto>(ticket);

@@ -11,15 +11,15 @@ public static class ProjectRolePermissions
             {
                 ProjectRole.RoleType.ProjectManager, new []
                 {
-                    ProjectPermissions.Update,
-                    TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
+                    ProjectPermissions.View, ProjectPermissions.Update,
+                    TicketPermissions.View, TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
                     TicketPermissions.Assign, TicketPermissions.Unassign
                 }
             },
             {
                 ProjectRole.RoleType.Member, new[]
                 {
-                    TicketPermissions.Update
+                    TicketPermissions.View, TicketPermissions.Update
                 }
             }
         };

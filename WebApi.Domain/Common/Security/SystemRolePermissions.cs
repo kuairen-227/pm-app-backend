@@ -1,3 +1,4 @@
+using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Aggregates.UserAggregate;
 using WebApi.Domain.Common.Security.Permissions;
 
@@ -11,9 +12,9 @@ public static class SystemRolePermissions
             {
                 SystemRole.RoleType.Admin, new []
                 {
-                    UserPermissions.Manage,
-                    ProjectPermissions.Launch, ProjectPermissions.Update, ProjectPermissions.Delete,
-                    TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
+                    UserPermissions.View, UserPermissions.Manage,
+                    ProjectPermissions.View, ProjectPermissions.Launch, ProjectPermissions.Update, ProjectPermissions.Delete,
+                    TicketPermissions.View, TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
                     TicketPermissions.Assign, TicketPermissions.Unassign,
                 }
             },

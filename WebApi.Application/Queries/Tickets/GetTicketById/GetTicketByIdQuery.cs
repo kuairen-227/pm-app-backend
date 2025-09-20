@@ -1,14 +1,19 @@
 using MediatR;
+using WebApi.Application.Common.Security;
 using WebApi.Application.Queries.Tickets.Dtos;
+using WebApi.Domain.Common.Security.Permissions;
 
 namespace WebApi.Application.Queries.Tickets.GetTicketById;
 
-public class GetTicketByIdQuery : IRequest<TicketDetailDto?>
+[RequiresPermission(TicketPermissions.View)]
+public class GetTicketByIdQuery : IRequest<TicketDetailDto?>, IProjectScopedRequest
 {
-    public Guid Id { get; }
+    public Guid ProjectId { get; }
+    public Guid TicketId { get; }
 
-    public GetTicketByIdQuery(Guid id)
+    public GetTicketByIdQuery(Guid projectId, Guid ticketId)
     {
-        Id = id;
+        ProjectId = projectId;
+        TicketId = ticketId;
     }
 }
