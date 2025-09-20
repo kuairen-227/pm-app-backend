@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Domain.Tests", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Application.Tests", "tests\WebApi.Application.Tests\WebApi.Application.Tests.csproj", "{DEC0BF7E-6144-4C43-9DDB-41E39C2A0294}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Tests.Helpers", "tests\WebApi.Tests.Helpers\WebApi.Tests.Helpers.csproj", "{C7180345-2D1E-4218-9CA8-F115F4536C37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,18 @@ Global
 		{DEC0BF7E-6144-4C43-9DDB-41E39C2A0294}.Release|x64.Build.0 = Release|Any CPU
 		{DEC0BF7E-6144-4C43-9DDB-41E39C2A0294}.Release|x86.ActiveCfg = Release|Any CPU
 		{DEC0BF7E-6144-4C43-9DDB-41E39C2A0294}.Release|x86.Build.0 = Release|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Debug|x64.Build.0 = Debug|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Debug|x86.Build.0 = Debug|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Release|x64.ActiveCfg = Release|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Release|x64.Build.0 = Release|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Release|x86.ActiveCfg = Release|Any CPU
+		{C7180345-2D1E-4218-9CA8-F115F4536C37}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,5 +120,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F6A0DEB6-5B2C-4866-9FF0-63F173EFA08F} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{DEC0BF7E-6144-4C43-9DDB-41E39C2A0294} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{C7180345-2D1E-4218-9CA8-F115F4536C37} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal
