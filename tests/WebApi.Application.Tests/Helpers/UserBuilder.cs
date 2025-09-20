@@ -7,7 +7,7 @@ public class UserBuilder : BaseBuilder<UserBuilder, User>
 {
     private string _name = "デフォルトユーザー";
     private string _email = "default@example.com";
-    private Role.RoleType _role = Role.RoleType.Member;
+    private Role.RoleType _role = Role.RoleType.User;
 
     public UserBuilder WithName(string name)
     {

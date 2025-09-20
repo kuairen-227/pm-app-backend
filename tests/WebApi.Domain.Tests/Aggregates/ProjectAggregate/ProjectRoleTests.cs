@@ -1,17 +1,17 @@
 using FluentAssertions;
-using WebApi.Domain.Aggregates.UserAggregate;
+using WebApi.Domain.Aggregates.ProjectAggregate;
 
-namespace WebApi.Domain.Tests.Aggregates.UserAggregate;
+namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
 
-public class RoleTests
+public class ProjectRoleTests
 {
     [Theory]
-    [InlineData(Role.RoleType.Admin)]
-    [InlineData(Role.RoleType.User)]
-    public void 正常系_インスタンス生成(Role.RoleType roleType)
+    [InlineData(ProjectRole.RoleType.ProjectManager)]
+    [InlineData(ProjectRole.RoleType.Member)]
+    public void 正常系_インスタンス生成(ProjectRole.RoleType roleType)
     {
         // Act
-        var result = Role.Create(roleType);
+        var result = ProjectRole.Create(roleType);
 
         // Assert
         result.Value.Should().Be(roleType);
@@ -21,8 +21,8 @@ public class RoleTests
     public void 正常系_値が同じ場合()
     {
         // Arrange & Act
-        var result1 = Role.Create(Role.RoleType.Admin);
-        var result2 = Role.Create(Role.RoleType.Admin);
+        var result1 = ProjectRole.Create(ProjectRole.RoleType.Member);
+        var result2 = ProjectRole.Create(ProjectRole.RoleType.Member);
 
         // Assert
         result1.Should().Be(result2);
@@ -34,8 +34,8 @@ public class RoleTests
     public void 正常系_値が異なる場合()
     {
         // Arrange & Act
-        var result1 = Role.Create(Role.RoleType.Admin);
-        var result2 = Role.Create(Role.RoleType.User);
+        var result1 = ProjectRole.Create(ProjectRole.RoleType.ProjectManager);
+        var result2 = ProjectRole.Create(ProjectRole.RoleType.Member);
 
         // Assert
         result1.Should().NotBe(result2);

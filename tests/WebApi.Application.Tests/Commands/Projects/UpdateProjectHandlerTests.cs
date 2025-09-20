@@ -66,8 +66,7 @@ public class UpdateProjectHandlerTests : BaseApplicationTest
         var command = new UpdateProjectCommand(
             Guid.NewGuid(),
             "プロジェクト名 - 編集",
-            "プロジェクト説明 - 編集",
-            Guid.NewGuid()
+            "プロジェクト説明 - 編集"
         );
         _projectRepository
             .Setup(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))

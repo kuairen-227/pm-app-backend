@@ -4,7 +4,7 @@ namespace WebApi.Domain.Aggregates.UserAggregate;
 
 public sealed class Role : ValueObject
 {
-    public enum RoleType { Admin, Manager, Member }
+    public enum RoleType { Admin, User }
     public RoleType Value { get; }
 
     private Role(RoleType value)

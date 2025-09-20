@@ -8,6 +8,9 @@ public sealed class Project : Entity
     public string Name { get; private set; }
     public string? Description { get; private set; }
 
+    private readonly List<ProjectMember> _members = new();
+    public IReadOnlyList<ProjectMember> Members => _members.AsReadOnly();
+
     public Project(
         string name, string? description, Guid createdBy, IDateTimeProvider clock)
         : base(createdBy, clock)
@@ -32,5 +35,23 @@ public sealed class Project : Entity
     {
         Description = newDescription;
         UpdateAuditInfo(updatedBy, clock);
+    }
+
+    public void AddMember(Guid userId, ProjectRole role)
+    {
+        if (_members.Any(m => m.UserId == userId))
+            throw new DomainException("USER_ALREADY_JOINED", "User はすでにプロジェクト参画済です");
+
+        var member = ProjectMember.Create(userId, role);
+        _members.Add(member);
+    }
+
+    public void ChangeRole(Guid userId, ProjectRole newRole)
+    {
+        var index = _members.FindIndex(m => m.UserId == userId);
+        if (index < 0)
+            throw new DomainException("USER_NOT_EXIST", "User はプロジェクトに所属していません");
+
+        _members[index] = ProjectMember.Create(userId, newRole);
     }
 }

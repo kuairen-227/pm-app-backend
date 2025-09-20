@@ -1,4 +1,5 @@
 using FluentAssertions;
+using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Common;
 using WebApi.Domain.Tests.Helpers;
 using WebApi.Domain.Tests.Helpers.Common;
@@ -8,12 +9,12 @@ namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
 public class ProjectTests : BaseDomainTest
 {
     private readonly ProjectBuilder _projectBuilder;
-    private readonly TicketBuilder _ticketBuilder;
+    private readonly UserBuilder _userBuilder;
 
     public ProjectTests()
     {
         _projectBuilder = new ProjectBuilder();
-        _ticketBuilder = new TicketBuilder();
+        _userBuilder = new UserBuilder();
     }
 
     [Fact]
@@ -61,10 +62,10 @@ public class ProjectTests : BaseDomainTest
     public void 異常系_Rename_ProjectNameが空の場合(string? newName)
     {
         // Arrange
-        var project = _projectBuilder.Build();
+        var result = _projectBuilder.Build();
 
         // Act
-        Action act = () => project.Rename(newName!, Guid.NewGuid(), Clock);
+        Action act = () => result.Rename(newName!, Guid.NewGuid(), Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -83,5 +84,58 @@ public class ProjectTests : BaseDomainTest
 
         // Assert
         result.Description.Should().Be(newDescription);
+    }
+
+    [Fact]
+    public void 正常系_AddMember()
+    {
+        // Arrange
+        var user = _userBuilder.Build();
+        var role = ProjectRole.Create(ProjectRole.RoleType.Member);
+
+        // Act
+        var result = _projectBuilder.Build();
+        result.AddMember(user.Id, role);
+
+        // Assert
+        var member = ProjectMember.Create(user.Id, role);
+        result.Members.Count.Should().Be(1);
+        result.Members[0].Should().Be(member);
+    }
+
+    [Fact]
+    public void 異常系_AddMember_すでに参画済のユーザーの場合()
+    {
+        // Arrange
+        var project = _projectBuilder.Build();
+        var user = _userBuilder.Build();
+        var role = ProjectRole.Create(ProjectRole.RoleType.Member);
+        project.AddMember(user.Id, role);
+
+        // Act
+        Action act = () => project.AddMember(user.Id, role);
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("USER_ALREADY_JOINED");
+    }
+
+    [Fact]
+    public void 正常系_ChangeRole()
+    {
+        // Arrange
+        var user = _userBuilder.Build();
+        var role = ProjectRole.Create(ProjectRole.RoleType.Member);
+        var result = _projectBuilder.Build();
+        result.AddMember(user.Id, role);
+
+        // Act
+        var newRole = ProjectRole.Create(ProjectRole.RoleType.ProjectManager);
+        result.ChangeRole(user.Id, newRole);
+
+        // Assert
+        var member = ProjectMember.Create(user.Id, newRole);
+        result.Members.Count.Should().Be(1);
+        result.Members[0].Should().Be(member);
     }
 }
