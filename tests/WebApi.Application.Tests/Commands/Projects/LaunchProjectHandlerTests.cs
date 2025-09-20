@@ -8,13 +8,13 @@ using WebApi.Tests.Helpers.Builders;
 
 namespace WebApi.Application.Tests.Commands.Projects;
 
-public class CreateProjectHandlerTests : BaseCommandHandlerTest
+public class LaunchProjectHandlerTests : BaseCommandHandlerTest
 {
     private readonly LaunchProjectHandler _handler;
     private readonly Mock<IProjectRepository> _projectRepository;
     private readonly ProjectBuilder _projectBuilder;
 
-    public CreateProjectHandlerTests()
+    public LaunchProjectHandlerTests()
     {
         _projectRepository = new Mock<IProjectRepository>();
         _projectBuilder = new ProjectBuilder();
