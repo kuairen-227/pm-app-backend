@@ -4,15 +4,15 @@ using WebApi.Application.Common;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
 
-namespace WebApi.Application.Commands.Tickets.AssignUser;
+namespace WebApi.Application.Commands.Tickets.AssignMember;
 
-public class AssignUserHandler : BaseCommandHandler, IRequestHandler<AssignUserCommand, Unit>
+public class AssignMemberHandler : BaseCommandHandler, IRequestHandler<AssignMemberCommand, Unit>
 {
     private readonly ITicketRepository _ticketRepository;
     private readonly IUserRepository _userRepository;
     private readonly IProjectRepository _projectRepository;
 
-    public AssignUserHandler(
+    public AssignMemberHandler(
         ITicketRepository ticketRepository,
         IUserRepository userRepository,
         IProjectRepository projectRepository,
@@ -26,7 +26,7 @@ public class AssignUserHandler : BaseCommandHandler, IRequestHandler<AssignUserC
         _projectRepository = projectRepository;
     }
 
-    public async Task<Unit> Handle(AssignUserCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(AssignMemberCommand request, CancellationToken cancellationToken)
     {
         var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
             ?? throw new NotFoundException("TICKET_NOT_FOUND", "Ticket が見つかりません");
