@@ -23,7 +23,7 @@ public class AssignmentHistoryTests
     public void 異常系_Assigned_AssigneeIdが空の場合()
     {
         // Arrange & Act
-        Action act = () => AssignmentHistory.Assigned(Guid.Empty, DateTime.UtcNow);
+        var act = () => AssignmentHistory.Assigned(Guid.Empty, DateTime.UtcNow);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -47,7 +47,7 @@ public class AssignmentHistoryTests
     public void 異常系_Changed_AssigneeIdが空の場合()
     {
         // Arrange & Act
-        Action act = () => AssignmentHistory.Changed(Guid.Empty, Guid.NewGuid(), DateTime.UtcNow);
+        var act = () => AssignmentHistory.Changed(Guid.Empty, Guid.NewGuid(), DateTime.UtcNow);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -58,7 +58,7 @@ public class AssignmentHistoryTests
     public void 異常系_Changed_PreviousAssigneeIdが空の場合()
     {
         // Arrange & Act
-        Action act = () => AssignmentHistory.Changed(Guid.NewGuid(), Guid.Empty, DateTime.UtcNow);
+        var act = () => AssignmentHistory.Changed(Guid.NewGuid(), Guid.Empty, DateTime.UtcNow);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -82,7 +82,7 @@ public class AssignmentHistoryTests
     public void 異常系_Unassigned_PreviousAssigneeIdが空の場合()
     {
         // Arrange & Act
-        Action act = () => AssignmentHistory.Unassigned(Guid.Empty, DateTime.UtcNow);
+        var act = () => AssignmentHistory.Unassigned(Guid.Empty, DateTime.UtcNow);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

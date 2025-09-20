@@ -28,7 +28,7 @@ public class TicketCommentTests : BaseDomainTest
     public void 異常系_インスタンス生成_TicketIdが空の場合()
     {
         // Arrange & Act
-        Action act = () => _commentBuilder.WithTicketId(Guid.Empty).Build();
+        var act = () => _commentBuilder.WithTicketId(Guid.Empty).Build();
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -39,7 +39,7 @@ public class TicketCommentTests : BaseDomainTest
     public void 異常系_インスタンス生成_AuthorIdが空の場合()
     {
         // Arrange & Act
-        Action act = () => _commentBuilder.WithAuthorId(Guid.Empty).Build();
+        var act = () => _commentBuilder.WithAuthorId(Guid.Empty).Build();
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -53,7 +53,7 @@ public class TicketCommentTests : BaseDomainTest
     public void 異常系_インスタンス生成_Contentが空の場合(string? content)
     {
         // Arrange & Act
-        Action act = () => _commentBuilder.WithContent(content!).Build();
+        var act = () => _commentBuilder.WithContent(content!).Build();
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -83,7 +83,7 @@ public class TicketCommentTests : BaseDomainTest
         var ticketComment = _commentBuilder.Build();
 
         // Act
-        Action act = () => ticketComment.UpdateContent(content!, UserContext.Id, Clock);
+        var act = () => ticketComment.UpdateContent(content!, UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

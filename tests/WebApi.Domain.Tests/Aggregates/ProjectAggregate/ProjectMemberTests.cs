@@ -29,7 +29,7 @@ public class ProjectMemberTests
         var role = ProjectRole.Create(ProjectRole.RoleType.Member);
 
         // Act
-        Action act = () => ProjectMember.Create(userId, role);
+        var act = () => ProjectMember.Create(userId, role);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

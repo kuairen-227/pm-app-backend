@@ -23,7 +23,7 @@ public class EmailTests
     public void 異常系_インスタンス生成_Emailが空の場合(string? input)
     {
         // Act
-        Action act = () => Email.Create(input!);
+        var act = () => Email.Create(input!);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

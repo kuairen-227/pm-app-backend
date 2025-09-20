@@ -27,7 +27,7 @@ public class DeadlineTests : BaseDomainTest
         var now = Clock.Now;
 
         // Act
-        Action act = () => Deadline.Create(now, Clock);
+        var act = () => Deadline.Create(now, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -41,7 +41,7 @@ public class DeadlineTests : BaseDomainTest
         var yesterday = Clock.Now.Date.AddDays(-1);
 
         // Act
-        Action act = () => Deadline.Create(yesterday, Clock);
+        var act = () => Deadline.Create(yesterday, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

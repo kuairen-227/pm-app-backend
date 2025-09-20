@@ -31,7 +31,7 @@ public class NotificationTests
         var builder = _notificationBuilder.WithUserId(Guid.Empty);
 
         // Act
-        Action act = () => builder.Build();
+        var act = () => builder.Build();
 
         // Then
         var ex = act.Should().Throw<DomainException>();
@@ -48,7 +48,7 @@ public class NotificationTests
         var builder = _notificationBuilder.WithMessage(message!);
 
         // Act
-        Action act = () => builder.Build();
+        var act = () => builder.Build();
 
         // Then
         var ex = act.Should().Throw<DomainException>();

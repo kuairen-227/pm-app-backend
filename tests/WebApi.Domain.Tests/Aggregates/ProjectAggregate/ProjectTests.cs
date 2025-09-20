@@ -34,7 +34,7 @@ public class ProjectTests : BaseDomainTest
     public void 異常系_インスタンス生成_ProjectNameが空の場合(string? name)
     {
         // Arrange & Act
-        Action act = () => _projectBuilder.WithName(name!).Build();
+        var act = () => _projectBuilder.WithName(name!).Build();
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -65,7 +65,7 @@ public class ProjectTests : BaseDomainTest
         var result = _projectBuilder.Build();
 
         // Act
-        Action act = () => result.Rename(newName!, Guid.NewGuid(), Clock);
+        var act = () => result.Rename(newName!, Guid.NewGuid(), Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -114,7 +114,7 @@ public class ProjectTests : BaseDomainTest
             .Build();
 
         // Act
-        Action act = () => project.AddMember(user.Id, role);
+        var act = () => project.AddMember(user.Id, role);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -149,7 +149,7 @@ public class ProjectTests : BaseDomainTest
         var role = ProjectRole.Create(ProjectRole.RoleType.Member);
 
         // Act
-        Action act = () => project.ChangeRole(Guid.NewGuid(), role);
+        var act = () => project.ChangeRole(Guid.NewGuid(), role);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -167,7 +167,7 @@ public class ProjectTests : BaseDomainTest
             .Build();
 
         // Act
-        Action act = () => project.EnsureMember(user.Id);
+        var act = () => project.EnsureMember(user.Id);
 
         // Assert
         act.Should().NotThrow();
@@ -180,7 +180,7 @@ public class ProjectTests : BaseDomainTest
         var project = _projectBuilder.Build();
 
         // Act
-        Action act = () => project.EnsureMember(Guid.NewGuid());
+        var act = () => project.EnsureMember(Guid.NewGuid());
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

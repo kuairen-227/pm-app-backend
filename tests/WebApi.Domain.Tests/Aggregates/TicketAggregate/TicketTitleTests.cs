@@ -26,7 +26,7 @@ public class TicketTitleTests
     public void 異常系_インスタンス生成_Titleが空の場合(string? title)
     {
         // Act
-        Action act = () => TicketTitle.Create(title!);
+        var act = () => TicketTitle.Create(title!);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

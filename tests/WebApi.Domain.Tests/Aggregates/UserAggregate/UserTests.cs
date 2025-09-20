@@ -30,7 +30,7 @@ public class UserTests
     public void 異常系_インスタンス生成_Nameが空の場合(string? name)
     {
         // Arrange & Act
-        Action act = () => _userBuilder.WithName(name!).Build();
+        var act = () => _userBuilder.WithName(name!).Build();
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
