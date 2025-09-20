@@ -3,6 +3,7 @@ using WebApi.Application.Abstractions;
 using WebApi.Application.Common;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
+using WebApi.Domain.Aggregates.ProjectAggregate;
 
 namespace WebApi.Application.Commands.Projects.UpdateProject;
 
@@ -23,7 +24,7 @@ public class UpdateProjectHandler : BaseCommandHandler, IRequestHandler<UpdatePr
     public async Task<Unit> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
         var project = await _projectRepository.GetByIdAsync(request.ProjectId, cancellationToken)
-            ?? throw new NotFoundException("PROJECT_NOT_FOUND", "Project が見つかりません");
+            ?? throw new NotFoundException(nameof(Project), request.ProjectId);
 
         project.Rename(request.Name, UserContext.Id, Clock);
         project.ChangeDescription(request.Description, UserContext.Id, Clock);

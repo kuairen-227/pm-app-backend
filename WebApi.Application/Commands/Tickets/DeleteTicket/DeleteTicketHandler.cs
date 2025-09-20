@@ -3,6 +3,7 @@ using WebApi.Application.Abstractions;
 using WebApi.Application.Common;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
+using WebApi.Domain.Aggregates.TicketAggregate;
 
 namespace WebApi.Application.Commands.Tickets.DeleteTicket;
 
@@ -23,7 +24,7 @@ public class DeleteTicketHandler : BaseCommandHandler, IRequestHandler<DeleteTic
     public async Task<Unit> Handle(DeleteTicketCommand request, CancellationToken cancellationToken)
     {
         var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
-            ?? throw new NotFoundException("TICKET_NOT_FOUND", "Ticket が見つかりません");
+            ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
         await _ticketRepository.DeleteAsync(ticket, cancellationToken);
         await UnitOfWork.SaveChangesAsync(cancellationToken);

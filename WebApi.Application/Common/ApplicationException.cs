@@ -24,6 +24,9 @@ public sealed class AuthorizationException : ApplicationException
 
 public sealed class NotFoundException : ApplicationException
 {
-    public NotFoundException(string errorCode, string message)
-        : base(errorCode, message) { }
+    public NotFoundException(string entityName, Guid key)
+        : base($"{entityName.ToUpperInvariant()}_NOT_FOUND",
+               $"{entityName}({key}) が見つかりません")
+    {
+    }
 }

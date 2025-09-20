@@ -24,7 +24,7 @@ public class UpdateTicketHandler : BaseCommandHandler, IRequestHandler<UpdateTic
     public async Task<Unit> Handle(UpdateTicketCommand request, CancellationToken cancellationToken)
     {
         var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
-            ?? throw new NotFoundException("TICKET_NOT_FOUND", "Ticket が見つかりません");
+            ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
         var title = TicketTitle.Create(request.Title);
         ticket.ChangeTitle(title, UserContext.Id, Clock);

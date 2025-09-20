@@ -3,6 +3,7 @@ using WebApi.Application.Abstractions;
 using WebApi.Application.Common;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
+using WebApi.Domain.Aggregates.ProjectAggregate;
 
 namespace WebApi.Application.Commands.Projects.DeleteProject;
 
@@ -23,7 +24,7 @@ public class DeleteProjectHandler : BaseCommandHandler, IRequestHandler<DeletePr
     public async Task<Unit> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
     {
         var project = await _projectRepository.GetByIdAsync(request.ProjectId, cancellationToken)
-            ?? throw new NotFoundException("PROJECT_NOT_FOUND", "Project が見つかりません");
+            ?? throw new NotFoundException(nameof(Project), request.ProjectId);
 
         await _projectRepository.DeleteAsync(project, cancellationToken);
         await UnitOfWork.SaveChangesAsync(cancellationToken);
