@@ -4,13 +4,13 @@ using WebApi.Domain.Abstractions;
 
 namespace WebApi.Application.Tests.Helpers.Common;
 
-public abstract class BaseApplicationTest
+public abstract class BaseCommandHandlerTest
 {
     protected readonly Mock<IUnitOfWork> UnitOfWork;
     protected readonly Mock<IUserContext> UserContext;
     protected readonly Mock<IDateTimeProvider> Clock;
 
-    protected BaseApplicationTest()
+    protected BaseCommandHandlerTest()
     {
         UnitOfWork = TestHelpers.CreateUnitOfWork();
         UserContext = TestHelpers.CreateUserContext();

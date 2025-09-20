@@ -8,7 +8,7 @@ using WebApi.Domain.Aggregates.ProjectAggregate;
 
 namespace WebApi.Application.Tests.Commands.Projects;
 
-public class CreateProjectHandlerTests : BaseApplicationTest
+public class CreateProjectHandlerTests : BaseCommandHandlerTest
 {
     private readonly LaunchProjectHandler _handler;
     private readonly Mock<IProjectRepository> _projectRepository;

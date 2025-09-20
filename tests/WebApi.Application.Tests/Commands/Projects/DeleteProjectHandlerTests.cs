@@ -6,11 +6,10 @@ using WebApi.Application.Tests.Helpers;
 using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.ProjectAggregate;
-using WebApi.Domain.Common;
 
 namespace WebApi.Application.Tests.Commands.Projects;
 
-public class DeleteProjectHandlerTests : BaseApplicationTest
+public class DeleteProjectHandlerTests : BaseCommandHandlerTest
 {
     private readonly DeleteProjectHandler _handler;
     private readonly Mock<IProjectRepository> _projectRepository;
