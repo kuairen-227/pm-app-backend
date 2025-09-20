@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using WebApi.Application.Queries.Projects.Dtos;
 using WebApi.Application.Queries.Projects.ListProjects;
 using WebApi.Application.Tests.Helpers;
 using WebApi.Application.Tests.Helpers.Common;
@@ -8,7 +9,7 @@ using WebApi.Domain.Aggregates.ProjectAggregate;
 
 namespace WebApi.Application.Tests.Queries.Projects;
 
-public class ListProjectsHandlerTests : BaseApplicationTest
+public class ListProjectsHandlerTests : BaseQueryHandlerTest
 {
     private readonly ListProjectsHandler _handler;
     private readonly Mock<IProjectRepository> _projectRepository;
@@ -19,7 +20,22 @@ public class ListProjectsHandlerTests : BaseApplicationTest
         _projectRepository = new Mock<IProjectRepository>();
         _projectBuilder = new ProjectBuilder();
 
-        _handler = new ListProjectsHandler(_projectRepository.Object);
+        Mapper.Setup(m => m.Map<ProjectDto>(It.IsAny<Project>()))
+            .Returns<Project>(p => new ProjectDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                CreatedBy = p.CreatedBy,
+                CreatedAt = p.CreatedAt,
+                UpdatedBy = p.UpdatedBy,
+                UpdatedAt = p.UpdatedAt,
+            });
+
+        _handler = new ListProjectsHandler(
+            _projectRepository.Object,
+            Mapper.Object
+        );
     }
 
     [Fact]
