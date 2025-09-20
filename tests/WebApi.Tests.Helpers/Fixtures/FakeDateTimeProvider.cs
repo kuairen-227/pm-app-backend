@@ -1,6 +1,6 @@
 using WebApi.Domain.Abstractions;
 
-namespace WebApi.Domain.Tests.Helpers.Common;
+namespace WebApi.Tests.Helpers.Fixtures;
 
 public class FakeDateTimeProvider : IDateTimeProvider
 {

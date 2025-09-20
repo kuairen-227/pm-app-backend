@@ -1,6 +1,6 @@
 using FluentAssertions;
 using WebApi.Domain.Common;
-using WebApi.Domain.Tests.Helpers;
+using WebApi.Tests.Helpers.Builders;
 
 namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 

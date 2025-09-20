@@ -1,7 +1,7 @@
 using WebApi.Domain.Aggregates.ProjectAggregate;
-using WebApi.Domain.Helpers.Common;
+using WebApi.Tests.Helpers.Builders.Common;
 
-namespace WebApi.Domain.Tests.Helpers;
+namespace WebApi.Tests.Helpers.Builders;
 
 public class ProjectBuilder : BaseBuilder<ProjectBuilder, Project>
 {

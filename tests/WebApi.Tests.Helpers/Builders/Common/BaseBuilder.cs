@@ -1,7 +1,7 @@
 using WebApi.Domain.Abstractions;
-using WebApi.Domain.Tests.Helpers.Common;
+using WebApi.Tests.Helpers.Fixtures;
 
-namespace WebApi.Domain.Helpers.Common;
+namespace WebApi.Tests.Helpers.Builders.Common;
 
 public abstract class BaseBuilder<TBuilder, TEntity>
     where TBuilder : BaseBuilder<TBuilder, TEntity>

@@ -1,4 +1,6 @@
-namespace WebApi.Domain.Tests.Helpers.Common;
+using WebApi.Tests.Helpers.Fixtures;
+
+namespace WebApi.Domain.Tests.Helpers;
 
 public abstract class BaseDomainTest
 {
