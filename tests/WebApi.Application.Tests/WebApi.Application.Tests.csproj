@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\WebApi.Application\WebApi.Application.csproj" />
     <ProjectReference Include="..\..\WebApi.Domain\WebApi.Domain.csproj" />
+    <ProjectReference Include="..\WebApi.Tests.Helpers\WebApi.Tests.Helpers.csproj" />
   </ItemGroup>
 
 </Project>
