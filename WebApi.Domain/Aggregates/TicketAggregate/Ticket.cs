@@ -70,7 +70,7 @@ public sealed class Ticket : Entity
         UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void UnAssign(Guid updatedBy, IDateTimeProvider clock)
+    public void Unassign(Guid updatedBy, IDateTimeProvider clock)
     {
         if (AssigneeId is null)
             throw new DomainException("NOT_ASSIGNED", "現在割り当てられていません");

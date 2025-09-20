@@ -122,7 +122,7 @@ public class TicketTests : BaseDomainTest
     }
 
     [Fact]
-    public void 正常系_UnAssign()
+    public void 正常系_Unassign()
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
@@ -130,20 +130,20 @@ public class TicketTests : BaseDomainTest
         ticket.Assign(user.Id, UserContext.Id, Clock);
 
         // Act
-        ticket.UnAssign(UserContext.Id, Clock);
+        ticket.Unassign(UserContext.Id, Clock);
 
         // Assert
         ticket.AssigneeId.Should().BeNull();
     }
 
     [Fact]
-    public void 異常系_UnAssign_未アサインの場合()
+    public void 異常系_Unassign_未アサインの場合()
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
 
         // Act
-        var act = () => ticket.UnAssign(UserContext.Id, Clock);
+        var act = () => ticket.Unassign(UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
