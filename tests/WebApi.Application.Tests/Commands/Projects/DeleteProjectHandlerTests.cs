@@ -33,7 +33,6 @@ public class DeleteProjectHandlerTests : BaseApplicationTest
     {
         // Arrange
         var project = _projectBuilder
-            .WithOwnerId(UserContext.Object.Id)
             .WithCreatedBy(UserContext.Object.Id)
             .WithClock(Clock.Object)
             .Build();
@@ -63,24 +62,5 @@ public class DeleteProjectHandlerTests : BaseApplicationTest
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
         ex.Which.ErrorCode.Should().Be("PROJECT_NOT_FOUND");
-    }
-
-    [Fact]
-    public async Task 異常系_Handle_削除可能でない場合()
-    {
-        // Arrange
-        var project = _projectBuilder
-            .WithOwnerId(Guid.NewGuid())
-            .WithClock(Clock.Object)
-            .Build();
-        var command = new DeleteProjectCommand(project.Id);
-        _projectRepository.Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(project);
-
-        // Act
-        var act = async () => await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        var ex = await act.Should().ThrowAsync<DomainException>();
     }
 }

@@ -24,7 +24,6 @@ public class UpdateProjectHandler : BaseCommandHandler, IRequestHandler<UpdatePr
 
         project.Rename(request.Name, UserContext.Id, Clock);
         project.ChangeDescription(request.Description, UserContext.Id, Clock);
-        project.ChangeOwner(request.OwnerId, UserContext.Id, Clock);
         await UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

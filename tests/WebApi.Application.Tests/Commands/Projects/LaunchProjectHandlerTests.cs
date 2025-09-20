@@ -33,8 +33,7 @@ public class CreateProjectHandlerTests : BaseApplicationTest
         var project = _projectBuilder.Build();
         var command = new LaunchProjectCommand(
             project.Name,
-            project.Description,
-            project.OwnerId
+            project.Description
         );
         Project? capturedProject = null;
         _projectRepository
@@ -50,7 +49,6 @@ public class CreateProjectHandlerTests : BaseApplicationTest
         capturedProject.Should().NotBeNull();
         capturedProject.Name.Should().Be(project.Name);
         capturedProject.Description.Should().Be(project.Description);
-        capturedProject.OwnerId.Should().Be(project.OwnerId);
         capturedProject.CreatedBy.Should().Be(UserContext.Object.Id);
         capturedProject.CreatedAt.Should().Be(Clock.Object.Now);
         capturedProject.UpdatedBy.Should().Be(UserContext.Object.Id);

@@ -40,7 +40,6 @@ public class GetProjectByIdHandlerTests : BaseApplicationTest
         result.Id.Should().Be(project.Id);
         result.Name.Should().Be(project.Name);
         result.Description.Should().Be(project.Description);
-        result.OwnerId.Should().Be(project.OwnerId);
         result.CreatedBy.Should().Be(project.CreatedBy);
         result.CreatedAt.Should().Be(project.CreatedAt);
         result.UpdatedBy.Should().Be(project.UpdatedBy);

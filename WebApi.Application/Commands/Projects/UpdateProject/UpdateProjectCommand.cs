@@ -10,13 +10,11 @@ public class UpdateProjectCommand : IRequest<Unit>
     public Guid Id { get; }
     public string Name { get; }
     public string? Description { get; }
-    public Guid OwnerId { get; }
 
-    public UpdateProjectCommand(Guid id, string name, string? description, Guid ownerId)
+    public UpdateProjectCommand(Guid id, string name, string? description)
     {
         Id = id;
         Name = name;
         Description = description;
-        OwnerId = ownerId;
     }
 }

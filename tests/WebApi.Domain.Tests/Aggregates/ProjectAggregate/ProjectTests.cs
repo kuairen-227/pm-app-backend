@@ -41,17 +41,6 @@ public class ProjectTests : BaseDomainTest
     }
 
     [Fact]
-    public void 異常系_インスタンス生成_OwnerIdが空の場合()
-    {
-        // Arrange & Act
-        Action act = () => _projectBuilder.WithOwnerId(Guid.Empty).Build();
-
-        // Assert
-        var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("PROJECT_OWNER_ID_REQUIRED");
-    }
-
-    [Fact]
     public void 正常系_Rename()
     {
         // Arrange
@@ -94,19 +83,5 @@ public class ProjectTests : BaseDomainTest
 
         // Assert
         result.Description.Should().Be(newDescription);
-    }
-
-    [Fact]
-    public void 正常系_ChangeOwner()
-    {
-        // Arrange
-        var newOwnerId = Guid.NewGuid();
-
-        // Act
-        var result = _projectBuilder.Build();
-        result.ChangeOwner(newOwnerId, Guid.NewGuid(), Clock);
-
-        // Assert
-        result.OwnerId.Should().Be(newOwnerId);
     }
 }

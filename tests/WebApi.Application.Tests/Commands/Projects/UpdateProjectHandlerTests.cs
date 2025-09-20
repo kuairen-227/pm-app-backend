@@ -36,8 +36,7 @@ public class UpdateProjectHandlerTests : BaseApplicationTest
         var command = new UpdateProjectCommand(
             project.Id,
             "プロジェクト名 - 編集",
-            "プロジェクト説明 - 編集",
-            Guid.NewGuid()
+            "プロジェクト説明 - 編集"
         );
 
         _projectRepository
@@ -54,7 +53,6 @@ public class UpdateProjectHandlerTests : BaseApplicationTest
         result.Should().Be(Unit.Value);
         project.Name.Should().Be(command.Name);
         project.Description.Should().Be(command.Description);
-        project.OwnerId.Should().Be(command.OwnerId);
         project.UpdatedBy.Should().Be(UserContext.Object.Id);
         project.UpdatedAt.Should().Be(Clock.Object.Now);
         _projectRepository.Verify(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()));

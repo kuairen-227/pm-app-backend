@@ -23,7 +23,6 @@ public class LaunchProjectHandler : BaseCommandHandler, IRequestHandler<LaunchPr
         var project = new Project(
             request.Name,
             request.Description,
-            request.OwnerId,
             UserContext.Id,
             Clock
         );
