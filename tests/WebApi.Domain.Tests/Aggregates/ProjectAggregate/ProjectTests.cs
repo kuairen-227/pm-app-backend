@@ -107,10 +107,11 @@ public class ProjectTests : BaseDomainTest
     public void 異常系_AddMember_すでに参画済のユーザーの場合()
     {
         // Arrange
-        var project = _projectBuilder.Build();
         var user = _userBuilder.Build();
         var role = ProjectRole.Create(ProjectRole.RoleType.Member);
-        project.AddMember(user.Id, role);
+        var project = _projectBuilder
+            .WithMembers(ProjectMember.Create(user.Id, role))
+            .Build();
 
         // Act
         Action act = () => project.AddMember(user.Id, role);
@@ -126,8 +127,9 @@ public class ProjectTests : BaseDomainTest
         // Arrange
         var user = _userBuilder.Build();
         var role = ProjectRole.Create(ProjectRole.RoleType.Member);
-        var result = _projectBuilder.Build();
-        result.AddMember(user.Id, role);
+        var result = _projectBuilder
+            .WithMembers(ProjectMember.Create(user.Id, role))
+            .Build();
 
         // Act
         var newRole = ProjectRole.Create(ProjectRole.RoleType.ProjectManager);
@@ -158,10 +160,11 @@ public class ProjectTests : BaseDomainTest
     public void 正常系_EnsureMember()
     {
         // Arrange
-        var project = _projectBuilder.Build();
         var user = _userBuilder.Build();
         var role = ProjectRole.Create(ProjectRole.RoleType.Member);
-        project.AddMember(user.Id, role);
+        var project = _projectBuilder
+            .WithMembers(ProjectMember.Create(user.Id, role))
+            .Build();
 
         // Act
         Action act = () => project.EnsureMember(user.Id);

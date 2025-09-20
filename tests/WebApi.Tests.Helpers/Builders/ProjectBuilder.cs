@@ -7,6 +7,7 @@ public class ProjectBuilder : BaseBuilder<ProjectBuilder, Project>
 {
     private string _name = "デフォルトプロジェクト";
     private string? _description;
+    private List<ProjectMember> _members = new();
 
     public ProjectBuilder WithName(string name)
     {
@@ -20,13 +21,26 @@ public class ProjectBuilder : BaseBuilder<ProjectBuilder, Project>
         return this;
     }
 
+    public ProjectBuilder WithMembers(params ProjectMember[] members)
+    {
+        _members = members.ToList();
+        return this;
+    }
+
     public override Project Build()
     {
-        return new Project(
+        var project = new Project(
             _name,
             _description,
             _createdBy,
             _clock
         );
+
+        foreach (var member in _members)
+        {
+            project.AddMember(member.UserId, member.Role);
+        }
+
+        return project;
     }
 }
