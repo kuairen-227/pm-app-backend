@@ -20,17 +20,18 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
         _projectRepository = new Mock<IProjectRepository>();
         _projectBuilder = new ProjectBuilder();
 
-        Mapper.Setup(m => m.Map<ProjectDto>(It.IsAny<Project>()))
-            .Returns<Project>(p => new ProjectDto
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                CreatedBy = p.CreatedBy,
-                CreatedAt = p.CreatedAt,
-                UpdatedBy = p.UpdatedBy,
-                UpdatedAt = p.UpdatedAt,
-            });
+        Mapper.Setup(m => m.Map<IEnumerable<ProjectDto>>(It.IsAny<IEnumerable<Project>>()))
+            .Returns<IEnumerable<Project>>(projects =>
+                projects.Select(p => new ProjectDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    CreatedBy = p.CreatedBy,
+                    CreatedAt = p.CreatedAt,
+                    UpdatedBy = p.UpdatedBy,
+                    UpdatedAt = p.UpdatedAt,
+                }));
 
         _handler = new ListProjectsHandler(
             _projectRepository.Object,
