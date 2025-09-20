@@ -14,6 +14,7 @@ public static class SystemRolePermissions
                 {
                     UserPermissions.View, UserPermissions.Manage,
                     ProjectPermissions.View, ProjectPermissions.Launch, ProjectPermissions.Update, ProjectPermissions.Delete,
+                    ProjectPermissions.InviteMember, ProjectPermissions.RemoveMember, ProjectPermissions.ChangeMemberRole,
                     TicketPermissions.View, TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
                     TicketPermissions.Assign, TicketPermissions.Unassign,
                 }
