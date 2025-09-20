@@ -96,6 +96,8 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
         var project = _projectBuilder.Build();
         var command = new AssignMemberCommand(project.Id, ticket.Id, Guid.NewGuid());
 
+        _ticketRepository.Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(ticket);
         _userRepository.Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((User?)null);
 
@@ -116,6 +118,10 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
         var user = _userBuilder.Build();
         var command = new AssignMemberCommand(Guid.NewGuid(), ticket.Id, user.Id);
 
+        _ticketRepository.Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(ticket);
+        _userRepository.Setup(x => x.GetByIdAsync(command.UserId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
         _projectRepository.Setup(x => x.GetByIdAsync(command.ProjectId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Project?)null);
 
