@@ -2,17 +2,17 @@ using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.UserAggregate;
 
-public sealed class Role : ValueObject
+public sealed class SystemRole : ValueObject
 {
     public enum RoleType { Admin, User }
     public RoleType Value { get; }
 
-    private Role(RoleType value)
+    private SystemRole(RoleType value)
     {
         Value = value;
     }
 
-    public static Role Create(RoleType value) => new Role(value);
+    public static SystemRole Create(RoleType value) => new SystemRole(value);
 
     protected override IEnumerable<object?> GetEqualityComponents()
     {

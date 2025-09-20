@@ -6,12 +6,12 @@ namespace WebApi.Domain.Tests.Aggregates.UserAggregate;
 public class RoleTests
 {
     [Theory]
-    [InlineData(Role.RoleType.Admin)]
-    [InlineData(Role.RoleType.User)]
-    public void 正常系_インスタンス生成(Role.RoleType roleType)
+    [InlineData(SystemRole.RoleType.Admin)]
+    [InlineData(SystemRole.RoleType.User)]
+    public void 正常系_インスタンス生成(SystemRole.RoleType roleType)
     {
         // Act
-        var result = Role.Create(roleType);
+        var result = SystemRole.Create(roleType);
 
         // Assert
         result.Value.Should().Be(roleType);
@@ -21,8 +21,8 @@ public class RoleTests
     public void 正常系_値が同じ場合()
     {
         // Arrange & Act
-        var result1 = Role.Create(Role.RoleType.Admin);
-        var result2 = Role.Create(Role.RoleType.Admin);
+        var result1 = SystemRole.Create(SystemRole.RoleType.Admin);
+        var result2 = SystemRole.Create(SystemRole.RoleType.Admin);
 
         // Assert
         result1.Should().Be(result2);
@@ -34,8 +34,8 @@ public class RoleTests
     public void 正常系_値が異なる場合()
     {
         // Arrange & Act
-        var result1 = Role.Create(Role.RoleType.Admin);
-        var result2 = Role.Create(Role.RoleType.User);
+        var result1 = SystemRole.Create(SystemRole.RoleType.Admin);
+        var result2 = SystemRole.Create(SystemRole.RoleType.User);
 
         // Assert
         result1.Should().NotBe(result2);

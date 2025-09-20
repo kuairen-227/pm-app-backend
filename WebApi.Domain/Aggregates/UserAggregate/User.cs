@@ -7,14 +7,14 @@ public sealed class User : Entity
 {
     public string Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
-    public Role Role { get; private set; } = null!;
+    public SystemRole Role { get; private set; } = null!;
 
     private readonly List<Notification> _notifications = new();
     public IReadOnlyList<Notification> Notifications => _notifications.AsReadOnly();
 
     private User() { } // EF Core 用
 
-    public User(string name, Email email, Role role, Guid createdBy, IDateTimeProvider clock)
+    public User(string name, Email email, SystemRole role, Guid createdBy, IDateTimeProvider clock)
         : base(createdBy, clock)
     {
         if (string.IsNullOrWhiteSpace(name))

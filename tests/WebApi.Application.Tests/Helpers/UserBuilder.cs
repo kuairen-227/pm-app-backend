@@ -7,7 +7,7 @@ public class UserBuilder : BaseBuilder<UserBuilder, User>
 {
     private string _name = "デフォルトユーザー";
     private string _email = "default@example.com";
-    private Role.RoleType _role = Role.RoleType.User;
+    private SystemRole.RoleType _role = SystemRole.RoleType.User;
 
     public UserBuilder WithName(string name)
     {
@@ -21,7 +21,7 @@ public class UserBuilder : BaseBuilder<UserBuilder, User>
         return this;
     }
 
-    public UserBuilder WithRole(Role.RoleType role)
+    public UserBuilder WithRole(SystemRole.RoleType role)
     {
         _role = role;
         return this;
@@ -32,7 +32,7 @@ public class UserBuilder : BaseBuilder<UserBuilder, User>
         return new User(
             _name,
             Email.Create(_email),
-            Role.Create(_role),
+            SystemRole.Create(_role),
             _createdBy,
             _clock
         );
