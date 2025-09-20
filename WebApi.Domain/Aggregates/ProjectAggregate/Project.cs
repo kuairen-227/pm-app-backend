@@ -37,7 +37,7 @@ public sealed class Project : Entity
         UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void AddMember(Guid userId, ProjectRole role)
+    public void InviteMember(Guid userId, ProjectRole role)
     {
         if (_members.Any(m => m.UserId == userId))
             throw new DomainException("USER_ALREADY_JOINED", "User はすでにプロジェクトメンバーです");

@@ -87,7 +87,7 @@ public class ProjectTests : BaseDomainTest
     }
 
     [Fact]
-    public void 正常系_AddMember()
+    public void 正常系_InviteMember()
     {
         // Arrange
         var user = _userBuilder.Build();
@@ -95,7 +95,7 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var result = _projectBuilder.Build();
-        result.AddMember(user.Id, role);
+        result.InviteMember(user.Id, role);
 
         // Assert
         var member = ProjectMember.Create(user.Id, role);
@@ -104,7 +104,7 @@ public class ProjectTests : BaseDomainTest
     }
 
     [Fact]
-    public void 異常系_AddMember_すでに参画済のユーザーの場合()
+    public void 異常系_InviteMember_すでに参画済のユーザーの場合()
     {
         // Arrange
         var user = _userBuilder.Build();
@@ -114,7 +114,7 @@ public class ProjectTests : BaseDomainTest
             .Build();
 
         // Act
-        var act = () => project.AddMember(user.Id, role);
+        var act = () => project.InviteMember(user.Id, role);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
