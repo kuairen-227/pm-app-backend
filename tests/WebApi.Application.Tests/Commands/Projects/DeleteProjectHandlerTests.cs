@@ -38,9 +38,9 @@ public class DeleteProjectHandlerTests : BaseCommandHandlerTest
             .Build();
         _projectRepository.Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
-        var command = new DeleteProjectCommand(project.Id);
 
         // Act
+        var command = new DeleteProjectCommand(project.Id);
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert

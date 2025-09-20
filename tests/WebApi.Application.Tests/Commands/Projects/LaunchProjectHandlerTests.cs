@@ -32,11 +32,6 @@ public class LaunchProjectHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var project = _projectBuilder.Build();
-        var command = new LaunchProjectCommand(
-            project.Name,
-            project.Description
-        );
-
         Project? capturedProject = null;
         _projectRepository
             .Setup(x => x.AddAsync(It.IsAny<Project>(), It.IsAny<CancellationToken>()))
@@ -44,6 +39,10 @@ public class LaunchProjectHandlerTests : BaseCommandHandlerTest
             .Returns(Task.CompletedTask);
 
         // Act
+        var command = new LaunchProjectCommand(
+            project.Name,
+            project.Description
+        );
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert

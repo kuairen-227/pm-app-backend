@@ -34,17 +34,16 @@ public class UpdateProjectHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var project = _projectBuilder.Build();
-        var command = new UpdateProjectCommand(
-            project.Id,
-            "プロジェクト名 - 編集",
-            "プロジェクト説明 - 編集"
-        );
-
         _projectRepository
             .Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
 
         // Act
+        var command = new UpdateProjectCommand(
+            project.Id,
+            "プロジェクト名 - 編集",
+            "プロジェクト説明 - 編集"
+        );
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
