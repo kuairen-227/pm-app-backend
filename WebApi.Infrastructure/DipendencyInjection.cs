@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using WebApi.Application.Common;
+using WebApi.Application.Abstractions;
 using WebApi.Domain.Abstractions;
 using WebApi.Infrastructure.Common;
 using WebApi.Infrastructure.Contexts;

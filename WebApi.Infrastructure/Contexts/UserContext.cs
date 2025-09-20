@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using WebApi.Application.Abstractions;
 using WebApi.Application.Common;
 
 namespace WebApi.Infrastructure.Contexts;
