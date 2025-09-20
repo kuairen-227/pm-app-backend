@@ -18,8 +18,8 @@ public class AssignMemberHandler : BaseCommandHandler, IRequestHandler<AssignMem
         IProjectRepository projectRepository,
         IUnitOfWork unitOfWork,
         IUserContext userContext,
-        IDateTimeProvider clock)
-        : base(unitOfWork, userContext, clock)
+        IDateTimeProvider clock
+    ) : base(unitOfWork, userContext, clock)
     {
         _ticketRepository = ticketRepository;
         _userRepository = userRepository;

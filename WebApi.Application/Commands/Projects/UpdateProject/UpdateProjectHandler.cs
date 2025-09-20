@@ -11,8 +11,11 @@ public class UpdateProjectHandler : BaseCommandHandler, IRequestHandler<UpdatePr
     private readonly IProjectRepository _projectRepository;
 
     public UpdateProjectHandler(
-        IProjectRepository projectRepository, IUnitOfWork unitOfWork, IUserContext userContext, IDateTimeProvider clock)
-        : base(unitOfWork, userContext, clock)
+        IProjectRepository projectRepository,
+        IUnitOfWork unitOfWork,
+        IUserContext userContext,
+        IDateTimeProvider clock
+    ) : base(unitOfWork, userContext, clock)
     {
         _projectRepository = projectRepository;
     }

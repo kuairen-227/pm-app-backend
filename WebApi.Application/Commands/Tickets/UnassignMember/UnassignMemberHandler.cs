@@ -14,8 +14,8 @@ public class UnassignMemberHandler : BaseCommandHandler, IRequestHandler<Unassig
         ITicketRepository ticketRepository,
         IUnitOfWork unitOfWork,
         IUserContext userContext,
-        IDateTimeProvider clock)
-        : base(unitOfWork, userContext, clock)
+        IDateTimeProvider clock
+    ) : base(unitOfWork, userContext, clock)
     {
         _ticketRepository = ticketRepository;
     }

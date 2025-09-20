@@ -12,8 +12,11 @@ public class UpdateTicketHandler : BaseCommandHandler, IRequestHandler<UpdateTic
     private readonly ITicketRepository _ticketRepository;
 
     public UpdateTicketHandler(
-        ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IUserContext userContext, IDateTimeProvider clock)
-        : base(unitOfWork, userContext, clock)
+        ITicketRepository ticketRepository,
+        IUnitOfWork unitOfWork,
+        IUserContext userContext,
+        IDateTimeProvider clock
+    ) : base(unitOfWork, userContext, clock)
     {
         _ticketRepository = ticketRepository;
     }

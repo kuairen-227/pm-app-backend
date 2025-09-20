@@ -11,8 +11,11 @@ public class DeleteProjectHandler : BaseCommandHandler, IRequestHandler<DeletePr
     private readonly IProjectRepository _projectRepository;
 
     public DeleteProjectHandler(
-        IProjectRepository projectRepository, IUnitOfWork unitOfWork, IUserContext userContext, IDateTimeProvider clock)
-        : base(unitOfWork, userContext, clock)
+        IProjectRepository projectRepository,
+        IUnitOfWork unitOfWork,
+        IUserContext userContext,
+        IDateTimeProvider clock
+    ) : base(unitOfWork, userContext, clock)
     {
         _projectRepository = projectRepository;
     }

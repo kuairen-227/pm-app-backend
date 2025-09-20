@@ -12,8 +12,11 @@ public class CreateTicketHandler : BaseCommandHandler, IRequestHandler<CreateTic
     private readonly ITicketRepository _ticketRepository;
 
     public CreateTicketHandler(
-        ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IUserContext userContext, IDateTimeProvider clock)
-        : base(unitOfWork, userContext, clock)
+        ITicketRepository ticketRepository,
+        IUnitOfWork unitOfWork,
+        IUserContext userContext,
+        IDateTimeProvider clock
+    ) : base(unitOfWork, userContext, clock)
     {
         _ticketRepository = ticketRepository;
     }
