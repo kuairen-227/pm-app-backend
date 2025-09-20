@@ -6,6 +6,14 @@ namespace WebApi.Application.Tests.Helpers.Common;
 
 public static class TestHelpers
 {
+    public static Mock<IUnitOfWork> CreateUnitOfWork()
+    {
+        var mock = new Mock<IUnitOfWork>();
+        mock.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+        return mock;
+    }
+
     public static Mock<IUserContext> CreateUserContext(Guid? userId = null)
     {
         var mock = new Mock<IUserContext>();

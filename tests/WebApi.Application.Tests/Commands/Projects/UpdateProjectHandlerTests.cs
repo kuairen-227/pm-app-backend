@@ -23,6 +23,7 @@ public class UpdateProjectHandlerTests : BaseApplicationTest
 
         _handler = new UpdateProjectHandler(
             _projectRepository.Object,
+            UnitOfWork.Object,
             UserContext.Object,
             Clock.Object
         );

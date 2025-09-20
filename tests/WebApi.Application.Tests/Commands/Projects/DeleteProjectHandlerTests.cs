@@ -23,6 +23,7 @@ public class DeleteProjectHandlerTests : BaseApplicationTest
 
         _handler = new DeleteProjectHandler(
             _projectRepository.Object,
+            UnitOfWork.Object,
             UserContext.Object,
             Clock.Object
         );

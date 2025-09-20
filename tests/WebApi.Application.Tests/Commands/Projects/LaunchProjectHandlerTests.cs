@@ -21,6 +21,7 @@ public class CreateProjectHandlerTests : BaseApplicationTest
 
         _handler = new LaunchProjectHandler(
             _projectRepository.Object,
+            UnitOfWork.Object,
             UserContext.Object,
             Clock.Object
         );
