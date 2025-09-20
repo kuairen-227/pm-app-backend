@@ -153,7 +153,7 @@ public class ProjectTests : BaseDomainTest
     }
 
     [Fact]
-    public void 正常系_ChangeRole()
+    public void 正常系_ChangeMemberRole()
     {
         // Arrange
         var user = _userBuilder.Build();
@@ -164,7 +164,7 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var newRole = ProjectRole.Create(ProjectRole.RoleType.ProjectManager);
-        result.ChangeRole(user.Id, newRole);
+        result.ChangeMemberRole(user.Id, newRole);
 
         // Assert
         var member = ProjectMember.Create(user.Id, newRole);
@@ -173,14 +173,14 @@ public class ProjectTests : BaseDomainTest
     }
 
     [Fact]
-    public void 異常系_ChangeRole()
+    public void 異常系_ChangeMemberRole()
     {
         // Arrange
         var project = _projectBuilder.Build();
         var role = ProjectRole.Create(ProjectRole.RoleType.Member);
 
         // Act
-        var act = () => project.ChangeRole(Guid.NewGuid(), role);
+        var act = () => project.ChangeMemberRole(Guid.NewGuid(), role);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

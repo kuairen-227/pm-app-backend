@@ -54,7 +54,7 @@ public sealed class Project : Entity
         _members.Remove(member);
     }
 
-    public void ChangeRole(Guid userId, ProjectRole newRole)
+    public void ChangeMemberRole(Guid userId, ProjectRole newRole)
     {
         var index = _members.FindIndex(m => m.UserId == userId);
         if (index < 0)
