@@ -1,10 +1,11 @@
 using FluentAssertions;
 using WebApi.Domain.Common;
+using WebApi.Domain.Tests.Helpers;
 using WebApi.Tests.Helpers.Builders;
 
 namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
-public class TicketCommentTests
+public class TicketCommentTests : BaseDomainTest
 {
     private readonly TicketCommentBuilder _commentBuilder;
 
@@ -66,7 +67,7 @@ public class TicketCommentTests
         var result = _commentBuilder.Build();
 
         // Act
-        result.UpdateContent("編集コメント");
+        result.UpdateContent("編集コメント", UserContext.Id, Clock);
 
         // Assert
         result.Content.Should().Be("編集コメント");
@@ -82,7 +83,7 @@ public class TicketCommentTests
         var ticketComment = _commentBuilder.Build();
 
         // Act
-        Action act = () => ticketComment.UpdateContent(content!);
+        Action act = () => ticketComment.UpdateContent(content!, UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

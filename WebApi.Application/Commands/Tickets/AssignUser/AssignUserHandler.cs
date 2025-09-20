@@ -32,7 +32,7 @@ public class AssignUserHandler : BaseCommandHandler, IRequestHandler<AssignUserC
 
         // TODO: アサイン可能かどうかのチェック（ex: プロジェクトに所属するユーザーか）
 
-        ticket.Assign(user.Id, Clock);
+        ticket.Assign(user.Id, UserContext.Id, Clock);
         await UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

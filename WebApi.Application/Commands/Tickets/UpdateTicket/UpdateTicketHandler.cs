@@ -24,7 +24,7 @@ public class UpdateTicketHandler : BaseCommandHandler, IRequestHandler<UpdateTic
             ?? throw new NotFoundException("TICKET_NOT_FOUND", "Ticket が見つかりません");
 
         var title = TicketTitle.Create(request.Title);
-        ticket.ChangeTitle(title);
+        ticket.ChangeTitle(title, UserContext.Id, Clock);
         await UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

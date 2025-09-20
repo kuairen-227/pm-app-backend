@@ -41,12 +41,13 @@ public sealed class Ticket : Entity
         CompletionCriteria = completionCriteria;
     }
 
-    public void ChangeTitle(TicketTitle title)
+    public void ChangeTitle(TicketTitle title, Guid updatedBy, IDateTimeProvider clock)
     {
         Title = title;
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void Assign(Guid assigneeId, IDateTimeProvider clock)
+    public void Assign(Guid assigneeId, Guid updatedBy, IDateTimeProvider clock)
     {
         if (assigneeId == Guid.Empty)
             throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
@@ -65,9 +66,11 @@ public sealed class Ticket : Entity
 
         _assignmentHistories.Add(history);
         AssigneeId = assigneeId;
+
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void UnAssign(IDateTimeProvider clock)
+    public void UnAssign(Guid updatedBy, IDateTimeProvider clock)
     {
         if (AssigneeId is null)
             throw new DomainException("NOT_ASSIGNED", "現在割り当てられていません");
@@ -75,16 +78,23 @@ public sealed class Ticket : Entity
         var history = AssignmentHistory.Unassigned(AssigneeId.Value, clock.Now);
         _assignmentHistories.Add(history);
         AssigneeId = null;
+
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void ChangeStatus(TicketStatus.StatusType status) => Status = TicketStatus.Create(status);
+    public void ChangeStatus(TicketStatus.StatusType status, Guid updatedBy, IDateTimeProvider clock)
+    {
+        Status = TicketStatus.Create(status);
+        UpdateAuditInfo(updatedBy, clock);
+    }
 
-    public void SetCompletionCriteria(string completionCriteria)
+    public void SetCompletionCriteria(string completionCriteria, Guid updatedBy, IDateTimeProvider clock)
     {
         if (string.IsNullOrWhiteSpace(completionCriteria))
             throw new DomainException("COMPLETION_CRITERIA_REQUIRED", "Completion criteria は必須です");
 
         CompletionCriteria = completionCriteria;
+        UpdateAuditInfo(updatedBy, clock);
     }
 
     public TicketComment AddComment(Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
@@ -94,7 +104,8 @@ public sealed class Ticket : Entity
         return comment;
     }
 
-    public void EditComment(Guid commentId, Guid authorId, string newContent)
+    public void EditComment(
+        Guid commentId, Guid authorId, string newContent, Guid updatedBy, IDateTimeProvider clock)
     {
         var comment = _comments.FirstOrDefault(c => c.Id == commentId)
             ?? throw new DomainException("TICKET_COMMENT_NOT_FOUND", "Ticket Comment が見つかりません");
@@ -102,7 +113,7 @@ public sealed class Ticket : Entity
         if (comment.AuthorId != authorId)
             throw new DomainException("NOT_TICKET_COMMENT_AUTHOR", "Ticket Comment の作成者のみが編集できます");
 
-        comment.UpdateContent(newContent);
+        comment.UpdateContent(newContent, updatedBy, clock);
     }
 
     public void RemoveComment(Guid commentId, Guid authorId)

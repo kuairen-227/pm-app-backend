@@ -31,11 +31,12 @@ public sealed class TicketComment : Entity
         return new TicketComment(ticketId, authorId, content, createdBy, clock);
     }
 
-    public void UpdateContent(string content)
+    public void UpdateContent(string content, Guid updatedBy, IDateTimeProvider clock)
     {
         if (string.IsNullOrWhiteSpace(content))
             throw new DomainException("CONTENT_REQUIRED", "Content は必須です");
 
         Content = content;
+        UpdateAuditInfo(updatedBy, clock);
     }
 }

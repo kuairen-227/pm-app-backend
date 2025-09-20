@@ -62,7 +62,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
 
         if (_status != TicketStatus.StatusType.Todo)
         {
-            ticket.ChangeStatus(_status);
+            ticket.ChangeStatus(_status, _createdBy, _clock);
         }
 
         return ticket;

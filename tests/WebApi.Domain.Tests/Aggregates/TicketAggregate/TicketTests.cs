@@ -49,7 +49,7 @@ public class TicketTests : BaseDomainTest
 
         // Act
         var result = _ticketBuilder.Build();
-        result.ChangeTitle(title);
+        result.ChangeTitle(title, UserContext.Id, Clock);
 
         // Assert
         result.Title.Should().Be(title);
@@ -65,7 +65,11 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        Action act = () => ticket.ChangeTitle(TicketTitle.Create(title!));
+        Action act = () => ticket.ChangeTitle(
+            TicketTitle.Create(title!),
+            UserContext.Id,
+            Clock
+        );
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -80,7 +84,7 @@ public class TicketTests : BaseDomainTest
 
         // Act
         var result = _ticketBuilder.Build();
-        result.Assign(user.Id, Clock);
+        result.Assign(user.Id, UserContext.Id, Clock);
 
         // Assert
         result.AssigneeId.Should().Be(user.Id);
@@ -94,7 +98,7 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        Action act = () => ticket.Assign(Guid.Empty, Clock);
+        Action act = () => ticket.Assign(Guid.Empty, UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -107,10 +111,10 @@ public class TicketTests : BaseDomainTest
         // Arrange
         var ticket = _ticketBuilder.Build();
         var user = _userBuilder.Build();
-        ticket.Assign(user.Id, Clock);
+        ticket.Assign(user.Id, UserContext.Id, Clock);
 
         // Act
-        Action act = () => ticket.Assign(user.Id, Clock);
+        Action act = () => ticket.Assign(user.Id, UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -123,10 +127,10 @@ public class TicketTests : BaseDomainTest
         // Arrange
         var ticket = _ticketBuilder.Build();
         var user = _userBuilder.Build();
-        ticket.Assign(user.Id, Clock);
+        ticket.Assign(user.Id, UserContext.Id, Clock);
 
         // Act
-        ticket.UnAssign(Clock);
+        ticket.UnAssign(UserContext.Id, Clock);
 
         // Assert
         ticket.AssigneeId.Should().BeNull();
@@ -139,7 +143,7 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        Action act = () => ticket.UnAssign(Clock);
+        Action act = () => ticket.UnAssign(UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -153,7 +157,11 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        ticket.ChangeStatus(TicketStatus.StatusType.InProgress);
+        ticket.ChangeStatus(
+            TicketStatus.StatusType.InProgress,
+            UserContext.Id,
+            Clock
+        );
 
         // Assert
         ticket.Status.Value.Should().Be(TicketStatus.StatusType.InProgress);
@@ -167,7 +175,7 @@ public class TicketTests : BaseDomainTest
         var criteria = "完了条件";
 
         // Act
-        ticket.SetCompletionCriteria(criteria);
+        ticket.SetCompletionCriteria(criteria, UserContext.Id, Clock);
 
         // Assert
         ticket.CompletionCriteria.Should().Be(criteria);
@@ -183,7 +191,11 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        Action act = () => ticket.SetCompletionCriteria(criteria!);
+        Action act = () => ticket.SetCompletionCriteria(
+            criteria!,
+            UserContext.Id,
+            Clock
+        );
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -243,7 +255,9 @@ public class TicketTests : BaseDomainTest
         var comment = ticket.AddComment(Guid.NewGuid(), "コメント1", Guid.NewGuid(), Clock);
 
         // Act
-        ticket.EditComment(comment.Id, comment.AuthorId, "コメント1-編集");
+        ticket.EditComment(
+            comment.Id, comment.AuthorId, "コメント1-編集", UserContext.Id, Clock
+        );
 
         // Assert
         ticket.Comments.Should().ContainSingle();
@@ -258,7 +272,9 @@ public class TicketTests : BaseDomainTest
         var comment = _commentBuilder.Build();
 
         // Act
-        Action act = () => ticket.EditComment(comment.Id, comment.AuthorId, "コメント1-編集");
+        Action act = () => ticket.EditComment(
+            comment.Id, comment.AuthorId, "コメント1-編集", UserContext.Id, Clock
+        );
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -273,7 +289,8 @@ public class TicketTests : BaseDomainTest
         var comment = ticket.AddComment(Guid.NewGuid(), "コメント", Guid.NewGuid(), Clock);
 
         // Act
-        Action act = () => ticket.EditComment(comment.Id, Guid.NewGuid(), "コメント-編集");
+        Action act = () => ticket.EditComment(
+            comment.Id, Guid.NewGuid(), "コメント-編集", UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
