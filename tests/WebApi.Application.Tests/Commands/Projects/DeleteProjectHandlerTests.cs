@@ -53,7 +53,7 @@ public class DeleteProjectHandlerTests : BaseApplicationTest
     {
         // Arrange
         var command = new DeleteProjectCommand(Guid.NewGuid());
-        _projectRepository.Setup(x => x.GetByIdAsync(command.Id, It.IsAny<CancellationToken>()))
+        _projectRepository.Setup(x => x.GetByIdAsync(command.ProjectId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Project?)null);
 
         // Act

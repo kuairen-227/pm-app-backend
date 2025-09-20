@@ -1,7 +1,6 @@
 using MediatR;
 using WebApi.Application.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
-using WebApi.Domain.Common;
 using WebApi.Domain.Common.Security;
 
 namespace WebApi.Application.Common.Security;
@@ -32,9 +31,16 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
             var user = await _userRepository.GetByIdAsync(_userContext.Id, cancellationToken)
                 ?? throw new AuthenticationException("USER_NOT_FOUND", "ユーザーが存在しません");
 
+            Guid? projectId = null;
+            if (request is IProjectScopedRequest scoped)
+            {
+                projectId = scoped.ProjectId;
+            }
+
+
             foreach (var attr in attributes)
             {
-                _permissionService.EnsurePermission(user, attr.PermissionCode);
+                await _permissionService.EnsurePermissionAsync(user, attr.PermissionCode, projectId, cancellationToken);
             }
         }
 

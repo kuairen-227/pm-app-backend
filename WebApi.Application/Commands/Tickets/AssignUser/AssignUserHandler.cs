@@ -25,7 +25,7 @@ public class AssignUserHandler : BaseCommandHandler, IRequestHandler<AssignUserC
 
     public async Task<Unit> Handle(AssignUserCommand request, CancellationToken cancellationToken)
     {
-        var ticket = await _ticketRepository.GetByIdAsync(request.Id, cancellationToken)
+        var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
             ?? throw new NotFoundException("TICKET_NOT_FOUND", "Ticket が見つかりません");
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken)
             ?? throw new NotFoundException("USER_NOT_FOUND", "User が見つかりません");

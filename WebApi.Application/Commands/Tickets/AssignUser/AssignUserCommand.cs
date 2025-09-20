@@ -5,14 +5,16 @@ using WebApi.Domain.Common.Security.Permissions;
 namespace WebApi.Application.Commands.Tickets.AssignUser;
 
 [RequiresPermission(TicketPermissions.Assign)]
-public class AssignUserCommand : IRequest<Unit>
+public class AssignUserCommand : IRequest<Unit>, IProjectScopedRequest
 {
-    public Guid Id { get; }
+    public Guid ProjectId { get; }
+    public Guid TicketId { get; }
     public Guid UserId { get; }
 
-    public AssignUserCommand(Guid id, Guid userId)
+    public AssignUserCommand(Guid projectId, Guid ticketId, Guid userId)
     {
-        Id = id;
+        ProjectId = projectId;
+        TicketId = ticketId;
         UserId = userId;
     }
 }

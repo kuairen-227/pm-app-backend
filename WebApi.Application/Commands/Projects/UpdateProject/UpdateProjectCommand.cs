@@ -5,15 +5,15 @@ using WebApi.Domain.Common.Security.Permissions;
 namespace WebApi.Application.Commands.Projects.UpdateProject;
 
 [RequiresPermission(ProjectPermissions.Update)]
-public class UpdateProjectCommand : IRequest<Unit>
+public class UpdateProjectCommand : IRequest<Unit>, IProjectScopedRequest
 {
-    public Guid Id { get; }
+    public Guid ProjectId { get; }
     public string Name { get; }
     public string? Description { get; }
 
     public UpdateProjectCommand(Guid id, string name, string? description)
     {
-        Id = id;
+        ProjectId = id;
         Name = name;
         Description = description;
     }

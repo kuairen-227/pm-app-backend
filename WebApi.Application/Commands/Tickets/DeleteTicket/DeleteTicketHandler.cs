@@ -19,7 +19,7 @@ public class DeleteTicketHandler : BaseCommandHandler, IRequestHandler<DeleteTic
 
     public async Task<Unit> Handle(DeleteTicketCommand request, CancellationToken cancellationToken)
     {
-        var ticket = await _ticketRepository.GetByIdAsync(request.Id, cancellationToken)
+        var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
             ?? throw new NotFoundException("TICKET_NOT_FOUND", "Ticket が見つかりません");
 
         await _ticketRepository.DeleteAsync(ticket, cancellationToken);

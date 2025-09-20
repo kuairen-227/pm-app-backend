@@ -5,12 +5,12 @@ using WebApi.Domain.Common.Security.Permissions;
 namespace WebApi.Application.Commands.Projects.DeleteProject;
 
 [RequiresPermission(ProjectPermissions.Delete)]
-public class DeleteProjectCommand : IRequest<Unit>
+public class DeleteProjectCommand : IRequest<Unit>, IProjectScopedRequest
 {
-    public Guid Id { get; }
+    public Guid ProjectId { get; }
 
     public DeleteProjectCommand(Guid id)
     {
-        Id = id;
+        ProjectId = id;
     }
 }

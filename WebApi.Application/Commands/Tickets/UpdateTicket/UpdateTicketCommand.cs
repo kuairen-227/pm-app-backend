@@ -5,14 +5,16 @@ using WebApi.Domain.Common.Security.Permissions;
 namespace WebApi.Application.Commands.Tickets.UpdateTicket;
 
 [RequiresPermission(TicketPermissions.Update)]
-public class UpdateTicketCommand : IRequest<Unit>
+public class UpdateTicketCommand : IRequest<Unit>, IProjectScopedRequest
 {
-    public Guid Id { get; }
+    public Guid ProjectId { get; }
+    public Guid TicketId { get; }
     public string Title { get; }
 
-    public UpdateTicketCommand(Guid id, string title)
+    public UpdateTicketCommand(Guid projectId, Guid ticketId, string title)
     {
-        Id = id;
+        ProjectId = projectId;
+        TicketId = ticketId;
         Title = title;
     }
 }

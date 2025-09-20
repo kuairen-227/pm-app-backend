@@ -19,7 +19,7 @@ public class DeleteProjectHandler : BaseCommandHandler, IRequestHandler<DeletePr
 
     public async Task<Unit> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id, cancellationToken)
+        var project = await _projectRepository.GetByIdAsync(request.ProjectId, cancellationToken)
             ?? throw new NotFoundException("PROJECT_NOT_FOUND", "Project が見つかりません");
 
         await _projectRepository.DeleteAsync(project, cancellationToken);

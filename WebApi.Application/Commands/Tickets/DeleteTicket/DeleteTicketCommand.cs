@@ -5,12 +5,14 @@ using WebApi.Domain.Common.Security.Permissions;
 namespace WebApi.Application.Commands.Tickets.DeleteTicket;
 
 [RequiresPermission(TicketPermissions.Delete)]
-public class DeleteTicketCommand : IRequest<Unit>
+public class DeleteTicketCommand : IRequest<Unit>, IProjectScopedRequest
 {
-    public Guid Id { get; }
+    public Guid ProjectId { get; }
+    public Guid TicketId { get; }
 
-    public DeleteTicketCommand(Guid id)
+    public DeleteTicketCommand(Guid projectId, Guid ticketId)
     {
-        Id = id;
+        ProjectId = projectId;
+        TicketId = ticketId;
     }
 }

@@ -5,7 +5,7 @@ using WebApi.Domain.Common.Security.Permissions;
 namespace WebApi.Application.Commands.Tickets.CreateTicket;
 
 [RequiresPermission(TicketPermissions.Create)]
-public class CreateTicketCommand : IRequest<Guid>
+public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
 {
     public Guid ProjectId { get; }
     public string Title { get; }

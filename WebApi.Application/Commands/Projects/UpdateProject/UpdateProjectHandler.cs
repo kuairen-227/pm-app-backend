@@ -19,7 +19,7 @@ public class UpdateProjectHandler : BaseCommandHandler, IRequestHandler<UpdatePr
 
     public async Task<Unit> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id, cancellationToken)
+        var project = await _projectRepository.GetByIdAsync(request.ProjectId, cancellationToken)
             ?? throw new NotFoundException("PROJECT_NOT_FOUND", "Project が見つかりません");
 
         project.Rename(request.Name, UserContext.Id, Clock);

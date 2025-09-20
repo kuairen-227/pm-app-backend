@@ -4,5 +4,10 @@ namespace WebApi.Domain.Common.Security;
 
 public interface IPermissionService
 {
-    void EnsurePermission(User user, string permission, object? context = null);
+    Task EnsurePermissionAsync(
+        User user,
+        string permissionCode,
+        Guid? projectId = null,
+        CancellationToken cancellationToken = default
+    );
 }
