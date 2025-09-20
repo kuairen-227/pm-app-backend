@@ -43,9 +43,6 @@ public class UpdateProjectHandlerTests : BaseCommandHandlerTest
         _projectRepository
             .Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
-        _projectRepository
-            .Setup(x => x.UpdateAsync(It.IsAny<Project>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -57,7 +54,7 @@ public class UpdateProjectHandlerTests : BaseCommandHandlerTest
         project.UpdatedBy.Should().Be(UserContext.Object.Id);
         project.UpdatedAt.Should().Be(Clock.Object.Now);
         _projectRepository.Verify(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()));
-        _projectRepository.Verify(x => x.UpdateAsync(project, It.IsAny<CancellationToken>()), Times.Once);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()));
     }
 
     [Fact]
@@ -79,6 +76,6 @@ public class UpdateProjectHandlerTests : BaseCommandHandlerTest
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
         ex.Which.ErrorCode.Should().Be("PROJECT_NOT_FOUND");
-        _projectRepository.Verify(x => x.UpdateAsync(It.IsAny<Project>(), It.IsAny<CancellationToken>()), Times.Never);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }

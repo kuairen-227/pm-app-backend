@@ -46,6 +46,7 @@ public class DeleteProjectHandlerTests : BaseCommandHandlerTest
         // Assert
         result.Should().Be(MediatR.Unit.Value);
         _projectRepository.Verify(x => x.DeleteAsync(project, It.IsAny<CancellationToken>()), Times.Once);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()));
     }
 
     [Fact]
@@ -62,5 +63,6 @@ public class DeleteProjectHandlerTests : BaseCommandHandlerTest
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
         ex.Which.ErrorCode.Should().Be("PROJECT_NOT_FOUND");
+        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }

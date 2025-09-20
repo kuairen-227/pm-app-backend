@@ -55,5 +55,6 @@ public class CreateProjectHandlerTests : BaseCommandHandlerTest
         capturedProject.UpdatedBy.Should().Be(UserContext.Object.Id);
         capturedProject.UpdatedAt.Should().Be(Clock.Object.Now);
         _projectRepository.Verify(x => x.AddAsync(It.IsAny<Project>(), It.IsAny<CancellationToken>()), Times.Once);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()));
     }
 }
