@@ -60,6 +60,7 @@ public class GetProjectByIdHandlerTests : BaseQueryHandlerTest
         result.CreatedAt.Should().Be(project.CreatedAt);
         result.UpdatedBy.Should().Be(project.UpdatedBy);
         result.UpdatedAt.Should().Be(project.UpdatedAt);
+
         _projectRepository.Verify(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()));
     }
 

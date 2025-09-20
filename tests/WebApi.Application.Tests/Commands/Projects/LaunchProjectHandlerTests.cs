@@ -36,6 +36,7 @@ public class LaunchProjectHandlerTests : BaseCommandHandlerTest
             project.Name,
             project.Description
         );
+
         Project? capturedProject = null;
         _projectRepository
             .Setup(x => x.AddAsync(It.IsAny<Project>(), It.IsAny<CancellationToken>()))
@@ -54,6 +55,7 @@ public class LaunchProjectHandlerTests : BaseCommandHandlerTest
         capturedProject.CreatedAt.Should().Be(Clock.Object.Now);
         capturedProject.UpdatedBy.Should().Be(UserContext.Object.Id);
         capturedProject.UpdatedAt.Should().Be(Clock.Object.Now);
+
         _projectRepository.Verify(x => x.AddAsync(It.IsAny<Project>(), It.IsAny<CancellationToken>()), Times.Once);
         UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()));
     }
