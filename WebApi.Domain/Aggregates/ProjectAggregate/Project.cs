@@ -46,6 +46,14 @@ public sealed class Project : Entity
         _members.Add(member);
     }
 
+    public void RemoveMember(Guid userId)
+    {
+        var member = _members.FirstOrDefault(m => m.UserId == userId)
+            ?? throw new DomainException("USER_NOT_PROJECT_MEMBER", "User はプロジェクトメンバーではありません");
+
+        _members.Remove(member);
+    }
+
     public void ChangeRole(Guid userId, ProjectRole newRole)
     {
         var index = _members.FindIndex(m => m.UserId == userId);

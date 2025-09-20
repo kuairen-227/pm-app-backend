@@ -122,6 +122,37 @@ public class ProjectTests : BaseDomainTest
     }
 
     [Fact]
+    public void 正常系_RemoveMember()
+    {
+        // Arrange
+        var user = _userBuilder.Build();
+        var role = ProjectRole.Create(ProjectRole.RoleType.Member);
+        var result = _projectBuilder
+            .WithMembers(ProjectMember.Create(user.Id, role))
+            .Build();
+
+        // Act
+        result.RemoveMember(user.Id);
+
+        // Assert
+        result.Members.Count.Should().Be(0);
+    }
+
+    [Fact]
+    public void 異常系_RemoveMember()
+    {
+        // Arrange
+        var project = _projectBuilder.Build();
+
+        // Act
+        var act = () => project.RemoveMember(Guid.NewGuid());
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("USER_NOT_PROJECT_MEMBER");
+    }
+
+    [Fact]
     public void 正常系_ChangeRole()
     {
         // Arrange
