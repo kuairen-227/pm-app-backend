@@ -140,6 +140,21 @@ public class ProjectTests : BaseDomainTest
     }
 
     [Fact]
+    public void 異常系_ChangeRole()
+    {
+        // Arrange
+        var project = _projectBuilder.Build();
+        var role = ProjectRole.Create(ProjectRole.RoleType.Member);
+
+        // Act
+        Action act = () => project.ChangeRole(Guid.NewGuid(), role);
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("USER_NOT_PROJECT_MEMBER");
+    }
+
+    [Fact]
     public void 正常系_EnsureMember()
     {
         // Arrange
