@@ -52,9 +52,9 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
     {
         var ticket = new Ticket(
             _projectId,
-            TicketTitle.Create(_title),
+            _title,
             _assigneeId,
-            Deadline.CreateNullable(_deadline, _clock),
+            _deadline,
             _completionCriteria,
             _createdBy,
             _clock

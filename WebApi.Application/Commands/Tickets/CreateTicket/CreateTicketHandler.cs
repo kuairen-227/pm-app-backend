@@ -25,9 +25,9 @@ public class CreateTicketHandler : BaseCommandHandler, IRequestHandler<CreateTic
     {
         var ticket = new Ticket(
             request.ProjectId,
-            TicketTitle.Create(request.Title),
+            request.Title,
             request.AssigneeId,
-            Deadline.CreateNullable(request.Deadline, Clock),
+            request.Deadline,
             request.CompletionCriteria,
             UserContext.Id,
             Clock

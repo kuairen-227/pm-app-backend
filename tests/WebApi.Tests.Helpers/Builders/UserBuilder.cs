@@ -31,8 +31,8 @@ public class UserBuilder : BaseBuilder<UserBuilder, User>
     {
         return new User(
             _name,
-            Email.Create(_email),
-            SystemRole.Create(_role),
+            _email,
+            _role,
             _createdBy,
             _clock
         );

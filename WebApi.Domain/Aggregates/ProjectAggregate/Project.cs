@@ -37,11 +37,12 @@ public sealed class Project : Entity
         UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void InviteMember(Guid userId, ProjectRole role)
+    public void InviteMember(Guid userId, ProjectRole.RoleType roleType)
     {
         if (_members.Any(m => m.UserId == userId))
             throw new DomainException("USER_ALREADY_JOINED", "User はすでにプロジェクトメンバーです");
 
+        var role = ProjectRole.Create(roleType);
         var member = ProjectMember.Create(userId, role);
         _members.Add(member);
     }
@@ -54,13 +55,14 @@ public sealed class Project : Entity
         _members.Remove(member);
     }
 
-    public void ChangeMemberRole(Guid userId, ProjectRole newRole)
+    public void ChangeMemberRole(Guid userId, ProjectRole.RoleType newRoleType)
     {
         var index = _members.FindIndex(m => m.UserId == userId);
         if (index < 0)
             throw new DomainException("USER_NOT_PROJECT_MEMBER", "User はプロジェクトメンバーではありません");
 
-        _members[index] = ProjectMember.Create(userId, newRole);
+        var role = ProjectRole.Create(newRoleType);
+        _members[index] = ProjectMember.Create(userId, role);
     }
 
     public void EnsureMember(Guid userId)

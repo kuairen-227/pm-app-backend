@@ -14,15 +14,15 @@ public sealed class User : Entity
 
     private User() { } // EF Core 用
 
-    public User(string name, Email email, SystemRole role, Guid createdBy, IDateTimeProvider clock)
+    public User(string name, string email, SystemRole.RoleType role, Guid createdBy, IDateTimeProvider clock)
         : base(createdBy, clock)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new DomainException("USER_NAME_REQUIRED", "Name は必須です");
 
         Name = name;
-        Email = email;
-        Role = role;
+        Email = Email.Create(email);
+        Role = SystemRole.Create(role);
     }
 
     public void AddNotification(Notification notification)

@@ -22,9 +22,9 @@ public sealed class Ticket : Entity
 
     public Ticket(
         Guid projectId,
-        TicketTitle title,
+        string title,
         Guid? assigneeId,
-        Deadline? deadline,
+        DateOnly? deadline,
         string? completionCriteria,
         Guid createdBy,
         IDateTimeProvider clock
@@ -34,16 +34,16 @@ public sealed class Ticket : Entity
             throw new DomainException("PROJECT_ID_REQUIRED", "Project ID は必須です");
 
         ProjectId = projectId;
-        Title = title;
+        Title = TicketTitle.Create(title);
         AssigneeId = assigneeId;
-        Deadline = deadline;
+        Deadline = Deadline.CreateNullable(deadline, clock);
         Status = TicketStatus.Create(TicketStatus.StatusType.Todo);
         CompletionCriteria = completionCriteria;
     }
 
-    public void ChangeTitle(TicketTitle title, Guid updatedBy, IDateTimeProvider clock)
+    public void ChangeTitle(string title, Guid updatedBy, IDateTimeProvider clock)
     {
-        Title = title;
+        Title = TicketTitle.Create(title);
         UpdateAuditInfo(updatedBy, clock);
     }
 
@@ -82,9 +82,9 @@ public sealed class Ticket : Entity
         UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void ChangeDeadline(Deadline? newDeadline, Guid updatedBy, IDateTimeProvider clock)
+    public void ChangeDeadline(DateOnly? newDeadline, Guid updatedBy, IDateTimeProvider clock)
     {
-        Deadline = newDeadline;
+        Deadline = Deadline.CreateNullable(newDeadline, clock);
         UpdateAuditInfo(updatedBy, clock);
     }
 

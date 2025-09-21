@@ -32,8 +32,7 @@ public class ChangeMemberRoleHandler : BaseCommandHandler, IRequestHandler<Chang
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken)
             ?? throw new NotFoundException(nameof(User), request.UserId);
 
-        var role = ProjectRole.Create(request.ProjectRole);
-        project.ChangeMemberRole(user.Id, role);
+        project.ChangeMemberRole(user.Id, request.ProjectRole);
         await UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

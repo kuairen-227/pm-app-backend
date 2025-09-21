@@ -45,14 +45,14 @@ public class TicketTests : BaseDomainTest
     public void 正常系_ChangeTitle()
     {
         // Arrange
-        var title = TicketTitle.Create("タイトル - 編集");
+        var title = "タイトル - 編集";
 
         // Act
         var result = _ticketBuilder.Build();
         result.ChangeTitle(title, UserContext.Id, Clock);
 
         // Assert
-        result.Title.Should().Be(title);
+        result.Title.Value.Should().Be(title);
     }
 
     [Theory]
@@ -66,7 +66,7 @@ public class TicketTests : BaseDomainTest
 
         // Act
         var act = () => ticket.ChangeTitle(
-            TicketTitle.Create(title!),
+            title!,
             UserContext.Id,
             Clock
         );
@@ -157,15 +157,13 @@ public class TicketTests : BaseDomainTest
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        Deadline? deadline = useDeadline
-            ? Deadline.Create(Clock.Today.AddDays(1), Clock)
-            : null;
+        DateOnly? deadline = useDeadline ? Clock.Today.AddDays(1) : null;
 
         // Act
         ticket.ChangeDeadline(deadline, UserContext.Id, Clock);
 
         // Assert
-        ticket.Deadline.Should().Be(deadline);
+        ticket.Deadline?.Value.Should().Be(deadline);
     }
 
     [Fact]

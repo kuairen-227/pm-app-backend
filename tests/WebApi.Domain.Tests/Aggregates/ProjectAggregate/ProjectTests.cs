@@ -91,14 +91,14 @@ public class ProjectTests : BaseDomainTest
     {
         // Arrange
         var user = _userBuilder.Build();
-        var role = ProjectRole.Create(ProjectRole.RoleType.Member);
+        var role = ProjectRole.RoleType.Member;
 
         // Act
         var result = _projectBuilder.Build();
         result.InviteMember(user.Id, role);
 
         // Assert
-        var member = ProjectMember.Create(user.Id, role);
+        var member = ProjectMember.Create(user.Id, ProjectRole.Create(role));
         result.Members.Count.Should().Be(1);
         result.Members[0].Should().Be(member);
     }
@@ -114,7 +114,7 @@ public class ProjectTests : BaseDomainTest
             .Build();
 
         // Act
-        var act = () => project.InviteMember(user.Id, role);
+        var act = () => project.InviteMember(user.Id, role.Value);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -163,11 +163,11 @@ public class ProjectTests : BaseDomainTest
             .Build();
 
         // Act
-        var newRole = ProjectRole.Create(ProjectRole.RoleType.ProjectManager);
+        var newRole = ProjectRole.RoleType.ProjectManager;
         result.ChangeMemberRole(user.Id, newRole);
 
         // Assert
-        var member = ProjectMember.Create(user.Id, newRole);
+        var member = ProjectMember.Create(user.Id, ProjectRole.Create(newRole));
         result.Members.Count.Should().Be(1);
         result.Members[0].Should().Be(member);
     }
@@ -177,7 +177,7 @@ public class ProjectTests : BaseDomainTest
     {
         // Arrange
         var project = _projectBuilder.Build();
-        var role = ProjectRole.Create(ProjectRole.RoleType.Member);
+        var role = ProjectRole.RoleType.Member;
 
         // Act
         var act = () => project.ChangeMemberRole(Guid.NewGuid(), role);
