@@ -82,6 +82,14 @@ public sealed class Ticket : Entity
         UpdateAuditInfo(updatedBy, clock);
     }
 
+    public void ChangeDeadline(Deadline? newDeadline, Guid updatedBy, IDateTimeProvider clock)
+    {
+        if (Deadline == newDeadline) return;
+
+        Deadline = newDeadline;
+        UpdateAuditInfo(updatedBy, clock);
+    }
+
     public void ChangeStatus(TicketStatus.StatusType status, Guid updatedBy, IDateTimeProvider clock)
     {
         Status = TicketStatus.Create(status);
