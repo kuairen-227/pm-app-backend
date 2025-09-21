@@ -10,11 +10,11 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
     public Guid ProjectId { get; }
     public string Title { get; }
     public Guid? AssigneeId { get; }
-    public DateTime? Deadline { get; }
+    public DateOnly? Deadline { get; }
     public string? CompletionCriteria { get; private set; }
 
     public CreateTicketCommand(
-        Guid projectId, string title, Guid? assigneeId, DateTime? deadline, string? completionCriteria
+        Guid projectId, string title, Guid? assigneeId, DateOnly? deadline, string? completionCriteria
     )
     {
         ProjectId = projectId;

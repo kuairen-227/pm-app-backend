@@ -5,23 +5,23 @@ namespace WebApi.Domain.Aggregates.TicketAggregate;
 
 public sealed class Deadline : ValueObject
 {
-    public DateTime Value { get; }
+    public DateOnly Value { get; }
 
-    private Deadline(DateTime value, DateTime now)
+    private Deadline(DateOnly value, DateOnly today)
     {
-        if (value <= DateTime.FromDateTime(now))
+        if (value <= today)
             throw new DomainException("DEADLINE_PAST_NOT_ALLOWED", "Deadline は過去にできません");
 
         Value = value;
     }
 
-    public static Deadline Create(DateTime value, IDateTimeProvider clock)
-        => new Deadline(value, clock.Now);
+    public static Deadline Create(DateOnly value, IDateTimeProvider clock)
+        => new Deadline(value, clock.Today);
 
-    public static Deadline? CreateNullable(DateTime? value, IDateTimeProvider clock)
+    public static Deadline? CreateNullable(DateOnly? value, IDateTimeProvider clock)
     {
         if (value is null) return null;
-        return new Deadline(value.Value, clock.Now);
+        return new Deadline(value.Value, clock.Today);
     }
 
     protected override IEnumerable<object?> GetEqualityComponents()

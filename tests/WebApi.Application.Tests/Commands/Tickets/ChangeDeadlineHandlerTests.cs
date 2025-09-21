@@ -36,7 +36,7 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        DateTime? deadline = useDeadline ? Clock.Object.Now.AddDays(1) : null;
+        DateOnly? deadline = useDeadline ? Clock.Object.Today.AddDays(1) : null;
         var command = new ChangeDeadlineCommand(
             ticket.ProjectId,
             ticket.Id,
@@ -66,7 +66,7 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
         var command = new ChangeDeadlineCommand(
             Guid.NewGuid(),
             Guid.NewGuid(),
-            Clock.Object.Now.AddDays(1)
+            Clock.Object.Today.AddDays(1)
         );
         _ticketRepository
             .Setup(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))

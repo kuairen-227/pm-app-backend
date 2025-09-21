@@ -11,7 +11,7 @@ public class DeadlineTests : BaseDomainTest
     public void 正常系_インスタンス生成_未来日付()
     {
         // Arrange
-        var tomorrow = Clock.Now.Date.AddDays(1);
+        var tomorrow = Clock.Today.AddDays(1);
 
         // Act
         var result = Deadline.Create(tomorrow, Clock);
@@ -21,13 +21,13 @@ public class DeadlineTests : BaseDomainTest
     }
 
     [Fact]
-    public void 異常系_インスタンス生成_現在時刻()
+    public void 異常系_インスタンス生成_現在日付()
     {
         // Arrange
-        var now = Clock.Now;
+        var today = Clock.Today;
 
         // Act
-        var act = () => Deadline.Create(now, Clock);
+        var act = () => Deadline.Create(today, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -38,7 +38,7 @@ public class DeadlineTests : BaseDomainTest
     public void 異常系_インスタンス生成_過去日付()
     {
         // Arrange
-        var yesterday = Clock.Now.Date.AddDays(-1);
+        var yesterday = Clock.Today.AddDays(-1);
 
         // Act
         var act = () => Deadline.Create(yesterday, Clock);
@@ -52,8 +52,8 @@ public class DeadlineTests : BaseDomainTest
     public void 正常系_値が同じ場合()
     {
         // Arrange & Act
-        var result1 = Deadline.Create(Clock.Now.Date.AddDays(1), Clock);
-        var result2 = Deadline.Create(Clock.Now.Date.AddDays(1), Clock);
+        var result1 = Deadline.Create(Clock.Today.AddDays(1), Clock);
+        var result2 = Deadline.Create(Clock.Today.AddDays(1), Clock);
 
         // Then
         result1.Should().Be(result2);
@@ -65,8 +65,8 @@ public class DeadlineTests : BaseDomainTest
     public void 正常系_値が異なる場合()
     {
         // Assert & Act
-        var result1 = Deadline.Create(Clock.Now.Date.AddDays(1), Clock);
-        var result2 = Deadline.Create(Clock.Now.Date.AddDays(2), Clock);
+        var result1 = Deadline.Create(Clock.Today.AddDays(1), Clock);
+        var result2 = Deadline.Create(Clock.Today.AddDays(2), Clock);
 
         // Assert
         result1.Should().NotBe(result2);

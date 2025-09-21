@@ -9,9 +9,9 @@ public class ChangeDeadlineCommand : IRequest<Unit>, IProjectScopedRequest
 {
     public Guid ProjectId { get; }
     public Guid TicketId { get; }
-    public DateTime? Deadline { get; }
+    public DateOnly? Deadline { get; }
 
-    public ChangeDeadlineCommand(Guid projectId, Guid ticketId, DateTime? deadline)
+    public ChangeDeadlineCommand(Guid projectId, Guid ticketId, DateOnly? deadline)
     {
         ProjectId = projectId;
         TicketId = ticketId;

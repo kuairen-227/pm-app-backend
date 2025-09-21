@@ -8,7 +8,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
     private Guid _projectId = Guid.NewGuid();
     private string _title = "デフォルトチケット";
     private Guid? _assigneeId = null;
-    private DateTime? _deadline = null;
+    private DateOnly? _deadline = null;
     private TicketStatus.StatusType _status = TicketStatus.StatusType.Todo;
     private string? _completionCriteria = null;
 
@@ -30,7 +30,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
         return this;
     }
 
-    public TicketBuilder WithDeadline(DateTime deadline)
+    public TicketBuilder WithDeadline(DateOnly deadline)
     {
         _deadline = deadline;
         return this;

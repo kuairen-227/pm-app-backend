@@ -158,7 +158,7 @@ public class TicketTests : BaseDomainTest
         // Arrange
         var ticket = _ticketBuilder.Build();
         Deadline? deadline = useDeadline
-            ? Deadline.Create(Clock.Now.AddDays(1), Clock)
+            ? Deadline.Create(Clock.Today.AddDays(1), Clock)
             : null;
 
         // Act
