@@ -84,8 +84,6 @@ public sealed class Ticket : Entity
 
     public void ChangeDeadline(Deadline? newDeadline, Guid updatedBy, IDateTimeProvider clock)
     {
-        if (Deadline == newDeadline) return;
-
         Deadline = newDeadline;
         UpdateAuditInfo(updatedBy, clock);
     }
