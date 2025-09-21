@@ -19,7 +19,8 @@
     "package",
     "user",
     "project",
-    "ticket"
+    "ticket",
+    "docs"
   ],
   "sqltools.connections": [
     {
