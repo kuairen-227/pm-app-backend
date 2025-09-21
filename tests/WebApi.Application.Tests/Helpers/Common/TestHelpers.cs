@@ -32,6 +32,8 @@ public static class TestHelpers
     {
         var mock = new Mock<IDateTimeProvider>();
         mock.Setup(x => x.Now).Returns(now ?? DateTime.UtcNow);
+        mock.Setup(x => x.Today).Returns(
+            now.HasValue ? DateOnly.FromDateTime(now.Value) : DateOnly.FromDateTime(DateTime.UtcNow));
         return mock;
     }
 }
