@@ -28,10 +28,10 @@ public static class TestHelpers
         return mock;
     }
 
-    public static Mock<IDateTimeProvider> CreateClock(DateTimeOffset? now = null)
+    public static Mock<IDateTimeProvider> CreateClock(DateTime? now = null)
     {
         var mock = new Mock<IDateTimeProvider>();
-        mock.Setup(x => x.Now).Returns(now ?? DateTimeOffset.UtcNow);
+        mock.Setup(x => x.Now).Returns(now ?? DateTime.UtcNow);
         return mock;
     }
 }

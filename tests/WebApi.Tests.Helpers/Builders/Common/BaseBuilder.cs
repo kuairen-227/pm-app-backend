@@ -7,7 +7,7 @@ public abstract class BaseBuilder<TBuilder, TEntity>
     where TBuilder : BaseBuilder<TBuilder, TEntity>
 {
     protected Guid _createdBy = Guid.NewGuid();
-    protected DateTimeOffset _createdAt = DateTimeOffset.UtcNow;
+    protected DateTime _createdAt = DateTime.UtcNow;
     protected IDateTimeProvider _clock = new FakeDateTimeProvider();
 
     public TBuilder WithCreatedBy(Guid createdBy)
@@ -16,7 +16,7 @@ public abstract class BaseBuilder<TBuilder, TEntity>
         return (TBuilder)this;
     }
 
-    public TBuilder WithCreatedAt(DateTimeOffset createdAt)
+    public TBuilder WithCreatedAt(DateTime createdAt)
     {
         _createdAt = createdAt;
         return (TBuilder)this;

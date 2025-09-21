@@ -11,7 +11,7 @@ public class TicketDetailMappingProfile : Profile
             .Include<Ticket, TicketDto>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Value.ToString()))
             .ForMember(dest => dest.Deadline,
-                opt => opt.MapFrom(src => src.Deadline != null ? src.Deadline.Value : (DateTimeOffset?)null));
+                opt => opt.MapFrom(src => src.Deadline != null ? src.Deadline.Value : (DateTime?)null));
 
         CreateMap<TicketComment, TicketCommentDto>();
 

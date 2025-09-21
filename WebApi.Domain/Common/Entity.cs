@@ -6,9 +6,9 @@ public abstract class Entity
 {
     public Guid Id { get; protected set; } = Guid.NewGuid();
     public Guid CreatedBy { get; }
-    public DateTimeOffset CreatedAt { get; }
+    public DateTime CreatedAt { get; }
     public Guid UpdatedBy { get; private set; }
-    public DateTimeOffset UpdatedAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; }
 
     protected Entity() { } // EF Core 用
 

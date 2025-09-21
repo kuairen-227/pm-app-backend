@@ -36,7 +36,7 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        DateTimeOffset? deadline = useDeadline ? Clock.Object.Now.AddDays(1) : null;
+        DateTime? deadline = useDeadline ? Clock.Object.Now.AddDays(1) : null;
         var command = new ChangeDeadlineCommand(
             ticket.ProjectId,
             ticket.Id,
