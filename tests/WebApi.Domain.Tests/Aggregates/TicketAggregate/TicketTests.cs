@@ -150,31 +150,22 @@ public class TicketTests : BaseDomainTest
         ex.Which.ErrorCode.Should().Be("NOT_ASSIGNED");
     }
 
-    [Fact]
-    public void 正常系_ChangeDeadline()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void 正常系_ChangeDeadline(bool useDeadline)
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        var deadline = Deadline.Create(Clock.Now.Date.AddDays(1), Clock);
+        Deadline? deadline = useDeadline
+            ? Deadline.Create(Clock.Now.AddDays(1), Clock)
+            : null;
 
         // Act
         ticket.ChangeDeadline(deadline, UserContext.Id, Clock);
 
         // Assert
         ticket.Deadline.Should().Be(deadline);
-    }
-
-    [Fact]
-    public void 正常系_ChangeDeadline_Deadlineが空の場合()
-    {
-        // Arrange
-        var ticket = _ticketBuilder.Build();
-
-        // Act
-        ticket.ChangeDeadline(null, UserContext.Id, Clock);
-
-        // Assert
-        ticket.Deadline.Should().BeNull();
     }
 
     [Fact]
