@@ -314,7 +314,7 @@ public class TicketTests : BaseDomainTest
     }
 
     [Fact]
-    public void 正常系_RemoveComment()
+    public void 正常系_DeleteComment()
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
@@ -322,7 +322,7 @@ public class TicketTests : BaseDomainTest
         var comment2 = ticket.AddComment(Guid.NewGuid(), "コメント2", Guid.NewGuid(), Clock);
 
         // Act
-        ticket.RemoveComment(comment1.Id, comment1.AuthorId);
+        ticket.DeleteComment(comment1.Id, comment1.AuthorId);
 
         // Assert
         ticket.Comments.Should().ContainSingle();
@@ -330,14 +330,14 @@ public class TicketTests : BaseDomainTest
     }
 
     [Fact]
-    public void 異常系_RemoveComment_存在しないコメントの場合()
+    public void 異常系_DeleteComment_存在しないコメントの場合()
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
         var comment = _commentBuilder.Build();
 
         // Act
-        var act = () => ticket.RemoveComment(comment.Id, comment.AuthorId);
+        var act = () => ticket.DeleteComment(comment.Id, comment.AuthorId);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -345,14 +345,14 @@ public class TicketTests : BaseDomainTest
     }
 
     [Fact]
-    public void 異常系_RemoveComment_作成者以外が削除しようとした場合()
+    public void 異常系_DeleteComment_作成者以外が削除しようとした場合()
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
         var comment = ticket.AddComment(Guid.NewGuid(), "コメント", Guid.NewGuid(), Clock);
 
         // Act
-        var act = () => ticket.RemoveComment(comment.Id, Guid.NewGuid());
+        var act = () => ticket.DeleteComment(comment.Id, Guid.NewGuid());
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

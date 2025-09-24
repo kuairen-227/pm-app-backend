@@ -122,7 +122,7 @@ public sealed class Ticket : Entity
         comment.UpdateContent(newContent, updatedBy, clock);
     }
 
-    public void RemoveComment(Guid commentId, Guid authorId)
+    public void DeleteComment(Guid commentId, Guid authorId)
     {
         var comment = _comments.FirstOrDefault(c => c.Id == commentId)
             ?? throw new DomainException("TICKET_COMMENT_NOT_FOUND", "Ticket Comment が見つかりません");
