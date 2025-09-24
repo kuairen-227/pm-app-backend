@@ -9,9 +9,6 @@ public sealed class User : Entity
     public Email Email { get; private set; } = null!;
     public SystemRole Role { get; private set; } = null!;
 
-    private readonly List<Notification> _notifications = new();
-    public IReadOnlyList<Notification> Notifications => _notifications.AsReadOnly();
-
     private User() { } // EF Core 用
 
     public User(string name, string email, SystemRole.RoleType role, Guid createdBy, IDateTimeProvider clock)
@@ -23,10 +20,5 @@ public sealed class User : Entity
         Name = name;
         Email = Email.Create(email);
         Role = SystemRole.Create(role);
-    }
-
-    public void AddNotification(Notification notification)
-    {
-        _notifications.Add(notification);
     }
 }

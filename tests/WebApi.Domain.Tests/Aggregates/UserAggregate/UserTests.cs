@@ -36,34 +36,4 @@ public class UserTests
         var ex = act.Should().Throw<DomainException>();
         ex.Which.ErrorCode.Should().Be("USER_NAME_REQUIRED");
     }
-
-    [Fact]
-    public void 正常系_AddNotification_1件()
-    {
-        // Arrange
-        var notification = new NotificationBuilder().Build();
-
-        // Act
-        var result = _userBuilder.Build();
-        result.AddNotification(notification);
-
-        // Assert
-        result.Notifications.Should().Contain(notification);
-    }
-
-    [Fact]
-    public void 正常系_AddNotification_2件()
-    {
-        // Arrange
-        var notification1 = new NotificationBuilder().Build();
-        var notification2 = new NotificationBuilder().Build();
-
-        // Act
-        var result = _userBuilder.Build();
-        result.AddNotification(notification1);
-        result.AddNotification(notification2);
-
-        // Assert
-        result.Notifications.Should().Contain([notification1, notification2]);
-    }
 }

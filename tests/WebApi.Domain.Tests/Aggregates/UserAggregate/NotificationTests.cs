@@ -35,7 +35,7 @@ public class NotificationTests
 
         // Then
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("NOTIFICATION_USER_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("NOTIFICATION_RECIPIENT_ID_REQUIRED");
     }
 
     [Theory]

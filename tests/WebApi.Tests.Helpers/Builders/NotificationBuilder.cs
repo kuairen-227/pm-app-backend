@@ -1,4 +1,4 @@
-using WebApi.Domain.Aggregates.UserAggregate;
+using WebApi.Domain.Aggregates.NotificationAggregate;
 using WebApi.Tests.Helpers.Builders.Common;
 
 namespace WebApi.Tests.Helpers.Builders;
