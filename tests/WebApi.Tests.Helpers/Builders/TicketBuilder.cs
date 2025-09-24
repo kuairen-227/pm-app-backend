@@ -11,6 +11,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
     private DateOnly? _deadline = null;
     private TicketStatus.StatusType _status = TicketStatus.StatusType.Todo;
     private string? _completionCriteria = null;
+    private List<TicketComment> _comments = new();
 
     public TicketBuilder WithProjectId(Guid projectId)
     {
@@ -48,6 +49,12 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
         return this;
     }
 
+    public TicketBuilder WithComments(params TicketComment[] comments)
+    {
+        _comments = comments.ToList();
+        return this;
+    }
+
     public override Ticket Build()
     {
         var ticket = new Ticket(
@@ -63,6 +70,11 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
         if (_status != TicketStatus.StatusType.Todo)
         {
             ticket.ChangeStatus(_status, _createdBy, _clock);
+        }
+
+        foreach (var comment in _comments)
+        {
+            ticket.AddComment(comment.AuthorId, comment.Content, comment.CreatedBy, _clock);
         }
 
         return ticket;
