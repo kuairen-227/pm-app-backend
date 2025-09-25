@@ -12,7 +12,8 @@ public static class SystemRolePermissions
                 SystemRole.RoleType.Admin, new []
                 {
                     UserPermissions.View, UserPermissions.Manage,
-                    ProjectPermissions.View, ProjectPermissions.Launch, ProjectPermissions.Update, ProjectPermissions.Delete,
+                    ProjectPermissions.View, ProjectPermissions.ViewAll,
+                    ProjectPermissions.Launch, ProjectPermissions.Update, ProjectPermissions.Delete,
                     ProjectPermissions.InviteMember, ProjectPermissions.RemoveMember, ProjectPermissions.ChangeMemberRole,
                     TicketPermissions.View, TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
                     TicketPermissions.Assign, TicketPermissions.Unassign,

@@ -3,6 +3,7 @@ namespace WebApi.Application.Common.Authorization.Permissions;
 public static class ProjectPermissions
 {
     public const string View = "PROJECT_VIEW";
+    public const string ViewAll = "PROJECT_VIEW_ALL";
     public const string Launch = "PROJECT_LAUNCH";
     public const string Update = "PROJECT_UPDATE";
     public const string Delete = "PROJECT_DELETE";

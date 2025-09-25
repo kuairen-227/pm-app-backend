@@ -20,6 +20,7 @@ public static class ProjectRolePermissions
             {
                 ProjectRole.RoleType.Member, new[]
                 {
+                    ProjectPermissions.View,
                     TicketPermissions.View, TicketPermissions.Update
                 }
             }
