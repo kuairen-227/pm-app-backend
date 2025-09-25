@@ -1,7 +1,7 @@
 using MediatR;
 using WebApi.Application.Common.Authorization;
+using WebApi.Application.Common.Authorization.Permissions;
 using WebApi.Domain.Aggregates.ProjectAggregate;
-using WebApi.Domain.Common.Authorization.Permissions;
 
 namespace WebApi.Application.Commands.Projects.InviteMember;
 

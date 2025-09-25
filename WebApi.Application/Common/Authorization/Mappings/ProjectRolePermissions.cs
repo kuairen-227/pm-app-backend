@@ -1,7 +1,7 @@
 using WebApi.Domain.Aggregates.ProjectAggregate;
-using WebApi.Domain.Common.Authorization.Permissions;
+using WebApi.Application.Common.Authorization.Permissions;
 
-namespace WebApi.Domain.Common.Authorization;
+namespace WebApi.Application.Common.Authorization;
 
 public static class ProjectRolePermissions
 {
@@ -14,7 +14,7 @@ public static class ProjectRolePermissions
                     ProjectPermissions.View, ProjectPermissions.Update,
                     ProjectPermissions.InviteMember, ProjectPermissions.RemoveMember, ProjectPermissions.ChangeMemberRole,
                     TicketPermissions.View, TicketPermissions.Create, TicketPermissions.Update, TicketPermissions.Delete,
-                    TicketPermissions.Assign, TicketPermissions.Unassign,
+                    TicketPermissions.Assign, TicketPermissions.Unassign
                 }
             },
             {

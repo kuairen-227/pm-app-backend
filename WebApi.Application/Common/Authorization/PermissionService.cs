@@ -1,7 +1,9 @@
 using WebApi.Domain.Abstractions.Repositories;
+using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Aggregates.UserAggregate;
+using WebApi.Domain.Common.Authorization;
 
-namespace WebApi.Domain.Common.Authorization;
+namespace WebApi.Application.Common.Authorization;
 
 public class PermissionService : IPermissionService
 {
@@ -29,10 +31,10 @@ public class PermissionService : IPermissionService
         if (projectId.HasValue)
         {
             var project = await _projectRepository.GetByIdAsync(projectId.Value, cancellationToken)
-                ?? throw new DomainException("NOT_FOUND", "プロジェクトが存在しません");
+                ?? throw new NotFoundException(nameof(Project), projectId.Value);
 
             var membership = project.Members.FirstOrDefault(m => m.UserId == user.Id)
-                ?? throw new DomainException("FORBIDDEN", "プロジェクトに所属していません");
+                ?? throw new AuthorizationException("FORBIDDEN", "プロジェクトに所属していません");
 
             if (ProjectRolePermissions.Map.TryGetValue(membership.Role.Value, out var projectPermissions)
                 && projectPermissions.Contains(permissionCode))
@@ -41,6 +43,6 @@ public class PermissionService : IPermissionService
             }
         }
 
-        throw new DomainException("FORBIDDEN", $"{permissionCode}: 権限がありません");
+        throw new AuthorizationException("FORBIDDEN", $"{permissionCode}: 権限がありません");
     }
 }

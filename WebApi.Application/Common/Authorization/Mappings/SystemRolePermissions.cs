@@ -1,7 +1,7 @@
 using WebApi.Domain.Aggregates.UserAggregate;
-using WebApi.Domain.Common.Authorization.Permissions;
+using WebApi.Application.Common.Authorization.Permissions;
 
-namespace WebApi.Domain.Common.Authorization;
+namespace WebApi.Application.Common.Authorization;
 
 public static class SystemRolePermissions
 {

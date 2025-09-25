@@ -1,4 +1,4 @@
-namespace WebApi.Domain.Common.Authorization.Permissions;
+namespace WebApi.Application.Common.Authorization.Permissions;
 
 public static class ProjectPermissions
 {

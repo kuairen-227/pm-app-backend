@@ -1,7 +1,7 @@
 using MediatR;
 using WebApi.Application.Common.Authorization;
 using WebApi.Domain.Aggregates.TicketAggregate;
-using WebApi.Domain.Common.Authorization.Permissions;
+using WebApi.Application.Common.Authorization.Permissions;
 
 namespace WebApi.Application.Commands.Tickets.ChangeStatus;
 
