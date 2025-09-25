@@ -4,7 +4,7 @@ namespace WebApi.Domain.Common.Authorization;
 
 public interface IPermissionService
 {
-    Task EnsurePermissionAsync(
+    Task<bool> HasPermissionAsync(
         User user,
         string permissionCode,
         Guid? projectId = null,

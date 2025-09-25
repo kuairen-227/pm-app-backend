@@ -40,7 +40,10 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
 
             foreach (var attr in attributes)
             {
-                await _permissionService.EnsurePermissionAsync(user, attr.PermissionCode, projectId, cancellationToken);
+                var hasPermission = await _permissionService
+                    .HasPermissionAsync(user, attr.PermissionCode, projectId, cancellationToken);
+                if (!hasPermission)
+                    throw new AuthorizationException("FORBIDDEN", $"{attr.PermissionCode}: 権限がありません");
             }
         }
 

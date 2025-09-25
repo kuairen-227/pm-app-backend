@@ -14,7 +14,7 @@ public class PermissionService : IPermissionService
         _projectRepository = projectRepository;
     }
 
-    public async Task EnsurePermissionAsync(
+    public async Task<bool> HasPermissionAsync(
         User user,
         string permissionCode,
         Guid? projectId = null,
@@ -24,7 +24,7 @@ public class PermissionService : IPermissionService
         if (SystemRolePermissions.Map.TryGetValue(user.Role.Value, out var systemPermissions)
             && systemPermissions.Contains(permissionCode))
         {
-            return;
+            return true;
         }
 
         // ProjectRole による認可
@@ -39,10 +39,10 @@ public class PermissionService : IPermissionService
             if (ProjectRolePermissions.Map.TryGetValue(membership.Role.Value, out var projectPermissions)
                 && projectPermissions.Contains(permissionCode))
             {
-                return;
+                return true;
             }
         }
 
-        throw new AuthorizationException("FORBIDDEN", $"{permissionCode}: 権限がありません");
+        return false;
     }
 }
