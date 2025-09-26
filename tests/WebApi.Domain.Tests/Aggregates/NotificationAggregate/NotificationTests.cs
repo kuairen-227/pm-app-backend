@@ -2,7 +2,7 @@ using FluentAssertions;
 using WebApi.Domain.Common;
 using WebApi.Tests.Helpers.Builders;
 
-namespace WebApi.Domain.Tests.Aggregates.UserAggregate;
+namespace WebApi.Domain.Tests.Aggregates.NotificationAggregate;
 
 public class NotificationTests
 {
@@ -28,7 +28,7 @@ public class NotificationTests
     public void 異常系_インスタンス生成_UserIdが空の場合()
     {
         // Arrange
-        var builder = _notificationBuilder.WithUserId(Guid.Empty);
+        var builder = _notificationBuilder.WithRecipientId(Guid.Empty);
 
         // Act
         var act = () => builder.Build();

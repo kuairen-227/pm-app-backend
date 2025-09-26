@@ -5,13 +5,13 @@ namespace WebApi.Tests.Helpers.Builders;
 
 public class NotificationBuilder : BaseBuilder<NotificationBuilder, Notification>
 {
-    private Guid _userId = Guid.NewGuid();
+    private Guid _recipientId = Guid.NewGuid();
     private string _message = "デフォルトメッセージ";
     private bool _isRead = false;
 
-    public NotificationBuilder WithUserId(Guid userId)
+    public NotificationBuilder WithRecipientId(Guid recipientId)
     {
-        _userId = userId;
+        _recipientId = recipientId;
         return this;
     }
 
@@ -30,7 +30,7 @@ public class NotificationBuilder : BaseBuilder<NotificationBuilder, Notification
     public override Notification Build()
     {
         var notification = new Notification(
-            _userId,
+            _recipientId,
             _message,
             _createdBy,
             _clock
