@@ -1,13 +1,13 @@
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Aggregates.NotificationAggregate;
 
-namespace WebApi.Domain.Services;
+namespace WebApi.Domain.Services.NotificationFactories;
 
-public sealed class NotificationFactory
+public sealed class ProjectNotificationFactory
 {
     public readonly IDateTimeProvider _clock;
 
-    public NotificationFactory(IDateTimeProvider clock)
+    public ProjectNotificationFactory(IDateTimeProvider clock)
     {
         _clock = clock;
     }
