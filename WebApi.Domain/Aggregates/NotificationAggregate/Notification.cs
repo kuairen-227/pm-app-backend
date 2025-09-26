@@ -6,12 +6,13 @@ namespace WebApi.Domain.Aggregates.NotificationAggregate;
 public sealed class Notification : Entity
 {
     public Guid RecipientId { get; private set; }
+    public NotificationCategory Category { get; private set; } = null!;
     public string Message { get; private set; } = null!;
     public bool IsRead { get; private set; }
 
     private Notification() { } // EF Core 用
 
-    public Notification(Guid recipientId, string message, Guid createdBy, IDateTimeProvider clock)
+    public Notification(Guid recipientId, NotificationCategory category, string message, Guid createdBy, IDateTimeProvider clock)
         : base(createdBy, clock)
     {
         if (recipientId == Guid.Empty)
@@ -20,6 +21,7 @@ public sealed class Notification : Entity
             throw new DomainException("NOTIFICATION_MESSAGE_REQUIRED", "Message は必須です");
 
         RecipientId = recipientId;
+        Category = category;
         Message = message;
         IsRead = false;
     }

@@ -6,12 +6,19 @@ namespace WebApi.Tests.Helpers.Builders;
 public class NotificationBuilder : BaseBuilder<NotificationBuilder, Notification>
 {
     private Guid _recipientId = Guid.NewGuid();
+    private NotificationCategory _category = NotificationCategory.Create(NotificationCategory.Category.ProjectInvitation);
     private string _message = "デフォルトメッセージ";
     private bool _isRead = false;
 
     public NotificationBuilder WithRecipientId(Guid recipientId)
     {
         _recipientId = recipientId;
+        return this;
+    }
+
+    public NotificationBuilder WithCategory(NotificationCategory.Category category)
+    {
+        _category = NotificationCategory.Create(category);
         return this;
     }
 
@@ -31,6 +38,7 @@ public class NotificationBuilder : BaseBuilder<NotificationBuilder, Notification
     {
         var notification = new Notification(
             _recipientId,
+            _category,
             _message,
             _createdBy,
             _clock
