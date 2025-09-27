@@ -23,6 +23,7 @@ public class AddCommentHandlerTests : BaseCommandHandlerTest
         _handler = new AddCommentHandler(
             _ticketRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

@@ -14,9 +14,10 @@ public class LaunchProjectHandler : BaseCommandHandler, IRequestHandler<LaunchPr
     public LaunchProjectHandler(
         IProjectRepository projectRepository,
         IUnitOfWork unitOfWork,
+        IDomainEventPublisher domainEventPublisher,
         IUserContext userContext,
         IDateTimeProvider clock
-    ) : base(unitOfWork, userContext, clock)
+    ) : base(unitOfWork, domainEventPublisher, userContext, clock)
     {
         _projectRepository = projectRepository;
     }

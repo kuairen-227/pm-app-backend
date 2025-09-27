@@ -24,6 +24,7 @@ public class ChangeStatusHandlerTests : BaseCommandHandlerTest
         _handler = new ChangeStatusHandler(
             _ticketRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

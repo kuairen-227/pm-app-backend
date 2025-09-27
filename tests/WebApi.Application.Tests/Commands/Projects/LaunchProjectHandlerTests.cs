@@ -22,6 +22,7 @@ public class LaunchProjectHandlerTests : BaseCommandHandlerTest
         _handler = new LaunchProjectHandler(
             _projectRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

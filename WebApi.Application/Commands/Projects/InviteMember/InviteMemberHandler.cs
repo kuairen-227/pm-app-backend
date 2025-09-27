@@ -17,9 +17,10 @@ public class InviteMemberHandler : BaseCommandHandler, IRequestHandler<InviteMem
         IProjectRepository projectRepository,
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
+        IDomainEventPublisher domainEventPublisher,
         IUserContext userContext,
         IDateTimeProvider clock
-    ) : base(unitOfWork, userContext, clock)
+    ) : base(unitOfWork, domainEventPublisher, userContext, clock)
     {
         _projectRepository = projectRepository;
         _userRepository = userRepository;
@@ -32,8 +33,9 @@ public class InviteMemberHandler : BaseCommandHandler, IRequestHandler<InviteMem
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken)
             ?? throw new NotFoundException(nameof(User), request.UserId);
 
-        project.InviteMember(user.Id, request.ProjectRole);
+        project.InviteMember(user.Id, request.ProjectRole, Clock);
         await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.PublishDomainEventsAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;
     }

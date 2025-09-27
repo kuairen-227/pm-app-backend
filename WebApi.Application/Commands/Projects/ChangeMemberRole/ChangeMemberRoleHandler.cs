@@ -17,9 +17,10 @@ public class ChangeMemberRoleHandler : BaseCommandHandler, IRequestHandler<Chang
         IProjectRepository projectRepository,
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
+        IDomainEventPublisher domainEventPublisher,
         IUserContext userContext,
         IDateTimeProvider clock
-    ) : base(unitOfWork, userContext, clock)
+    ) : base(unitOfWork, domainEventPublisher, userContext, clock)
     {
         _projectRepository = projectRepository;
         _userRepository = userRepository;

@@ -29,6 +29,7 @@ public class ChangeMemberRoleHandlerTests : BaseCommandHandlerTest
             _projectRepository.Object,
             _userRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

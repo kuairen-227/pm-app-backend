@@ -23,6 +23,7 @@ public class DeleteTicketHandlerTests : BaseCommandHandlerTest
         _handler = new DeleteTicketHandler(
             _ticketRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

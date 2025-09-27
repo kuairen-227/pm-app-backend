@@ -35,6 +35,7 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
             _userRepository.Object,
             _projectRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

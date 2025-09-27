@@ -24,6 +24,7 @@ public class UpdateTicketHandlerTests : BaseCommandHandlerTest
         _handler = new UpdateTicketHandler(
             _ticketRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

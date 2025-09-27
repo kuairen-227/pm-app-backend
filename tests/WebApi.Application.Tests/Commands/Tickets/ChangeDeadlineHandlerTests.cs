@@ -24,6 +24,7 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
         _handler = new ChangeDeadlineHandler(
             _ticketRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

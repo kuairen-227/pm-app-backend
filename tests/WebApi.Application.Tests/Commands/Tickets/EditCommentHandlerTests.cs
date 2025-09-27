@@ -25,6 +25,7 @@ public class EditCommentHandlerTests : BaseCommandHandlerTest
         _handler = new EditCommentHandler(
             _ticketRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

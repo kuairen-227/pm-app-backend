@@ -25,6 +25,7 @@ public class DeleteCommentHandlerTests : BaseCommandHandlerTest
         _handler = new DeleteCommentHandler(
             _ticketRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

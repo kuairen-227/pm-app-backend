@@ -25,6 +25,7 @@ public class UnassignMemberHandlerTests : BaseCommandHandlerTest
         _handler = new UnassignMemberHandler(
             _ticketRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

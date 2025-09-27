@@ -24,6 +24,7 @@ public class UpdateProjectHandlerTests : BaseCommandHandlerTest
         _handler = new UpdateProjectHandler(
             _projectRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );

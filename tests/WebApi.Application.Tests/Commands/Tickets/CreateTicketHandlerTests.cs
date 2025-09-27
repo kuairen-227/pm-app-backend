@@ -22,6 +22,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         _handler = new CreateTicketHandler(
             _ticketRepository.Object,
             UnitOfWork.Object,
+            DomainEventPublisher.Object,
             UserContext.Object,
             Clock.Object
         );
