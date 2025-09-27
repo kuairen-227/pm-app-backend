@@ -10,6 +10,9 @@ public abstract class Entity
     public Guid UpdatedBy { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
+    private readonly List<IDomainEvent> _domainEvents = new();
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+
     protected Entity() { } // EF Core 用
 
     protected Entity(Guid createdBy, IDateTimeProvider clock)
@@ -24,5 +27,15 @@ public abstract class Entity
     {
         UpdatedBy = updatedBy;
         UpdatedAt = clock.Now;
+    }
+
+    public void AddDomainEvent(IDomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 }
