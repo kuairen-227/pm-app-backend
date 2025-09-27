@@ -7,6 +7,7 @@ public class NotificationBuilder : BaseBuilder<NotificationBuilder, Notification
 {
     private Guid _recipientId = Guid.NewGuid();
     private NotificationCategory _category = NotificationCategory.Create(NotificationCategory.Category.ProjectInvitation);
+    private Guid _subjectId = Guid.NewGuid();
     private string _message = "デフォルトメッセージ";
     private bool _isRead = false;
 
@@ -19,6 +20,12 @@ public class NotificationBuilder : BaseBuilder<NotificationBuilder, Notification
     public NotificationBuilder WithCategory(NotificationCategory.Category category)
     {
         _category = NotificationCategory.Create(category);
+        return this;
+    }
+
+    public NotificationBuilder WithSubjectId(Guid subjectId)
+    {
+        _subjectId = subjectId;
         return this;
     }
 
@@ -39,6 +46,7 @@ public class NotificationBuilder : BaseBuilder<NotificationBuilder, Notification
         var notification = new Notification(
             _recipientId,
             _category,
+            _subjectId,
             _message,
             _createdBy,
             _clock

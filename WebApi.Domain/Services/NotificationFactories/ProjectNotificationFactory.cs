@@ -12,22 +12,25 @@ public sealed class ProjectNotificationFactory
         _clock = clock;
     }
 
-    public Notification CreateForProjectInvitation(Guid recipientId, Guid createdBy)
+    public Notification CreateForProjectInvitation(
+        Guid recipientId, Guid projectId, string projectName, Guid createdBy)
     {
         return new Notification(
             recipientId,
             NotificationCategory.Create(NotificationCategory.Category.ProjectInvitation),
-            "プロジェクトに招待されました。",
+            projectId,
+            $"{projectName} に招待されました。",
             createdBy,
             _clock
         );
     }
 
-    public Notification CreateForProjectChangeMemberRole(Guid recipientId, Guid createdBy)
+    public Notification CreateForProjectChangeMemberRole(Guid recipientId, Guid memberId, Guid createdBy)
     {
         return new Notification(
             recipientId,
             NotificationCategory.Create(NotificationCategory.Category.ProjectChangeMemberRole),
+            memberId,
             "メンバー権限が変更されました。",
             createdBy,
             _clock
