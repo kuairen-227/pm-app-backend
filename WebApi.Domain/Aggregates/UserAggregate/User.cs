@@ -1,4 +1,5 @@
 using WebApi.Domain.Abstractions;
+using WebApi.Domain.Aggregates.UserAggregate.Events;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.UserAggregate;
@@ -20,5 +21,7 @@ public sealed class User : Entity
         Name = name;
         Email = Email.Create(email);
         Role = SystemRole.Create(role);
+
+        AddDomainEvent(new UserRegisteredEvent(Id, Name, clock));
     }
 }
