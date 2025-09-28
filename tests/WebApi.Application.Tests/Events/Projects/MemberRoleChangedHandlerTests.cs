@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Moq;
 using WebApi.Application.Common;
-using WebApi.Application.Events.Projects.RoleChanged;
+using WebApi.Application.Events.Projects.MemberRoleChanged;
 using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.NotificationAggregate;
@@ -11,16 +11,16 @@ using WebApi.Tests.Helpers.Builders;
 
 namespace WebApi.Application.Tests.Events.Projects;
 
-public class RoleChangedHandlerTests : BaseEventHandlerTest
+public class MemberRoleChangedHandlerTests : BaseEventHandlerTest
 {
-    private RoleChangedHandler _handler;
+    private MemberRoleChangedHandler _handler;
     private readonly ProjectNotificationFactory _notificationFactory;
     private readonly Mock<INotificationRepository> _notificationRepository;
     private readonly Mock<IProjectRepository> _projectRepository;
     private readonly ProjectBuilder _projectBuilder;
     private readonly UserBuilder _userBuilder;
 
-    public RoleChangedHandlerTests()
+    public MemberRoleChangedHandlerTests()
     {
         _notificationRepository = new Mock<INotificationRepository>();
         _projectRepository = new Mock<IProjectRepository>();
@@ -28,7 +28,7 @@ public class RoleChangedHandlerTests : BaseEventHandlerTest
         _projectBuilder = new ProjectBuilder();
         _userBuilder = new UserBuilder();
 
-        _handler = new RoleChangedHandler(
+        _handler = new MemberRoleChangedHandler(
             _notificationFactory,
             _notificationRepository.Object,
             _projectRepository.Object,
@@ -48,7 +48,7 @@ public class RoleChangedHandlerTests : BaseEventHandlerTest
             .ReturnsAsync(project);
 
         // Act
-        var notification = new RoleChangedNotification(project.Id, user.Id, ProjectRole.RoleType.Member);
+        var notification = new MemberRoleChangedNotification(project.Id, user.Id, ProjectRole.RoleType.Member);
         await _handler.Handle(notification, CancellationToken.None);
 
         // Assert
@@ -65,7 +65,7 @@ public class RoleChangedHandlerTests : BaseEventHandlerTest
             .ReturnsAsync((Project?)null);
 
         // Act
-        var notification = new RoleChangedNotification(Guid.NewGuid(), Guid.NewGuid(), ProjectRole.RoleType.Member);
+        var notification = new MemberRoleChangedNotification(Guid.NewGuid(), Guid.NewGuid(), ProjectRole.RoleType.Member);
         var act = async () => await _handler.Handle(notification, CancellationToken.None);
 
         // Assert

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Application.Abstractions;
 using WebApi.Application.Common;
+using WebApi.Application.Events.Projects.MemberRoleChanged;
 using WebApi.Domain.Aggregates.ProjectAggregate.Events;
 using WebApi.Domain.Aggregates.UserAggregate.Events;
 
@@ -18,7 +19,7 @@ public static class DependencyInjection
 
         // Project Event Mappers
         services.AddScoped<IDomainEventMapper<ProjectMemberInvitedEvent>, MemberInvitedEventMapper>();
-        services.AddScoped<IDomainEventMapper<ProjectRoleChangedEvent>, RoleChangedEventMapper>();
+        services.AddScoped<IDomainEventMapper<ProjectRoleChangedEvent>, MemberRoleChangedEventMapper>();
 
         return services;
     }

@@ -1,15 +1,15 @@
 using MediatR;
 using WebApi.Domain.Aggregates.ProjectAggregate;
 
-namespace WebApi.Application.Events.Projects.RoleChanged;
+namespace WebApi.Application.Events.Projects.MemberRoleChanged;
 
-public sealed class RoleChangedNotification : INotification
+public sealed class MemberRoleChangedNotification : INotification
 {
     public Guid ProjectId { get; }
     public Guid UserId { get; }
     public ProjectRole.RoleType Role { get; }
 
-    public RoleChangedNotification(Guid projectId, Guid userId, ProjectRole.RoleType role)
+    public MemberRoleChangedNotification(Guid projectId, Guid userId, ProjectRole.RoleType role)
     {
         ProjectId = projectId;
         UserId = userId;
