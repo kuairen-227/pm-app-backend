@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using WebApi.Application.Abstractions;
 using WebApi.Application.Commands.Projects.InviteMember;
 using WebApi.Application.Common;
 using WebApi.Application.Tests.Helpers.Common;
@@ -53,6 +54,7 @@ public class InviteMemberHandlerTests : BaseCommandHandlerTest
 
         // Assert
         result.Should().Be(MediatR.Unit.Value);
+        UnitOfWork.Verify(x => x.PublishDomainEventsAsync(It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()), Times.Once);
         UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -72,6 +74,7 @@ public class InviteMemberHandlerTests : BaseCommandHandlerTest
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
         ex.Which.ErrorCode.Should().Be("PROJECT_NOT_FOUND");
+        UnitOfWork.Verify(x => x.PublishDomainEventsAsync(It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()), Times.Never);
         UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 
@@ -93,6 +96,7 @@ public class InviteMemberHandlerTests : BaseCommandHandlerTest
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
         ex.Which.ErrorCode.Should().Be("USER_NOT_FOUND");
+        UnitOfWork.Verify(x => x.PublishDomainEventsAsync(It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()), Times.Never);
         UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }

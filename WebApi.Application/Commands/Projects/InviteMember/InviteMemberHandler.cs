@@ -34,8 +34,8 @@ public class InviteMemberHandler : BaseCommandHandler, IRequestHandler<InviteMem
             ?? throw new NotFoundException(nameof(User), request.UserId);
 
         project.InviteMember(user.Id, request.ProjectRole, Clock);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
         await UnitOfWork.PublishDomainEventsAsync(DomainEventPublisher, cancellationToken);
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

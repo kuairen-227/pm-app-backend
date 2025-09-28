@@ -40,6 +40,5 @@ public sealed class MemberInvitedHandler
         );
 
         await _notificationRepository.AddAsync(notificationEntity, cancellationToken);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

@@ -55,7 +55,6 @@ public class MemberInvitedHandlerTests : BaseEventHandlerTest
             It.IsAny<Domain.Aggregates.NotificationAggregate.Notification>(),
             It.IsAny<CancellationToken>()
         ), Times.Once);
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -76,6 +75,5 @@ public class MemberInvitedHandlerTests : BaseEventHandlerTest
             It.IsAny<Domain.Aggregates.NotificationAggregate.Notification>(),
             It.IsAny<CancellationToken>()
         ), Times.Never);
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }
