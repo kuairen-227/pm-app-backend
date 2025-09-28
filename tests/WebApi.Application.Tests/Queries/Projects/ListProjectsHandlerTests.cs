@@ -80,21 +80,16 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
         // Assert
         result.Should().HaveCount(2);
 
-        result.ElementAt(0).Id.Should().Be(projects[0].Id);
-        result.ElementAt(0).Name.Should().Be(projects[0].Name);
-        result.ElementAt(0).Description.Should().Be(projects[0].Description);
-        result.ElementAt(0).CreatedBy.Should().Be(projects[0].CreatedBy);
-        result.ElementAt(0).CreatedAt.Should().Be(projects[0].CreatedAt);
-        result.ElementAt(0).UpdatedBy.Should().Be(projects[0].UpdatedBy);
-        result.ElementAt(0).UpdatedAt.Should().Be(projects[0].UpdatedAt);
-
-        result.ElementAt(1).Id.Should().Be(projects[1].Id);
-        result.ElementAt(1).Name.Should().Be(projects[1].Name);
-        result.ElementAt(1).Description.Should().Be(projects[1].Description);
-        result.ElementAt(1).CreatedBy.Should().Be(projects[1].CreatedBy);
-        result.ElementAt(1).CreatedAt.Should().Be(projects[1].CreatedAt);
-        result.ElementAt(1).UpdatedBy.Should().Be(projects[1].UpdatedBy);
-        result.ElementAt(1).UpdatedAt.Should().Be(projects[1].UpdatedAt);
+        for (int i = 0; i < projects.Count; i++)
+        {
+            result.ElementAt(i).Id.Should().Be(projects[i].Id);
+            result.ElementAt(i).Name.Should().Be(projects[i].Name);
+            result.ElementAt(i).Description.Should().Be(projects[i].Description);
+            result.ElementAt(i).CreatedBy.Should().Be(projects[i].CreatedBy);
+            result.ElementAt(i).CreatedAt.Should().Be(projects[i].CreatedAt);
+            result.ElementAt(i).UpdatedBy.Should().Be(projects[i].UpdatedBy);
+            result.ElementAt(i).UpdatedAt.Should().Be(projects[i].UpdatedAt);
+        }
 
         _projectRepository.Verify(x => x.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
         _projectRepository.Verify(x => x.GetByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
@@ -155,7 +150,6 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
         _permissionService
             .Setup(x => x.HasPermissionAsync(user, ProjectPermissions.ViewAll, null, It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-
 
         // Act
         var query = new ListProjectsQuery();
