@@ -1,4 +1,5 @@
 using FluentAssertions;
+using MediatR;
 using Moq;
 using WebApi.Application.Abstractions;
 using WebApi.Application.Commands.Tickets.DeleteTicket;
@@ -46,7 +47,7 @@ public class DeleteTicketHandlerTests : BaseCommandHandlerTest
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.Should().Be(MediatR.Unit.Value);
+        result.Should().Be(Unit.Value);
         _ticketRepository.Verify(x => x.DeleteAsync(ticket, It.IsAny<CancellationToken>()), Times.Once);
         UnitOfWork.Verify(x => x.SaveChangesAsync(
             It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),

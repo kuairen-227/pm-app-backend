@@ -1,4 +1,5 @@
 using FluentAssertions;
+using MediatR;
 using Moq;
 using WebApi.Application.Abstractions;
 using WebApi.Application.Commands.Tickets.AssignMember;
@@ -66,7 +67,7 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.Should().Be(MediatR.Unit.Value);
+        result.Should().Be(Unit.Value);
         UnitOfWork.Verify(x => x.SaveChangesAsync(
             It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
             Times.Once);
