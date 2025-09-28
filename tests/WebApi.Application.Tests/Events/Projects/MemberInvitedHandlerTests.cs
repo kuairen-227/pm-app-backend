@@ -47,7 +47,7 @@ public class MemberInvitedHandlerTests : BaseEventHandlerTest
             .ReturnsAsync(project);
 
         // Act
-        var notification = new MemberInvitedNotification(project.Id, user.Id, ProjectRole.RoleType.Member);
+        var notification = new MemberInvitedNotification(project.Id, user.Id);
         await _handler.Handle(notification, CancellationToken.None);
 
         // Assert
@@ -65,7 +65,7 @@ public class MemberInvitedHandlerTests : BaseEventHandlerTest
             .ReturnsAsync((Project?)null);
 
         // Act
-        var notification = new MemberInvitedNotification(Guid.NewGuid(), Guid.NewGuid(), ProjectRole.RoleType.Member);
+        var notification = new MemberInvitedNotification(Guid.NewGuid(), Guid.NewGuid());
         var act = async () => await _handler.Handle(notification, CancellationToken.None);
 
         // Assert

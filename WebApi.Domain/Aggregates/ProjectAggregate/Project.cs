@@ -47,7 +47,7 @@ public sealed class Project : Entity
         var member = ProjectMember.Create(userId, role);
         _members.Add(member);
 
-        AddDomainEvent(new ProjectMemberInvitedEvent(Id, userId, roleType, _clock));
+        AddDomainEvent(new ProjectMemberInvitedEvent(Id, userId, _clock));
     }
 
     public void RemoveMember(Guid userId)
