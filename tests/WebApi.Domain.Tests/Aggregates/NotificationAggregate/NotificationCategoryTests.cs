@@ -9,7 +9,7 @@ public class NotificationCategoryTests
     public void 正常系_インスタンス生成()
     {
         // Arrange
-        var category = NotificationCategory.Category.ProjectInvitation;
+        var category = NotificationCategory.Category.ProjectMemberInvited;
 
         // Act
         var result = NotificationCategory.Create(category);
@@ -22,8 +22,8 @@ public class NotificationCategoryTests
     public void 正常系_値が同じ場合()
     {
         // Arrange
-        var category1 = NotificationCategory.Category.ProjectInvitation;
-        var category2 = NotificationCategory.Category.ProjectInvitation;
+        var category1 = NotificationCategory.Category.ProjectMemberInvited;
+        var category2 = NotificationCategory.Category.ProjectMemberInvited;
 
         // Act
         var result1 = NotificationCategory.Create(category1);
@@ -39,8 +39,8 @@ public class NotificationCategoryTests
     public void 正常系_値が異なる場合()
     {
         // Arrange
-        var category1 = NotificationCategory.Category.ProjectInvitation;
-        var category2 = NotificationCategory.Category.ProjectChangeMemberRole;
+        var category1 = NotificationCategory.Category.ProjectMemberInvited;
+        var category2 = NotificationCategory.Category.ProjectMemberRoleChanged;
 
         // Act
         var result1 = NotificationCategory.Create(category1);
