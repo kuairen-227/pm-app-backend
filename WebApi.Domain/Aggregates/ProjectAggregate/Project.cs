@@ -1,4 +1,5 @@
 using WebApi.Domain.Abstractions;
+using WebApi.Domain.Aggregates.ProjectAggregate.Events;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.ProjectAggregate;
@@ -37,7 +38,7 @@ public sealed class Project : Entity
         UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void InviteMember(Guid userId, ProjectRole.RoleType roleType)
+    public void InviteMember(Guid userId, ProjectRole.RoleType roleType, IDateTimeProvider clock)
     {
         if (_members.Any(m => m.UserId == userId))
             throw new DomainException("USER_ALREADY_JOINED", "User はすでにプロジェクトメンバーです");
@@ -45,6 +46,8 @@ public sealed class Project : Entity
         var role = ProjectRole.Create(roleType);
         var member = ProjectMember.Create(userId, role);
         _members.Add(member);
+
+        AddDomainEvent(new ProjectMemberInvitedEvent(Id, userId, roleType, clock));
     }
 
     public void RemoveMember(Guid userId)

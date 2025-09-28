@@ -95,7 +95,7 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var result = _projectBuilder.Build();
-        result.InviteMember(user.Id, role);
+        result.InviteMember(user.Id, role, Clock);
 
         // Assert
         var member = ProjectMember.Create(user.Id, ProjectRole.Create(role));
@@ -114,7 +114,7 @@ public class ProjectTests : BaseDomainTest
             .Build();
 
         // Act
-        var act = () => project.InviteMember(user.Id, role.Value);
+        var act = () => project.InviteMember(user.Id, role.Value, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

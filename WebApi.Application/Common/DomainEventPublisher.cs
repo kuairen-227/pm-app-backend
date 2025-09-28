@@ -1,6 +1,6 @@
 using MediatR;
 using WebApi.Application.Abstractions;
-using WebApi.Application.Events.Projects.InviteMember;
+using WebApi.Application.Events.Projects.MemberInvited;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Aggregates.ProjectAggregate.Events;
 
@@ -21,7 +21,7 @@ public sealed class DomainEventPublisher : IDomainEventPublisher
         switch (domainEvent)
         {
             case ProjectMemberInvitedEvent e:
-                var notification = new ProjectMemberInvitedNotification(
+                var notification = new MemberInvitedNotification(
                     e.ProjectId, e.UserId, e.Role
                 );
                 await _mediator.Publish(notification, cancellationToken);
