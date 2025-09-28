@@ -2,17 +2,12 @@ using AutoMapper;
 using Moq;
 using WebApi.Application.Abstractions;
 using WebApi.Domain.Abstractions;
+using WebApi.Domain.Services.NotificationFactories;
 
 namespace WebApi.Application.Tests.Helpers.Common;
 
 public static class TestHelpers
 {
-    public static Mock<IMapper> CreateMapper()
-    {
-        var mock = new Mock<IMapper>();
-        return mock;
-    }
-
     public static Mock<IUnitOfWork> CreateUnitOfWork()
     {
         var mock = new Mock<IUnitOfWork>();

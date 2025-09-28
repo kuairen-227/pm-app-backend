@@ -12,6 +12,6 @@ public abstract class BaseQueryHandlerTest
     protected BaseQueryHandlerTest()
     {
         UserContext = TestHelpers.CreateUserContext();
-        Mapper = TestHelpers.CreateMapper();
+        Mapper = new Mock<IMapper>();
     }
 }
