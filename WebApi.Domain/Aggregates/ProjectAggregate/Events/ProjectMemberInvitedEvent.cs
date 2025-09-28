@@ -4,6 +4,7 @@ namespace WebApi.Domain.Aggregates.ProjectAggregate.Events;
 
 public sealed class ProjectMemberInvitedEvent : IDomainEvent
 {
+    public Guid EventId { get; } = Guid.NewGuid();
     public Guid ProjectId { get; }
     public Guid UserId { get; }
     public ProjectRole.RoleType Role { get; }
