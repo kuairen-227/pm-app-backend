@@ -25,4 +25,17 @@ public sealed class UserNotificationFactory
             _clock
         );
     }
+
+    public Notification CreateForUserRoleChange(
+        Guid recipientId, Guid userId, SystemRole.RoleType newRole, Guid createdBy)
+    {
+        return new Notification(
+            recipientId,
+            NotificationCategory.Category.UserRoleChanged,
+            userId,
+            $"ユーザー権限が {newRole} に変更されました。",
+            createdBy,
+            _clock
+        );
+    }
 }

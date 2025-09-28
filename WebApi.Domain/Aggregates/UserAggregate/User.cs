@@ -24,4 +24,11 @@ public sealed class User : Entity
 
         AddDomainEvent(new UserRegisteredEvent(Id, Name, clock));
     }
+
+    public void ChangeUserRole(Guid userId, SystemRole.RoleType newRole)
+    {
+        Role = SystemRole.Create(newRole);
+        UpdateAuditInfo(userId);
+        AddDomainEvent(new UserRoleChangedEvent(Id, newRole, _clock));
+    }
 }
