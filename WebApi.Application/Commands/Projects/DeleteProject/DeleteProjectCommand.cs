@@ -9,8 +9,8 @@ public class DeleteProjectCommand : IRequest<Unit>, IProjectScopedRequest
 {
     public Guid ProjectId { get; }
 
-    public DeleteProjectCommand(Guid id)
+    public DeleteProjectCommand(Guid projectId)
     {
-        ProjectId = id;
+        ProjectId = projectId;
     }
 }
