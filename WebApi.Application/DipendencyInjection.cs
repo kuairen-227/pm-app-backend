@@ -14,6 +14,7 @@ public static class DependencyInjection
 
         // Event Mappers
         services.AddScoped<IDomainEventMapper<ProjectMemberInvitedEvent>, MemberInvitedEventMapper>();
+        services.AddScoped<IDomainEventMapper<ProjectRoleChangedEvent>, RoleChangedEventMapper>();
 
         return services;
     }

@@ -66,6 +66,8 @@ public sealed class Project : Entity
 
         var role = ProjectRole.Create(newRoleType);
         _members[index] = ProjectMember.Create(userId, role);
+
+        AddDomainEvent(new ProjectRoleChangedEvent(Id, userId, newRoleType, _clock));
     }
 
     public void EnsureMember(Guid userId)

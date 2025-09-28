@@ -1,5 +1,4 @@
 using MediatR;
-using WebApi.Domain.Aggregates.ProjectAggregate;
 
 namespace WebApi.Application.Events.Projects.MemberInvited;
 

@@ -1,5 +1,6 @@
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Aggregates.NotificationAggregate;
+using WebApi.Domain.Aggregates.ProjectAggregate;
 
 namespace WebApi.Domain.Services.NotificationFactories;
 
@@ -25,13 +26,14 @@ public sealed class ProjectNotificationFactory
         );
     }
 
-    public Notification CreateForProjectChangeMemberRole(Guid recipientId, Guid memberId, Guid createdBy)
+    public Notification CreateForProjectChangeMemberRole(
+        Guid recipientId, Guid memberId, ProjectRole.RoleType newRoleType, Guid createdBy)
     {
         return new Notification(
             recipientId,
             NotificationCategory.Create(NotificationCategory.Category.ProjectChangeMemberRole),
             memberId,
-            "メンバー権限が変更されました。",
+            $"メンバー権限が {newRoleType} に変更されました。",
             createdBy,
             _clock
         );
