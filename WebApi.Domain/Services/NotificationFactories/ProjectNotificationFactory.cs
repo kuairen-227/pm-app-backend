@@ -18,7 +18,7 @@ public sealed class ProjectNotificationFactory
     {
         return new Notification(
             recipientId,
-            NotificationCategory.Create(NotificationCategory.Category.ProjectInvitation),
+            NotificationCategory.Category.ProjectMemberInvited,
             projectId,
             $"{projectName} に招待されました。",
             createdBy,
@@ -31,7 +31,7 @@ public sealed class ProjectNotificationFactory
     {
         return new Notification(
             recipientId,
-            NotificationCategory.Create(NotificationCategory.Category.ProjectChangeMemberRole),
+            NotificationCategory.Category.ProjectMemberRoleChanged,
             memberId,
             $"メンバー権限が {newRoleType} に変更されました。",
             createdBy,

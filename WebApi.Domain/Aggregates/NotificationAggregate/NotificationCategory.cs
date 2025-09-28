@@ -23,10 +23,11 @@ public sealed class NotificationCategory : ValueObject
     public enum Category
     {
         // User
-        UserRegistration,
+        UserRegistered,
+        UserRoleChanged,
 
         // Project
-        ProjectInvitation,
-        ProjectChangeMemberRole,
+        ProjectMemberInvited,
+        ProjectMemberRoleChanged,
     }
 }

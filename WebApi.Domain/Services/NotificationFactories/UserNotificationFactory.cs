@@ -18,7 +18,7 @@ public sealed class UserNotificationFactory
     {
         return new Notification(
             recipientId,
-            NotificationCategory.Create(NotificationCategory.Category.UserRegistration),
+            NotificationCategory.Category.UserRegistered,
             userId,
             $"{userName} が登録されました。",
             createdBy,

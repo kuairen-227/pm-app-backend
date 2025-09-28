@@ -15,7 +15,7 @@ public sealed class Notification : Entity
 
     public Notification(
         Guid recipientId,
-        NotificationCategory category,
+        NotificationCategory.Category category,
         Guid subjectId,
         string message,
         Guid createdBy,
@@ -30,7 +30,7 @@ public sealed class Notification : Entity
             throw new DomainException("NOTIFICATION_MESSAGE_REQUIRED", "Message は必須です");
 
         RecipientId = recipientId;
-        Category = category;
+        Category = NotificationCategory.Create(category);
         SubjectId = subjectId;
         Message = message;
         IsRead = false;
