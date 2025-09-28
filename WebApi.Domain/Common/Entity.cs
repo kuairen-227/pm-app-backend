@@ -13,6 +13,8 @@ public abstract class Entity
     private readonly List<IDomainEvent> _domainEvents = new();
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
+    protected readonly IDateTimeProvider _clock = null!;
+
     protected Entity() { } // EF Core 用
 
     protected Entity(Guid createdBy, IDateTimeProvider clock)
@@ -21,12 +23,13 @@ public abstract class Entity
         CreatedAt = clock.Now;
         UpdatedBy = createdBy;
         UpdatedAt = clock.Now;
+        _clock = clock;
     }
 
-    public void UpdateAuditInfo(Guid updatedBy, IDateTimeProvider clock)
+    public void UpdateAuditInfo(Guid updatedBy)
     {
         UpdatedBy = updatedBy;
-        UpdatedAt = clock.Now;
+        UpdatedAt = _clock.Now;
     }
 
     public void AddDomainEvent(IDomainEvent domainEvent)

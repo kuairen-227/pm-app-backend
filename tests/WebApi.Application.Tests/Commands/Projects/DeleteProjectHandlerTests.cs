@@ -26,7 +26,7 @@ public class DeleteProjectHandlerTests : BaseCommandHandlerTest
             UnitOfWork.Object,
             DomainEventPublisher.Object,
             UserContext.Object,
-            Clock.Object
+            Clock
         );
     }
 
@@ -36,7 +36,7 @@ public class DeleteProjectHandlerTests : BaseCommandHandlerTest
         // Arrange
         var project = _projectBuilder
             .WithCreatedBy(UserContext.Object.Id)
-            .WithClock(Clock.Object)
+            .WithClock(Clock)
             .Build();
         _projectRepository.Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);

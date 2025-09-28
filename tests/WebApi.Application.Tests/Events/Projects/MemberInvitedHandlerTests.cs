@@ -23,7 +23,7 @@ public class MemberInvitedHandlerTests : BaseEventHandlerTest
     {
         _notificationRepository = new Mock<INotificationRepository>();
         _projectRepository = new Mock<IProjectRepository>();
-        _notificationFactory = new ProjectNotificationFactory(Clock.Object);
+        _notificationFactory = new ProjectNotificationFactory(Clock);
         _projectBuilder = new ProjectBuilder();
         _userBuilder = new UserBuilder();
 

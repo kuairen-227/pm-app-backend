@@ -25,7 +25,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
             UnitOfWork.Object,
             DomainEventPublisher.Object,
             UserContext.Object,
-            Clock.Object
+            Clock
         );
     }
 
@@ -60,9 +60,9 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         capturedTicket.Status.Should().Be(ticket.Status);
         capturedTicket.CompletionCriteria.Should().Be(ticket.CompletionCriteria);
         capturedTicket.CreatedBy.Should().Be(UserContext.Object.Id);
-        capturedTicket.CreatedAt.Should().Be(Clock.Object.Now);
+        capturedTicket.CreatedAt.Should().Be(Clock.Now);
         capturedTicket.UpdatedBy.Should().Be(UserContext.Object.Id);
-        capturedTicket.UpdatedAt.Should().Be(Clock.Object.Now);
+        capturedTicket.UpdatedAt.Should().Be(Clock.Now);
 
         _ticketRepository.Verify(x => x.AddAsync(It.IsAny<Ticket>(), It.IsAny<CancellationToken>()), Times.Once);
         UnitOfWork.Verify(x => x.SaveChangesAsync(

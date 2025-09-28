@@ -11,7 +11,7 @@ public sealed class TicketComment : Entity
 
     private TicketComment() { } // EF Core 用
 
-    private TicketComment(Guid ticketId, Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
+    public TicketComment(Guid ticketId, Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
         : base(createdBy, clock)
     {
         if (ticketId == Guid.Empty)
@@ -26,17 +26,12 @@ public sealed class TicketComment : Entity
         Content = content;
     }
 
-    public static TicketComment Create(Guid ticketId, Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
-    {
-        return new TicketComment(ticketId, authorId, content, createdBy, clock);
-    }
-
-    public void UpdateContent(string content, Guid updatedBy, IDateTimeProvider clock)
+    public void UpdateContent(string content, Guid updatedBy)
     {
         if (string.IsNullOrWhiteSpace(content))
             throw new DomainException("CONTENT_REQUIRED", "Content は必須です");
 
         Content = content;
-        UpdateAuditInfo(updatedBy, clock);
+        UpdateAuditInfo(updatedBy);
     }
 }

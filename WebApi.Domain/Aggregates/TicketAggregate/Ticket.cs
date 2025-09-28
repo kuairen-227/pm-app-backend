@@ -41,13 +41,13 @@ public sealed class Ticket : Entity
         CompletionCriteria = completionCriteria;
     }
 
-    public void ChangeTitle(string title, Guid updatedBy, IDateTimeProvider clock)
+    public void ChangeTitle(string title, Guid updatedBy)
     {
         Title = TicketTitle.Create(title);
-        UpdateAuditInfo(updatedBy, clock);
+        UpdateAuditInfo(updatedBy);
     }
 
-    public void Assign(Guid assigneeId, Guid updatedBy, IDateTimeProvider clock)
+    public void Assign(Guid assigneeId, Guid updatedBy)
     {
         if (assigneeId == Guid.Empty)
             throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
@@ -57,61 +57,61 @@ public sealed class Ticket : Entity
         AssignmentHistory history;
         if (AssigneeId is null)
         {
-            history = AssignmentHistory.Assigned(assigneeId, clock.Now);
+            history = AssignmentHistory.Assigned(assigneeId, _clock.Now);
         }
         else
         {
-            history = AssignmentHistory.Changed(assigneeId, AssigneeId.Value, clock.Now);
+            history = AssignmentHistory.Changed(assigneeId, AssigneeId.Value, _clock.Now);
         }
 
         _assignmentHistories.Add(history);
         AssigneeId = assigneeId;
 
-        UpdateAuditInfo(updatedBy, clock);
+        UpdateAuditInfo(updatedBy);
     }
 
-    public void Unassign(Guid updatedBy, IDateTimeProvider clock)
+    public void Unassign(Guid updatedBy)
     {
         if (AssigneeId is null)
             throw new DomainException("NOT_ASSIGNED", "現在割り当てられていません");
 
-        var history = AssignmentHistory.Unassigned(AssigneeId.Value, clock.Now);
+        var history = AssignmentHistory.Unassigned(AssigneeId.Value, _clock.Now);
         _assignmentHistories.Add(history);
         AssigneeId = null;
 
-        UpdateAuditInfo(updatedBy, clock);
+        UpdateAuditInfo(updatedBy);
     }
 
-    public void ChangeDeadline(DateOnly? newDeadline, Guid updatedBy, IDateTimeProvider clock)
+    public void ChangeDeadline(DateOnly? newDeadline, Guid updatedBy)
     {
-        Deadline = Deadline.CreateNullable(newDeadline, clock);
-        UpdateAuditInfo(updatedBy, clock);
+        Deadline = Deadline.CreateNullable(newDeadline, _clock);
+        UpdateAuditInfo(updatedBy);
     }
 
-    public void ChangeStatus(TicketStatus.StatusType status, Guid updatedBy, IDateTimeProvider clock)
+    public void ChangeStatus(TicketStatus.StatusType status, Guid updatedBy)
     {
         Status = TicketStatus.Create(status);
-        UpdateAuditInfo(updatedBy, clock);
+        UpdateAuditInfo(updatedBy);
     }
 
-    public void SetCompletionCriteria(string completionCriteria, Guid updatedBy, IDateTimeProvider clock)
+    public void SetCompletionCriteria(string completionCriteria, Guid updatedBy)
     {
         if (string.IsNullOrWhiteSpace(completionCriteria))
             throw new DomainException("COMPLETION_CRITERIA_REQUIRED", "Completion criteria は必須です");
 
         CompletionCriteria = completionCriteria;
-        UpdateAuditInfo(updatedBy, clock);
+        UpdateAuditInfo(updatedBy);
     }
 
-    public TicketComment AddComment(Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
+    public TicketComment AddComment(Guid authorId, string content, Guid createdBy)
     {
-        var comment = TicketComment.Create(Id, authorId, content, createdBy, clock);
+        var comment = new TicketComment(Id, authorId, content, createdBy, _clock);
         _comments.Add(comment);
         return comment;
     }
 
     public void EditComment(
-        Guid commentId, Guid authorId, string newContent, Guid updatedBy, IDateTimeProvider clock)
+        Guid commentId, Guid authorId, string newContent, Guid updatedBy)
     {
         var comment = _comments.FirstOrDefault(c => c.Id == commentId)
             ?? throw new DomainException("TICKET_COMMENT_NOT_FOUND", "Ticket Comment が見つかりません");
@@ -119,7 +119,7 @@ public sealed class Ticket : Entity
         if (comment.AuthorId != authorId)
             throw new DomainException("NOT_TICKET_COMMENT_AUTHOR", "Ticket Comment の作成者のみが編集できます");
 
-        comment.UpdateContent(newContent, updatedBy, clock);
+        comment.UpdateContent(newContent, updatedBy);
     }
 
     public void DeleteComment(Guid commentId, Guid authorId)

@@ -25,7 +25,7 @@ public class LaunchProjectHandlerTests : BaseCommandHandlerTest
             UnitOfWork.Object,
             DomainEventPublisher.Object,
             UserContext.Object,
-            Clock.Object
+            Clock
         );
     }
 
@@ -53,9 +53,9 @@ public class LaunchProjectHandlerTests : BaseCommandHandlerTest
         capturedProject.Name.Should().Be(project.Name);
         capturedProject.Description.Should().Be(project.Description);
         capturedProject.CreatedBy.Should().Be(UserContext.Object.Id);
-        capturedProject.CreatedAt.Should().Be(Clock.Object.Now);
+        capturedProject.CreatedAt.Should().Be(Clock.Now);
         capturedProject.UpdatedBy.Should().Be(UserContext.Object.Id);
-        capturedProject.UpdatedAt.Should().Be(Clock.Object.Now);
+        capturedProject.UpdatedAt.Should().Be(Clock.Now);
 
         _projectRepository.Verify(x => x.AddAsync(It.IsAny<Project>(), It.IsAny<CancellationToken>()), Times.Once);
         UnitOfWork.Verify(x => x.SaveChangesAsync(

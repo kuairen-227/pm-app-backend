@@ -26,7 +26,7 @@ public class DeleteTicketHandlerTests : BaseCommandHandlerTest
             UnitOfWork.Object,
             DomainEventPublisher.Object,
             UserContext.Object,
-            Clock.Object
+            Clock
         );
     }
 
@@ -36,7 +36,7 @@ public class DeleteTicketHandlerTests : BaseCommandHandlerTest
         // Arrange
         var ticket = _ticketBuilder
             .WithCreatedBy(UserContext.Object.Id)
-            .WithClock(Clock.Object)
+            .WithClock(Clock)
             .Build();
         _ticketRepository.Setup(x => x.GetByIdAsync(ticket.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(ticket);

@@ -27,7 +27,7 @@ public class UnassignMemberHandler : BaseCommandHandler, IRequestHandler<Unassig
         var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
-        ticket.Unassign(UserContext.Id, Clock);
+        ticket.Unassign(UserContext.Id);
         await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;

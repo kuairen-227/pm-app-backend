@@ -3,6 +3,7 @@ using Moq;
 using WebApi.Application.Abstractions;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Services.NotificationFactories;
+using WebApi.Tests.Helpers.Fixtures;
 
 namespace WebApi.Application.Tests.Helpers.Common;
 
@@ -29,15 +30,6 @@ public static class TestHelpers
     {
         var mock = new Mock<IUserContext>();
         mock.SetupGet(x => x.Id).Returns(userId ?? Guid.NewGuid());
-        return mock;
-    }
-
-    public static Mock<IDateTimeProvider> CreateClock(DateTime? now = null)
-    {
-        var mock = new Mock<IDateTimeProvider>();
-        mock.Setup(x => x.Now).Returns(now ?? DateTime.UtcNow);
-        mock.Setup(x => x.Today).Returns(
-            now.HasValue ? DateOnly.FromDateTime(now.Value) : DateOnly.FromDateTime(DateTime.UtcNow));
         return mock;
     }
 }

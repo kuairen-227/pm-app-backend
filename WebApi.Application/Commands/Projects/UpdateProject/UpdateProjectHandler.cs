@@ -27,8 +27,8 @@ public class UpdateProjectHandler : BaseCommandHandler, IRequestHandler<UpdatePr
         var project = await _projectRepository.GetByIdAsync(request.ProjectId, cancellationToken)
             ?? throw new NotFoundException(nameof(Project), request.ProjectId);
 
-        project.Rename(request.Name, UserContext.Id, Clock);
-        project.ChangeDescription(request.Description, UserContext.Id, Clock);
+        project.Rename(request.Name, UserContext.Id);
+        project.ChangeDescription(request.Description, UserContext.Id);
         await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;

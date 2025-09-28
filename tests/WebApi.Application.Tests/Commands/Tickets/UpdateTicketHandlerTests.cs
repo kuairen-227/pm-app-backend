@@ -27,7 +27,7 @@ public class UpdateTicketHandlerTests : BaseCommandHandlerTest
             UnitOfWork.Object,
             DomainEventPublisher.Object,
             UserContext.Object,
-            Clock.Object
+            Clock
         );
     }
 
@@ -54,7 +54,7 @@ public class UpdateTicketHandlerTests : BaseCommandHandlerTest
         ticket.ProjectId.Should().Be(command.ProjectId);
         ticket.Title.Value.Should().Be(command.Title);
         ticket.UpdatedBy.Should().Be(UserContext.Object.Id);
-        ticket.UpdatedAt.Should().Be(Clock.Object.Now);
+        ticket.UpdatedAt.Should().Be(Clock.Now);
 
         UnitOfWork.Verify(x => x.SaveChangesAsync(
             It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),

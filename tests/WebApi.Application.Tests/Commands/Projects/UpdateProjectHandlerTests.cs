@@ -27,7 +27,7 @@ public class UpdateProjectHandlerTests : BaseCommandHandlerTest
             UnitOfWork.Object,
             DomainEventPublisher.Object,
             UserContext.Object,
-            Clock.Object
+            Clock
         );
     }
 
@@ -53,7 +53,7 @@ public class UpdateProjectHandlerTests : BaseCommandHandlerTest
         project.Name.Should().Be(command.Name);
         project.Description.Should().Be(command.Description);
         project.UpdatedBy.Should().Be(UserContext.Object.Id);
-        project.UpdatedAt.Should().Be(Clock.Object.Now);
+        project.UpdatedAt.Should().Be(Clock.Now);
 
         UnitOfWork.Verify(x => x.SaveChangesAsync(
             It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),

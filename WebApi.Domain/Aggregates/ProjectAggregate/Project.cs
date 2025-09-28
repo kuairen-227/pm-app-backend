@@ -23,22 +23,22 @@ public sealed class Project : Entity
         Description = description;
     }
 
-    public void Rename(string newName, Guid updatedBy, IDateTimeProvider clock)
+    public void Rename(string newName, Guid updatedBy)
     {
         if (string.IsNullOrWhiteSpace(newName))
             throw new DomainException("PROJECT_NAME_REQUIRED", "Project Name は必須です");
 
         Name = newName;
-        UpdateAuditInfo(updatedBy, clock);
+        UpdateAuditInfo(updatedBy);
     }
 
-    public void ChangeDescription(string? newDescription, Guid updatedBy, IDateTimeProvider clock)
+    public void ChangeDescription(string? newDescription, Guid updatedBy)
     {
         Description = newDescription;
-        UpdateAuditInfo(updatedBy, clock);
+        UpdateAuditInfo(updatedBy);
     }
 
-    public void InviteMember(Guid userId, ProjectRole.RoleType roleType, IDateTimeProvider clock)
+    public void InviteMember(Guid userId, ProjectRole.RoleType roleType)
     {
         if (_members.Any(m => m.UserId == userId))
             throw new DomainException("USER_ALREADY_JOINED", "User はすでにプロジェクトメンバーです");
@@ -47,7 +47,7 @@ public sealed class Project : Entity
         var member = ProjectMember.Create(userId, role);
         _members.Add(member);
 
-        AddDomainEvent(new ProjectMemberInvitedEvent(Id, userId, roleType, clock));
+        AddDomainEvent(new ProjectMemberInvitedEvent(Id, userId, roleType, _clock));
     }
 
     public void RemoveMember(Guid userId)

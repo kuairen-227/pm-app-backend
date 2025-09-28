@@ -27,7 +27,7 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
             UnitOfWork.Object,
             DomainEventPublisher.Object,
             UserContext.Object,
-            Clock.Object
+            Clock
         );
     }
 
@@ -38,7 +38,7 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        DateOnly? deadline = useDeadline ? Clock.Object.Today.AddDays(1) : null;
+        DateOnly? deadline = useDeadline ? Clock.Today.AddDays(1) : null;
         var command = new ChangeDeadlineCommand(
             ticket.ProjectId,
             ticket.Id,
@@ -56,7 +56,7 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
         result.Should().Be(Unit.Value);
         ticket.Deadline?.Value.Should().Be(command.Deadline);
         ticket.UpdatedBy.Should().Be(UserContext.Object.Id);
-        ticket.UpdatedAt.Should().Be(Clock.Object.Now);
+        ticket.UpdatedAt.Should().Be(Clock.Now);
 
         UnitOfWork.Verify(x => x.SaveChangesAsync(
             It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
@@ -70,7 +70,7 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
         var command = new ChangeDeadlineCommand(
             Guid.NewGuid(),
             Guid.NewGuid(),
-            Clock.Object.Today.AddDays(1)
+            Clock.Today.AddDays(1)
         );
         _ticketRepository
             .Setup(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))

@@ -49,7 +49,7 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var result = _projectBuilder.Build();
-        result.Rename(newName, Guid.NewGuid(), Clock);
+        result.Rename(newName, Guid.NewGuid());
 
         // Assert
         result.Name.Should().Be(newName);
@@ -65,7 +65,7 @@ public class ProjectTests : BaseDomainTest
         var result = _projectBuilder.Build();
 
         // Act
-        var act = () => result.Rename(newName!, Guid.NewGuid(), Clock);
+        var act = () => result.Rename(newName!, Guid.NewGuid());
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -80,7 +80,7 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var result = _projectBuilder.Build();
-        result.ChangeDescription(newDescription, Guid.NewGuid(), Clock);
+        result.ChangeDescription(newDescription, Guid.NewGuid());
 
         // Assert
         result.Description.Should().Be(newDescription);
@@ -95,7 +95,7 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var result = _projectBuilder.Build();
-        result.InviteMember(user.Id, role, Clock);
+        result.InviteMember(user.Id, role);
 
         // Assert
         var member = ProjectMember.Create(user.Id, ProjectRole.Create(role));
@@ -114,7 +114,7 @@ public class ProjectTests : BaseDomainTest
             .Build();
 
         // Act
-        var act = () => project.InviteMember(user.Id, role.Value, Clock);
+        var act = () => project.InviteMember(user.Id, role.Value);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

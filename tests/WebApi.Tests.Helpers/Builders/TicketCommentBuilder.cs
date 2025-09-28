@@ -29,7 +29,7 @@ public class TicketCommentBuilder : BaseBuilder<TicketCommentBuilder, TicketComm
 
     public override TicketComment Build()
     {
-        return TicketComment.Create(
+        return new TicketComment(
             _ticketId,
             _authorId,
             _content,
