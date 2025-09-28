@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WebApi.Application.Abstractions;
 using WebApi.Application.Common;
 using WebApi.Application.Events.Projects.MemberRoleChanged;
+using WebApi.Application.Events.Users.UserRegistered;
 using WebApi.Domain.Aggregates.ProjectAggregate.Events;
 using WebApi.Domain.Aggregates.UserAggregate.Events;
 

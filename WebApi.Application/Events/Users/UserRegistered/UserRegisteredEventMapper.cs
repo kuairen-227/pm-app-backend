@@ -1,7 +1,8 @@
 using MediatR;
 using WebApi.Application.Abstractions;
-using WebApi.Application.Events.Users.UserRegistered;
 using WebApi.Domain.Aggregates.UserAggregate.Events;
+
+namespace WebApi.Application.Events.Users.UserRegistered;
 
 public sealed class UserRegisteredEventMapper : IDomainEventMapper<UserRegisteredEvent>
 {
