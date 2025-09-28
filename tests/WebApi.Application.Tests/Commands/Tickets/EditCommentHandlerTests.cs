@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using WebApi.Application.Abstractions;
 using WebApi.Application.Commands.Tickets.EditComment;
 using WebApi.Application.Common;
 using WebApi.Application.Tests.Helpers.Common;
@@ -48,7 +49,9 @@ public class EditCommentHandlerTests : BaseCommandHandlerTest
 
         // Assert
         result.Should().Be(MediatR.Unit.Value);
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(
+            It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 
     [Fact]
@@ -65,6 +68,8 @@ public class EditCommentHandlerTests : BaseCommandHandlerTest
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
         ex.Which.ErrorCode.Should().Be("TICKET_NOT_FOUND");
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(
+            It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 }

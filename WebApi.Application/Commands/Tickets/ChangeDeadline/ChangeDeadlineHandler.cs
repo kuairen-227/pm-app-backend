@@ -28,7 +28,7 @@ public class ChangeDeadlineHandler : BaseCommandHandler, IRequestHandler<ChangeD
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
         ticket.ChangeDeadline(request.Deadline, UserContext.Id, Clock);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;
     }

@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using WebApi.Application.Abstractions;
 using WebApi.Application.Commands.Projects.LaunchProject;
 using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions.Repositories;
@@ -57,6 +58,8 @@ public class LaunchProjectHandlerTests : BaseCommandHandlerTest
         capturedProject.UpdatedAt.Should().Be(Clock.Object.Now);
 
         _projectRepository.Verify(x => x.AddAsync(It.IsAny<Project>(), It.IsAny<CancellationToken>()), Times.Once);
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(
+            It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 }

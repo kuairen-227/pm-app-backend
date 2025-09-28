@@ -28,7 +28,7 @@ public class ChangeStatusHandler : BaseCommandHandler, IRequestHandler<ChangeSta
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
         ticket.ChangeStatus(request.Status, UserContext.Id, Clock);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;
     }

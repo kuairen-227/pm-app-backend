@@ -42,7 +42,7 @@ public class AssignMemberHandler : BaseCommandHandler, IRequestHandler<AssignMem
         project.EnsureMember(user.Id);
 
         ticket.Assign(user.Id, UserContext.Id, Clock);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;
     }

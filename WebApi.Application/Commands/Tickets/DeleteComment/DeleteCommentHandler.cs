@@ -28,7 +28,7 @@ public class DeleteCommentHandler : BaseCommandHandler, IRequestHandler<DeleteCo
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
         ticket.DeleteComment(request.CommentId, UserContext.Id);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;
     }

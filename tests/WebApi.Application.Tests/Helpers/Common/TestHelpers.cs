@@ -11,7 +11,8 @@ public static class TestHelpers
     public static Mock<IUnitOfWork> CreateUnitOfWork()
     {
         var mock = new Mock<IUnitOfWork>();
-        mock.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+        mock.Setup(x => x.SaveChangesAsync(
+                It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         return mock;
     }

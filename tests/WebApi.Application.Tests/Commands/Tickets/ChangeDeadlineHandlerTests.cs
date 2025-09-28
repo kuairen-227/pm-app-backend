@@ -1,6 +1,7 @@
 using FluentAssertions;
 using MediatR;
 using Moq;
+using WebApi.Application.Abstractions;
 using WebApi.Application.Commands.Tickets.ChangeDeadline;
 using WebApi.Application.Common;
 using WebApi.Application.Tests.Helpers.Common;
@@ -57,7 +58,9 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
         ticket.UpdatedBy.Should().Be(UserContext.Object.Id);
         ticket.UpdatedAt.Should().Be(Clock.Object.Now);
 
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(
+            It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 
     [Fact]
@@ -79,6 +82,8 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
         ex.Which.ErrorCode.Should().Be("TICKET_NOT_FOUND");
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(
+            It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 }

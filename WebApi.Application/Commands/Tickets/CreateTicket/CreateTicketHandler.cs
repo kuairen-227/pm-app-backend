@@ -35,7 +35,7 @@ public class CreateTicketHandler : BaseCommandHandler, IRequestHandler<CreateTic
         );
 
         await _ticketRepository.AddAsync(ticket, cancellationToken);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return ticket.Id;
     }

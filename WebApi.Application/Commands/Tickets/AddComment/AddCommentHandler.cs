@@ -28,7 +28,7 @@ public class AddCommentHandler : BaseCommandHandler, IRequestHandler<AddCommentC
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
         ticket.AddComment(UserContext.Id, request.Content, UserContext.Id, Clock);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;
     }

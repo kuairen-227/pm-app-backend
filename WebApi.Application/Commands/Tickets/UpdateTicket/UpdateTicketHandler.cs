@@ -28,7 +28,7 @@ public class UpdateTicketHandler : BaseCommandHandler, IRequestHandler<UpdateTic
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
         ticket.ChangeTitle(request.Title, UserContext.Id, Clock);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;
     }

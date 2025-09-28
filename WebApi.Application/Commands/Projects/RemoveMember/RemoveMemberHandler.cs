@@ -34,7 +34,7 @@ public class RemoveMemberHandler : BaseCommandHandler, IRequestHandler<RemoveMem
             ?? throw new NotFoundException(nameof(User), request.UserId);
 
         project.RemoveMember(user.Id);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;
     }

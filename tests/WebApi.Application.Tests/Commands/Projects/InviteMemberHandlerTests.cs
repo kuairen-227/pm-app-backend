@@ -54,8 +54,9 @@ public class InviteMemberHandlerTests : BaseCommandHandlerTest
 
         // Assert
         result.Should().Be(MediatR.Unit.Value);
-        UnitOfWork.Verify(x => x.PublishDomainEventsAsync(It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()), Times.Once);
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(
+            It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 
     [Fact]
@@ -74,8 +75,9 @@ public class InviteMemberHandlerTests : BaseCommandHandlerTest
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
         ex.Which.ErrorCode.Should().Be("PROJECT_NOT_FOUND");
-        UnitOfWork.Verify(x => x.PublishDomainEventsAsync(It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()), Times.Never);
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(
+            It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 
     [Fact]
@@ -96,7 +98,8 @@ public class InviteMemberHandlerTests : BaseCommandHandlerTest
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
         ex.Which.ErrorCode.Should().Be("USER_NOT_FOUND");
-        UnitOfWork.Verify(x => x.PublishDomainEventsAsync(It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()), Times.Never);
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        UnitOfWork.Verify(x => x.SaveChangesAsync(
+            It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 }

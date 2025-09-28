@@ -32,7 +32,7 @@ public class LaunchProjectHandler : BaseCommandHandler, IRequestHandler<LaunchPr
         );
 
         await _projectRepository.AddAsync(project, cancellationToken);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return project.Id;
     }

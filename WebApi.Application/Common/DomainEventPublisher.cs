@@ -1,8 +1,6 @@
 using MediatR;
 using WebApi.Application.Abstractions;
-using WebApi.Application.Events.Projects.MemberInvited;
 using WebApi.Domain.Abstractions;
-using WebApi.Domain.Aggregates.ProjectAggregate.Events;
 
 namespace WebApi.Application.Common;
 

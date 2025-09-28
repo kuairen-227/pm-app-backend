@@ -29,7 +29,7 @@ public class UpdateProjectHandler : BaseCommandHandler, IRequestHandler<UpdatePr
 
         project.Rename(request.Name, UserContext.Id, Clock);
         project.ChangeDescription(request.Description, UserContext.Id, Clock);
-        await UnitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;
     }

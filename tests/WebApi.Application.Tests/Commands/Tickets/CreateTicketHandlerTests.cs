@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using WebApi.Application.Abstractions;
 using WebApi.Application.Commands.Tickets.CreateTicket;
 using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions.Repositories;
@@ -64,6 +65,8 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         capturedTicket.UpdatedAt.Should().Be(Clock.Object.Now);
 
         _ticketRepository.Verify(x => x.AddAsync(It.IsAny<Ticket>(), It.IsAny<CancellationToken>()), Times.Once);
-        UnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()));
+        UnitOfWork.Verify(x => x.SaveChangesAsync(
+            It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 }
