@@ -4,11 +4,12 @@ using WebApi.Application.Common;
 using WebApi.Application.Events.Projects.MemberInvited;
 using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions.Repositories;
+using WebApi.Domain.Aggregates.NotificationAggregate;
 using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Services.NotificationFactories;
 using WebApi.Tests.Helpers.Builders;
 
-namespace WebApi.Application.Tests.Commands.Projects;
+namespace WebApi.Application.Tests.Events.Projects;
 
 public class MemberInvitedHandlerTests : BaseEventHandlerTest
 {
@@ -52,9 +53,8 @@ public class MemberInvitedHandlerTests : BaseEventHandlerTest
 
         // Assert
         _notificationRepository.Verify(x => x.AddAsync(
-            It.IsAny<Domain.Aggregates.NotificationAggregate.Notification>(),
-            It.IsAny<CancellationToken>()
-        ), Times.Once);
+            It.IsAny<Notification>(), It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 
     [Fact]
@@ -72,8 +72,7 @@ public class MemberInvitedHandlerTests : BaseEventHandlerTest
         var ex = await act.Should().ThrowAsync<NotFoundException>();
         ex.Which.ErrorCode.Should().Be("PROJECT_NOT_FOUND");
         _notificationRepository.Verify(x => x.AddAsync(
-            It.IsAny<Domain.Aggregates.NotificationAggregate.Notification>(),
-            It.IsAny<CancellationToken>()
-        ), Times.Never);
+            It.IsAny<Notification>(), It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 }
