@@ -8,6 +8,7 @@ public sealed class MemberInvitedEventMapper : IDomainEventMapper<ProjectMemberI
     public INotification? Map(ProjectMemberInvitedEvent e) =>
         new MemberInvitedNotification(
             e.ProjectId,
+            e.ProjectName,
             e.UserId
         );
 }
