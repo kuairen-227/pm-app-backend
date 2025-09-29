@@ -2,7 +2,6 @@ using MediatR;
 using WebApi.Application.Abstractions;
 using WebApi.Application.Common;
 using WebApi.Domain.Abstractions.Repositories;
-using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Services.NotificationFactories;
 
 namespace WebApi.Application.Events.Projects.MemberRoleChanged;

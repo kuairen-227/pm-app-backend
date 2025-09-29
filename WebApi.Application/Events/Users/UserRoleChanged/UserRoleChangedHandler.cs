@@ -11,19 +11,16 @@ public sealed class UserRoleChangedHandler
 {
     private readonly UserNotificationFactory _notificationFactory;
     private readonly INotificationRepository _notificationRepository;
-    private readonly IUserRepository _userRepository;
 
     public UserRoleChangedHandler(
         UserNotificationFactory notificationFactory,
         INotificationRepository notificationRepository,
-        IUserRepository userRepository,
         IUnitOfWork unitOfWork,
         IUserContext userContext
     ) : base(unitOfWork, userContext)
     {
         _notificationFactory = notificationFactory;
         _notificationRepository = notificationRepository;
-        _userRepository = userRepository;
     }
 
     public async Task Handle(UserRoleChangedNotification notification, CancellationToken cancellationToken)

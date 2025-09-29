@@ -14,20 +14,17 @@ public class UserRoleChangedHandlerTests : BaseEventHandlerTest
     private UserRoleChangedHandler _handler;
     private readonly UserNotificationFactory _notificationFactory;
     private readonly Mock<INotificationRepository> _notificationRepository;
-    private readonly Mock<IUserRepository> _userRepository;
     private readonly UserBuilder _userBuilder;
 
     public UserRoleChangedHandlerTests()
     {
         _notificationRepository = new Mock<INotificationRepository>();
-        _userRepository = new Mock<IUserRepository>();
         _notificationFactory = new UserNotificationFactory(Clock);
         _userBuilder = new UserBuilder();
 
         _handler = new UserRoleChangedHandler(
             _notificationFactory,
             _notificationRepository.Object,
-            _userRepository.Object,
             UnitOfWork.Object,
             UserContext.Object
         );
@@ -38,9 +35,6 @@ public class UserRoleChangedHandlerTests : BaseEventHandlerTest
     {
         // Arrange
         var user = _userBuilder.Build();
-
-        _userRepository.Setup(x => x.GetByIdAsync(user.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
 
         // Act
         var notification = new UserRoleChangedNotification(user.Id, SystemRole.RoleType.User);
