@@ -13,30 +13,24 @@ public sealed class UserRegisteredHandler
 {
     private readonly UserNotificationFactory _notificationFactory;
     private readonly INotificationRepository _notificationRepository;
-    private readonly IUserRepository _userRepository;
 
     public UserRegisteredHandler(
         UserNotificationFactory notificationFactory,
         INotificationRepository notificationRepository,
-        IUserRepository userRepository,
         IUnitOfWork unitOfWork,
         IUserContext userContext
     ) : base(unitOfWork, userContext)
     {
         _notificationFactory = notificationFactory;
         _notificationRepository = notificationRepository;
-        _userRepository = userRepository;
     }
 
     public async Task Handle(UserRegisteredNotification notification, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(notification.UserId, cancellationToken)
-            ?? throw new NotFoundException(nameof(User), notification.UserId);
-
         var notificationEntity = _notificationFactory.CreateForUserRegistration(
-            user.Id,
-            user.Id,
-            user.Name,
+            notification.UserId,
+            notification.UserId,
+            notification.UserName,
             UserContext.Id
         );
 

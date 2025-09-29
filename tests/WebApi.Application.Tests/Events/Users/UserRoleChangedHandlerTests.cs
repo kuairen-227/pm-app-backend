@@ -1,6 +1,4 @@
-using FluentAssertions;
 using Moq;
-using WebApi.Application.Common;
 using WebApi.Application.Events.Users.UserRoleChanged;
 using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions.Repositories;
