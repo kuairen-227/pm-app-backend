@@ -29,5 +29,9 @@ public sealed class NotificationCategory : ValueObject
         // Project
         ProjectMemberInvited,
         ProjectMemberRoleChanged,
+
+        // Ticket
+        TicketCreated,
+        TicketUpdated,
     }
 }
