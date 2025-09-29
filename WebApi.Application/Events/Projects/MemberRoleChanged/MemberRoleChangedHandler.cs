@@ -12,30 +12,24 @@ public sealed class MemberRoleChangedHandler
 {
     private readonly ProjectNotificationFactory _notificationFactory;
     private readonly INotificationRepository _notificationRepository;
-    private readonly IProjectRepository _projectRepository;
 
     public MemberRoleChangedHandler(
         ProjectNotificationFactory notificationFactory,
         INotificationRepository notificationRepository,
-        IProjectRepository projectRepository,
         IUnitOfWork unitOfWork,
         IUserContext userContext
     ) : base(unitOfWork, userContext)
     {
         _notificationFactory = notificationFactory;
         _notificationRepository = notificationRepository;
-        _projectRepository = projectRepository;
     }
 
     public async Task Handle(MemberRoleChangedNotification notification, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(notification.ProjectId, cancellationToken)
-            ?? throw new NotFoundException(nameof(Project), notification.ProjectId);
-
-        var notificationEntity = _notificationFactory.CreateForProjectInvitation(
+        var notificationEntity = _notificationFactory.CreateForProjectChangeMemberRole(
             notification.UserId,
             notification.ProjectId,
-            project.Name,
+            notification.Role,
             UserContext.Id
         );
 

@@ -16,14 +16,12 @@ public class MemberRoleChangedHandlerTests : BaseEventHandlerTest
     private MemberRoleChangedHandler _handler;
     private readonly ProjectNotificationFactory _notificationFactory;
     private readonly Mock<INotificationRepository> _notificationRepository;
-    private readonly Mock<IProjectRepository> _projectRepository;
     private readonly ProjectBuilder _projectBuilder;
     private readonly UserBuilder _userBuilder;
 
     public MemberRoleChangedHandlerTests()
     {
         _notificationRepository = new Mock<INotificationRepository>();
-        _projectRepository = new Mock<IProjectRepository>();
         _notificationFactory = new ProjectNotificationFactory(Clock);
         _projectBuilder = new ProjectBuilder();
         _userBuilder = new UserBuilder();
@@ -31,7 +29,6 @@ public class MemberRoleChangedHandlerTests : BaseEventHandlerTest
         _handler = new MemberRoleChangedHandler(
             _notificationFactory,
             _notificationRepository.Object,
-            _projectRepository.Object,
             UnitOfWork.Object,
             UserContext.Object
         );
@@ -44,9 +41,6 @@ public class MemberRoleChangedHandlerTests : BaseEventHandlerTest
         var project = _projectBuilder.Build();
         var user = _userBuilder.Build();
 
-        _projectRepository.Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(project);
-
         // Act
         var notification = new MemberRoleChangedNotification(project.Id, user.Id, ProjectRole.RoleType.Member);
         await _handler.Handle(notification, CancellationToken.None);
@@ -55,24 +49,5 @@ public class MemberRoleChangedHandlerTests : BaseEventHandlerTest
         _notificationRepository.Verify(x => x.AddAsync(
             It.IsAny<Notification>(), It.IsAny<CancellationToken>()),
             Times.Once);
-    }
-
-    [Fact]
-    public async Task 異常系_Projectが存在しない場合()
-    {
-        // Arrange
-        _projectRepository.Setup(x => x.GetByIdAsync(Guid.NewGuid(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Project?)null);
-
-        // Act
-        var notification = new MemberRoleChangedNotification(Guid.NewGuid(), Guid.NewGuid(), ProjectRole.RoleType.Member);
-        var act = async () => await _handler.Handle(notification, CancellationToken.None);
-
-        // Assert
-        var ex = await act.Should().ThrowAsync<NotFoundException>();
-        ex.Which.ErrorCode.Should().Be("PROJECT_NOT_FOUND");
-        _notificationRepository.Verify(x => x.AddAsync(
-            It.IsAny<Notification>(), It.IsAny<CancellationToken>()),
-            Times.Never);
     }
 }
