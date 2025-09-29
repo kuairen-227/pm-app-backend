@@ -39,11 +39,24 @@ public class MemberInvitedHandlerTests : BaseEventHandlerTest
         var project = _projectBuilder.Build();
         var user = _userBuilder.Build();
 
+        Notification? capturedNotification = null;
+        _notificationRepository
+            .Setup(x => x.AddAsync(It.IsAny<Notification>(), It.IsAny<CancellationToken>()))
+            .Callback<Notification, CancellationToken>((n, _) => capturedNotification = n)
+            .Returns(Task.CompletedTask);
+
         // Act
         var notification = new MemberInvitedNotification(project.Id, project.Name, user.Id);
         await _handler.Handle(notification, CancellationToken.None);
 
         // Assert
+        capturedNotification.Should().NotBeNull();
+        capturedNotification.RecipientId.Should().Be(user.Id);
+        capturedNotification.Category.Value.Should().Be(NotificationCategory.Category.ProjectMemberInvited);
+        capturedNotification.SubjectId.Should().Be(project.Id);
+        capturedNotification.Message.Should().Be($"{project.Name} に招待されました。");
+        capturedNotification.IsRead.Should().Be(false);
+
         _notificationRepository.Verify(x => x.AddAsync(
             It.IsAny<Notification>(), It.IsAny<CancellationToken>()),
             Times.Once);

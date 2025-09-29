@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Moq;
 using WebApi.Application.Events.Users.UserRegistered;
 using WebApi.Application.Tests.Helpers.Common;
@@ -35,11 +36,24 @@ public class UserRegisteredHandlerTests : BaseEventHandlerTest
         // Arrange
         var user = _userBuilder.Build();
 
+        Notification? capturedNotification = null;
+        _notificationRepository
+            .Setup(x => x.AddAsync(It.IsAny<Notification>(), It.IsAny<CancellationToken>()))
+            .Callback<Notification, CancellationToken>((n, _) => capturedNotification = n)
+            .Returns(Task.CompletedTask);
+
         // Act
         var notification = new UserRegisteredNotification(user.Id, user.Name);
         await _handler.Handle(notification, CancellationToken.None);
 
         // Assert
+        capturedNotification.Should().NotBeNull();
+        capturedNotification.RecipientId.Should().Be(user.Id);
+        capturedNotification.Category.Value.Should().Be(NotificationCategory.Category.UserRegistered);
+        capturedNotification.SubjectId.Should().Be(user.Id);
+        capturedNotification.Message.Should().Be($"{user.Name} が登録されました。");
+        capturedNotification.IsRead.Should().Be(false);
+
         _notificationRepository.Verify(x => x.AddAsync(
             It.IsAny<Notification>(), It.IsAny<CancellationToken>()),
             Times.Once);

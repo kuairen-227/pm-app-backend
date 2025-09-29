@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Moq;
 using WebApi.Application.Events.Users.UserRoleChanged;
 using WebApi.Application.Tests.Helpers.Common;
@@ -36,11 +37,24 @@ public class UserRoleChangedHandlerTests : BaseEventHandlerTest
         // Arrange
         var user = _userBuilder.Build();
 
+        Notification? capturedNotification = null;
+        _notificationRepository
+            .Setup(x => x.AddAsync(It.IsAny<Notification>(), It.IsAny<CancellationToken>()))
+            .Callback<Notification, CancellationToken>((n, _) => capturedNotification = n)
+            .Returns(Task.CompletedTask);
+
         // Act
         var notification = new UserRoleChangedNotification(user.Id, SystemRole.RoleType.User);
         await _handler.Handle(notification, CancellationToken.None);
 
         // Assert
+        capturedNotification.Should().NotBeNull();
+        capturedNotification.RecipientId.Should().Be(user.Id);
+        capturedNotification.Category.Value.Should().Be(NotificationCategory.Category.UserRoleChanged);
+        capturedNotification.SubjectId.Should().Be(user.Id);
+        capturedNotification.Message.Should().Be($"ユーザー権限が {notification.Role} に変更されました。");
+        capturedNotification.IsRead.Should().Be(false);
+
         _notificationRepository.Verify(x => x.AddAsync(
             It.IsAny<Notification>(), It.IsAny<CancellationToken>()),
             Times.Once);

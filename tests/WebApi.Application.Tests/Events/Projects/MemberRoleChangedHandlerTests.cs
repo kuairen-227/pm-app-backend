@@ -41,11 +41,24 @@ public class MemberRoleChangedHandlerTests : BaseEventHandlerTest
         var project = _projectBuilder.Build();
         var user = _userBuilder.Build();
 
+        Notification? capturedNotification = null;
+        _notificationRepository
+            .Setup(x => x.AddAsync(It.IsAny<Notification>(), It.IsAny<CancellationToken>()))
+            .Callback<Notification, CancellationToken>((n, _) => capturedNotification = n)
+            .Returns(Task.CompletedTask);
+
         // Act
         var notification = new MemberRoleChangedNotification(project.Id, user.Id, ProjectRole.RoleType.Member);
         await _handler.Handle(notification, CancellationToken.None);
 
         // Assert
+        capturedNotification.Should().NotBeNull();
+        capturedNotification.RecipientId.Should().Be(user.Id);
+        capturedNotification.Category.Value.Should().Be(NotificationCategory.Category.ProjectMemberRoleChanged);
+        capturedNotification.SubjectId.Should().Be(project.Id);
+        capturedNotification.Message.Should().Be($"メンバー権限が {notification.Role} に変更されました。");
+        capturedNotification.IsRead.Should().Be(false);
+
         _notificationRepository.Verify(x => x.AddAsync(
             It.IsAny<Notification>(), It.IsAny<CancellationToken>()),
             Times.Once);
