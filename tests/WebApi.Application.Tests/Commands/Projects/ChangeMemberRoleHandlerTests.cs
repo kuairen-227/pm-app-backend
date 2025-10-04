@@ -46,9 +46,11 @@ public class ChangeMemberRoleHandlerTests : BaseCommandHandlerTest
             .WithMembers(ProjectMember.Create(user.Id, ProjectRole.Create(ProjectRole.RoleType.Member)))
             .Build();
 
-        _projectRepository.Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
+        _projectRepository
+            .Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
-        _userRepository.Setup(x => x.GetByIdAsync(user.Id, It.IsAny<CancellationToken>()))
+        _userRepository
+            .Setup(x => x.GetByIdAsync(user.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
         // Act
@@ -69,7 +71,8 @@ public class ChangeMemberRoleHandlerTests : BaseCommandHandlerTest
         var user = _userBuilder.Build();
         var command = new ChangeMemberRoleCommand(Guid.NewGuid(), user.Id, ProjectRole.RoleType.Member);
 
-        _projectRepository.Setup(x => x.GetByIdAsync(command.ProjectId, It.IsAny<CancellationToken>()))
+        _projectRepository
+            .Setup(x => x.GetByIdAsync(command.ProjectId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Project?)null);
 
         // Act
@@ -90,9 +93,11 @@ public class ChangeMemberRoleHandlerTests : BaseCommandHandlerTest
         var project = _projectBuilder.Build();
         var command = new ChangeMemberRoleCommand(project.Id, Guid.NewGuid(), ProjectRole.RoleType.Member);
 
-        _projectRepository.Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
+        _projectRepository
+            .Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
-        _userRepository.Setup(x => x.GetByIdAsync(command.UserId, It.IsAny<CancellationToken>()))
+        _userRepository
+            .Setup(x => x.GetByIdAsync(command.UserId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((User?)null);
 
         // Act

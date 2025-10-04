@@ -40,7 +40,8 @@ public class DeleteCommentHandlerTests : BaseCommandHandlerTest
         var ticket = _ticketBuilder
             .WithComments(_ticketCommentBuilder.WithAuthorId(UserContext.Object.Id).Build())
             .Build();
-        _ticketRepository.Setup(x => x.GetByIdAsync(ticket.Id, It.IsAny<CancellationToken>()))
+        _ticketRepository
+            .Setup(x => x.GetByIdAsync(ticket.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(ticket);
 
         // Act
@@ -59,7 +60,8 @@ public class DeleteCommentHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var command = new DeleteCommentCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
-        _ticketRepository.Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
+        _ticketRepository
+            .Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Ticket?)null);
 
         // Act

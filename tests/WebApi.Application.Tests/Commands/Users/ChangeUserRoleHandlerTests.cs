@@ -38,7 +38,8 @@ public class ChangeUserRoleHandlerTests : BaseCommandHandlerTest
         // Arrange
         var user = _userBuilder.Build();
 
-        _userRepository.Setup(x => x.GetByIdAsync(user.Id, It.IsAny<CancellationToken>()))
+        _userRepository
+            .Setup(x => x.GetByIdAsync(user.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
         // Act
@@ -58,7 +59,8 @@ public class ChangeUserRoleHandlerTests : BaseCommandHandlerTest
         // Arrange
         var command = new ChangeUserRoleCommand(Guid.NewGuid(), SystemRole.RoleType.User);
 
-        _userRepository.Setup(x => x.GetByIdAsync(command.UserId, It.IsAny<CancellationToken>()))
+        _userRepository
+            .Setup(x => x.GetByIdAsync(command.UserId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((User?)null);
 
         // Act

@@ -39,7 +39,8 @@ public class DeleteProjectHandlerTests : BaseCommandHandlerTest
             .WithCreatedBy(UserContext.Object.Id)
             .WithClock(Clock)
             .Build();
-        _projectRepository.Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
+        _projectRepository
+            .Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
 
         // Act
@@ -59,7 +60,8 @@ public class DeleteProjectHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var command = new DeleteProjectCommand(Guid.NewGuid());
-        _projectRepository.Setup(x => x.GetByIdAsync(command.ProjectId, It.IsAny<CancellationToken>()))
+        _projectRepository
+            .Setup(x => x.GetByIdAsync(command.ProjectId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Project?)null);
 
         // Act

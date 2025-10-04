@@ -38,7 +38,8 @@ public class UnassignMemberHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var ticket = _ticketBuilder.WithAssigneeId(Guid.NewGuid()).Build();
-        _ticketRepository.Setup(x => x.GetByIdAsync(ticket.Id, It.IsAny<CancellationToken>()))
+        _ticketRepository
+            .Setup(x => x.GetByIdAsync(ticket.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(ticket);
 
         // Act
@@ -57,7 +58,8 @@ public class UnassignMemberHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var command = new UnassignMemberCommand(Guid.NewGuid(), Guid.NewGuid());
-        _ticketRepository.Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
+        _ticketRepository
+            .Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Ticket?)null);
 
         // Act

@@ -44,9 +44,11 @@ public class InviteMemberHandlerTests : BaseCommandHandlerTest
         var project = _projectBuilder.Build();
         var user = _userBuilder.Build();
 
-        _projectRepository.Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
+        _projectRepository
+            .Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
-        _userRepository.Setup(x => x.GetByIdAsync(user.Id, It.IsAny<CancellationToken>()))
+        _userRepository
+            .Setup(x => x.GetByIdAsync(user.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
         // Act
@@ -67,7 +69,8 @@ public class InviteMemberHandlerTests : BaseCommandHandlerTest
         var user = _userBuilder.Build();
         var command = new InviteMemberCommand(Guid.NewGuid(), user.Id, ProjectRole.RoleType.Member);
 
-        _projectRepository.Setup(x => x.GetByIdAsync(command.ProjectId, It.IsAny<CancellationToken>()))
+        _projectRepository
+            .Setup(x => x.GetByIdAsync(command.ProjectId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Project?)null);
 
         // Act
@@ -88,9 +91,11 @@ public class InviteMemberHandlerTests : BaseCommandHandlerTest
         var project = _projectBuilder.Build();
         var command = new InviteMemberCommand(project.Id, Guid.NewGuid(), ProjectRole.RoleType.Member);
 
-        _projectRepository.Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
+        _projectRepository
+            .Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
-        _userRepository.Setup(x => x.GetByIdAsync(command.UserId, It.IsAny<CancellationToken>()))
+        _userRepository
+            .Setup(x => x.GetByIdAsync(command.UserId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((User?)null);
 
         // Act

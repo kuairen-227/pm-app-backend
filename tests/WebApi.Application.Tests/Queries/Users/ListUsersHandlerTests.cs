@@ -50,7 +50,8 @@ public class ListUsersHandlerTests : BaseQueryHandlerTest
             _userBuilder.WithName("ユーザー2").WithEmail("user2@example.com").WithRole(SystemRole.RoleType.User).Build()
         };
 
-        _userRepository.Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
+        _userRepository
+            .Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(users);
 
         // Act

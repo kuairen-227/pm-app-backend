@@ -39,7 +39,8 @@ public class DeleteUserHandlerTests : BaseCommandHandlerTest
             .WithCreatedBy(UserContext.Object.Id)
             .WithClock(Clock)
             .Build();
-        _userRepository.Setup(x => x.GetByIdAsync(user.Id, It.IsAny<CancellationToken>()))
+        _userRepository
+            .Setup(x => x.GetByIdAsync(user.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
         // Act
@@ -59,7 +60,8 @@ public class DeleteUserHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var command = new DeleteUserCommand(Guid.NewGuid());
-        _userRepository.Setup(x => x.GetByIdAsync(command.UserId, It.IsAny<CancellationToken>()))
+        _userRepository
+            .Setup(x => x.GetByIdAsync(command.UserId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((User?)null);
 
         // Act

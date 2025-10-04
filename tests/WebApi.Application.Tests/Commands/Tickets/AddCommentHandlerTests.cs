@@ -36,7 +36,8 @@ public class AddCommentHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        _ticketRepository.Setup(x => x.GetByIdAsync(ticket.Id, It.IsAny<CancellationToken>()))
+        _ticketRepository
+            .Setup(x => x.GetByIdAsync(ticket.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(ticket);
 
         // Act
@@ -55,7 +56,8 @@ public class AddCommentHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var command = new AddCommentCommand(Guid.NewGuid(), Guid.NewGuid(), "コメント");
-        _ticketRepository.Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
+        _ticketRepository
+            .Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Ticket?)null);
 
         // Act
