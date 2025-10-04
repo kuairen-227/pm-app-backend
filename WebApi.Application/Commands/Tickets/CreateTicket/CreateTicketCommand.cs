@@ -12,9 +12,15 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
     public Guid? AssigneeId { get; }
     public DateOnly? Deadline { get; }
     public string? CompletionCriteria { get; private set; }
+    public List<Guid> NotificationRecipientIds { get; }
 
     public CreateTicketCommand(
-        Guid projectId, string title, Guid? assigneeId, DateOnly? deadline, string? completionCriteria
+        Guid projectId,
+        string title,
+        Guid? assigneeId,
+        DateOnly? deadline,
+        string? completionCriteria,
+        List<Guid> notificationRecipientIds
     )
     {
         ProjectId = projectId;
@@ -22,5 +28,6 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
         AssigneeId = assigneeId;
         Deadline = deadline;
         CompletionCriteria = completionCriteria;
+        NotificationRecipientIds = notificationRecipientIds;
     }
 }
