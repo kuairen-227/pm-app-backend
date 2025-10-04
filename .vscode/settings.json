@@ -10,6 +10,7 @@
   },
   // 拡張機能設定
   "conventionalCommits.scopes": [
+    // Folder
     "api",
     "application",
     "domain",
@@ -17,10 +18,11 @@
     "workspace",
     "tests",
     "package",
+    // Domain
+    "docs",
     "user",
     "project",
     "ticket",
-    "docs",
     "notification"
   ],
   "sqltools.connections": [
