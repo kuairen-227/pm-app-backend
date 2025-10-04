@@ -43,17 +43,19 @@ public class AddCommentHandler : BaseCommandHandler, IRequestHandler<AddCommentC
         // 2. 通知作成
         var project = await _projectRepository.GetByIdAsync(ticket.ProjectId)
             ?? throw new NotFoundException(nameof(Project), ticket.ProjectId);
-        foreach (var recipientId in request.NotificationRecipientIds)
-        {
-            project.EnsureMember(recipientId);
-            var notification = _notificationFactory.CreateForCommentAdded(
-                recipientId,
-                ticket.Id,
-                ticket.Title.Value,
-                UserContext.Id
-            );
-            await _notificationRepository.AddAsync(notification, cancellationToken);
-        }
+        var notifications = request.NotificationRecipientIds
+            .Select(recipientId =>
+            {
+                project.EnsureMember(recipientId);
+                return _notificationFactory.CreateForCommentAdded(
+                    recipientId,
+                    ticket.Id,
+                    ticket.Title.Value,
+                    UserContext.Id
+                );
+            }).ToList();
+
+        await _notificationRepository.AddRangeAsync(notifications);
 
         // 3. 永続化
         await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);

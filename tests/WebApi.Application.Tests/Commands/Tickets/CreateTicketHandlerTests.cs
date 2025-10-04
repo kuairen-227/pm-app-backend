@@ -66,8 +66,8 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
 
         List<Notification> capturedNotifications = [];
         _notificationRepository
-            .Setup(x => x.AddAsync(It.IsAny<Notification>(), It.IsAny<CancellationToken>()))
-            .Callback<Notification, CancellationToken>((n, _) => capturedNotifications.Add(n))
+            .Setup(x => x.AddRangeAsync(It.IsAny<List<Notification>>(), It.IsAny<CancellationToken>()))
+            .Callback<IEnumerable<Notification>, CancellationToken>((n, _) => capturedNotifications = n.ToList())
             .Returns(Task.CompletedTask);
 
         // Act
@@ -105,9 +105,9 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
             capturedNotifications[i].Message.Should().Be($"チケット {ticket.Title} が作成されました。");
             capturedNotifications[i].IsRead.Should().Be(false);
         }
-        _notificationRepository.Verify(x => x.AddAsync(
-            It.IsAny<Notification>(), It.IsAny<CancellationToken>()),
-            Times.Exactly(command.NotificationRecipientIds.Count()));
+        _notificationRepository.Verify(x => x.AddRangeAsync(
+            It.IsAny<List<Notification>>(), It.IsAny<CancellationToken>()),
+            Times.Once);
 
         UnitOfWork.Verify(x => x.SaveChangesAsync(
             It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
