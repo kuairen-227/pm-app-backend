@@ -63,6 +63,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         _projectRepository
             .Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
+
         List<Notification> capturedNotifications = [];
         _notificationRepository
             .Setup(x => x.AddAsync(It.IsAny<Notification>(), It.IsAny<CancellationToken>()))
@@ -106,7 +107,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         }
         _notificationRepository.Verify(x => x.AddAsync(
             It.IsAny<Notification>(), It.IsAny<CancellationToken>()),
-            Times.Exactly(2));
+            Times.Exactly(command.NotificationRecipientIds.Count()));
 
         UnitOfWork.Verify(x => x.SaveChangesAsync(
             It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
@@ -117,10 +118,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
     public async Task 異常系_Handle_Projectが存在しない場合()
     {
         // Arrange
-        var project = _projectBuilder.WithMembers([
-            ProjectMember.Create(Guid.NewGuid(), ProjectRole.Create(ProjectRole.RoleType.ProjectManager)),
-            ProjectMember.Create(Guid.NewGuid(), ProjectRole.Create(ProjectRole.RoleType.Member))
-        ]).Build();
+        var project = _projectBuilder.Build();
         var ticket = _ticketBuilder.WithProjectId(project.Id).Build();
 
         Ticket? capturedTicket = null;
