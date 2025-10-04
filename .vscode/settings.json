@@ -20,7 +20,8 @@
     "user",
     "project",
     "ticket",
-    "docs"
+    "docs",
+    "notification"
   ],
   "sqltools.connections": [
     {
