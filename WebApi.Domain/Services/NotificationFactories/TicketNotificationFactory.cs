@@ -38,4 +38,17 @@ public sealed class TicketNotificationFactory
             _clock
         );
     }
+
+    public Notification CreateForCommentAdded(
+        Guid recipientId, Guid ticketId, string ticketTitle, Guid createdBy)
+    {
+        return new Notification(
+            recipientId,
+            NotificationCategory.Category.TicketCommentAdded,
+            ticketId,
+            $"チケット {ticketTitle} にコメントが追加されました。",
+            createdBy,
+            _clock
+        );
+    }
 }

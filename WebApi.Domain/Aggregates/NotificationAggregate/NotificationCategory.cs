@@ -33,5 +33,6 @@ public sealed class NotificationCategory : ValueObject
         // Ticket
         TicketCreated,
         TicketUpdated,
+        TicketCommentAdded,
     }
 }

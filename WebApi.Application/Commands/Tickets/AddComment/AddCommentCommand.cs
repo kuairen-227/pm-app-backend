@@ -10,11 +10,18 @@ public class AddCommentCommand : IRequest<Unit>, IProjectScopedRequest
     public Guid ProjectId { get; }
     public Guid TicketId { get; }
     public string Content { get; }
+    public IEnumerable<Guid> NotificationRecipientIds { get; }
 
-    public AddCommentCommand(Guid projectId, Guid ticketId, string content)
+    public AddCommentCommand(
+        Guid projectId,
+        Guid ticketId,
+        string content,
+        IEnumerable<Guid> notificationRecipientIds
+    )
     {
         ProjectId = projectId;
         TicketId = ticketId;
         Content = content;
+        NotificationRecipientIds = notificationRecipientIds;
     }
 }
