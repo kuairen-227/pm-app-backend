@@ -10,13 +10,13 @@ public class AssignMemberCommand : IRequest<Unit>, IProjectScopedRequest
     public Guid ProjectId { get; }
     public Guid TicketId { get; }
     public Guid UserId { get; }
-    public IEnumerable<Guid> NotificationRecipientIds { get; }
+    public IReadOnlyCollection<Guid> NotificationRecipientIds { get; }
 
     public AssignMemberCommand(
         Guid projectId,
         Guid ticketId,
         Guid userId,
-        IEnumerable<Guid> notificationRecipientIds
+        IReadOnlyCollection<Guid> notificationRecipientIds
     )
     {
         ProjectId = projectId;

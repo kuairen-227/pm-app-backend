@@ -4,7 +4,7 @@ namespace WebApi.Application.Events.Tickets.MemberAssigned;
 
 public sealed class MemberAssignedNotification : INotification
 {
-    public IEnumerable<Guid> NotificationRecipientIds { get; }
+    public IReadOnlyCollection<Guid> NotificationRecipientIds { get; }
     public Guid TicketId { get; }
     public string TicketTitle { get; }
     public Guid AssigneeId { get; }
@@ -12,7 +12,7 @@ public sealed class MemberAssignedNotification : INotification
     public Guid ProjectId { get; }
 
     public MemberAssignedNotification(
-        IEnumerable<Guid> notificationRecipientIds,
+        IReadOnlyCollection<Guid> notificationRecipientIds,
         Guid ticketId,
         string ticketTitle,
         Guid assigneeId,

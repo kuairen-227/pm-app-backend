@@ -5,7 +5,7 @@ namespace WebApi.Domain.Aggregates.TicketAggregate.Events;
 
 public sealed class TicketMemberAssignedEvent : DomainEvent
 {
-    public IEnumerable<Guid> NotificationRecipientIds { get; }
+    public IReadOnlyCollection<Guid> NotificationRecipientIds { get; }
     public Guid TicketId { get; }
     public TicketTitle TicketTitle { get; }
     public Guid AssigneeId { get; }
@@ -13,7 +13,7 @@ public sealed class TicketMemberAssignedEvent : DomainEvent
     public Guid ProjectId { get; }
 
     public TicketMemberAssignedEvent(
-        IEnumerable<Guid> notificationRecipientIds,
+        IReadOnlyCollection<Guid> notificationRecipientIds,
         Guid ticketId,
         TicketTitle ticketTitle,
         Guid assigneeId,

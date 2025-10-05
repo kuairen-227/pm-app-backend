@@ -48,7 +48,7 @@ public sealed class Ticket : Entity
         UpdateAuditInfo(updatedBy);
     }
 
-    public void Assign(Guid assigneeId, string assigneeName, IEnumerable<Guid> notificationRecipientIds, Guid updatedBy)
+    public void Assign(Guid assigneeId, string assigneeName, IReadOnlyCollection<Guid> notificationRecipientIds, Guid updatedBy)
     {
         if (assigneeId == Guid.Empty)
             throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");

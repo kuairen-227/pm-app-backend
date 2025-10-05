@@ -12,7 +12,7 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
     public Guid? AssigneeId { get; }
     public DateOnly? Deadline { get; }
     public string? CompletionCriteria { get; private set; }
-    public IEnumerable<Guid> NotificationRecipientIds { get; }
+    public IReadOnlyCollection<Guid> NotificationRecipientIds { get; }
 
     public CreateTicketCommand(
         Guid projectId,
@@ -20,7 +20,7 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
         Guid? assigneeId,
         DateOnly? deadline,
         string? completionCriteria,
-        IEnumerable<Guid> notificationRecipientIds
+        IReadOnlyCollection<Guid> notificationRecipientIds
     )
     {
         ProjectId = projectId;
