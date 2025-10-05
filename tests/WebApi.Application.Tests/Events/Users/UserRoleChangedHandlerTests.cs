@@ -19,8 +19,8 @@ public class UserRoleChangedHandlerTests : BaseEventHandlerTest
 
     public UserRoleChangedHandlerTests()
     {
-        _notificationRepository = new Mock<INotificationRepository>();
         _notificationFactory = new UserNotificationFactory(Clock);
+        _notificationRepository = new Mock<INotificationRepository>();
         _userBuilder = new UserBuilder();
 
         _handler = new UserRoleChangedHandler(

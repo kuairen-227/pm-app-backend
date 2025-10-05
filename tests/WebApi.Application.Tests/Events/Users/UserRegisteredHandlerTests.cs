@@ -18,8 +18,8 @@ public class UserRegisteredHandlerTests : BaseEventHandlerTest
 
     public UserRegisteredHandlerTests()
     {
-        _notificationRepository = new Mock<INotificationRepository>();
         _notificationFactory = new UserNotificationFactory(Clock);
+        _notificationRepository = new Mock<INotificationRepository>();
         _userBuilder = new UserBuilder();
 
         _handler = new UserRegisteredHandler(
