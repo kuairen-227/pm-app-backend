@@ -66,7 +66,8 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
             .ReturnsAsync(project);
 
         // Act
-        var command = new AssignMemberCommand(project.Id, ticket.Id, user.Id);
+        var command = new AssignMemberCommand(
+            project.Id, ticket.Id, user.Id, [Guid.NewGuid(), Guid.NewGuid()]);
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
@@ -82,7 +83,8 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
         // Arrange
         var user = _userBuilder.Build();
         var project = _projectBuilder.Build();
-        var command = new AssignMemberCommand(project.Id, Guid.NewGuid(), user.Id);
+        var command = new AssignMemberCommand(
+            project.Id, Guid.NewGuid(), user.Id, [Guid.NewGuid(), Guid.NewGuid()]);
 
         _ticketRepository
             .Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
@@ -105,7 +107,8 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
         // Arrange
         var ticket = _ticketBuilder.Build();
         var project = _projectBuilder.Build();
-        var command = new AssignMemberCommand(project.Id, ticket.Id, Guid.NewGuid());
+        var command = new AssignMemberCommand(
+            project.Id, ticket.Id, Guid.NewGuid(), [Guid.NewGuid(), Guid.NewGuid()]);
 
         _ticketRepository
             .Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))
@@ -131,7 +134,8 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
         // Arrange
         var ticket = _ticketBuilder.Build();
         var user = _userBuilder.Build();
-        var command = new AssignMemberCommand(Guid.NewGuid(), ticket.Id, user.Id);
+        var command = new AssignMemberCommand(
+            Guid.NewGuid(), ticket.Id, user.Id, [Guid.NewGuid(), Guid.NewGuid()]);
 
         _ticketRepository
             .Setup(x => x.GetByIdAsync(command.TicketId, It.IsAny<CancellationToken>()))

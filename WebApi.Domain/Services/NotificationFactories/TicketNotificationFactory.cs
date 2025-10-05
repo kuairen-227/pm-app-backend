@@ -39,6 +39,19 @@ public sealed class TicketNotificationFactory
         );
     }
 
+    public Notification CreateForTicketMemberAssigned(
+        Guid recipientId, Guid ticketId, string ticketTitle, string assigneeName, Guid createdBy)
+    {
+        return new Notification(
+            recipientId,
+            NotificationCategory.Category.TicketMemberAssigned,
+            ticketId,
+            $"{assigneeName} が チケット {ticketTitle} の担当になりました。",
+            createdBy,
+            _clock
+        );
+    }
+
     public Notification CreateForCommentAdded(
         Guid recipientId, Guid ticketId, string ticketTitle, Guid createdBy)
     {

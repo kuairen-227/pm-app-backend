@@ -80,7 +80,7 @@ public class TicketTests : BaseDomainTest
 
         // Act
         var result = _ticketBuilder.Build();
-        result.Assign(user.Id, UserContext.Id);
+        result.Assign(user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id);
 
         // Assert
         result.AssigneeId.Should().Be(user.Id);
@@ -94,7 +94,7 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        var act = () => ticket.Assign(Guid.Empty, UserContext.Id);
+        var act = () => ticket.Assign(Guid.Empty, "テスト 太郎", [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -107,10 +107,10 @@ public class TicketTests : BaseDomainTest
         // Arrange
         var ticket = _ticketBuilder.Build();
         var user = _userBuilder.Build();
-        ticket.Assign(user.Id, UserContext.Id);
+        ticket.Assign(user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id);
 
         // Act
-        var act = () => ticket.Assign(user.Id, UserContext.Id);
+        var act = () => ticket.Assign(user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -123,7 +123,7 @@ public class TicketTests : BaseDomainTest
         // Arrange
         var ticket = _ticketBuilder.Build();
         var user = _userBuilder.Build();
-        ticket.Assign(user.Id, UserContext.Id);
+        ticket.Assign(user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id);
 
         // Act
         ticket.Unassign(UserContext.Id);

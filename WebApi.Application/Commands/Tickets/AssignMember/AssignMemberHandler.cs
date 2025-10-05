@@ -41,7 +41,7 @@ public class AssignMemberHandler : BaseCommandHandler, IRequestHandler<AssignMem
             ?? throw new NotFoundException(nameof(Project), request.ProjectId);
         project.EnsureMember(user.Id);
 
-        ticket.Assign(user.Id, UserContext.Id);
+        ticket.Assign(user.Id, user.Name, request.NotificationRecipientIds, UserContext.Id);
         await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;

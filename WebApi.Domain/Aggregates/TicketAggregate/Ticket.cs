@@ -1,4 +1,5 @@
 using WebApi.Domain.Abstractions;
+using WebApi.Domain.Aggregates.TicketAggregate.Events;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.TicketAggregate;
@@ -47,7 +48,7 @@ public sealed class Ticket : Entity
         UpdateAuditInfo(updatedBy);
     }
 
-    public void Assign(Guid assigneeId, Guid updatedBy)
+    public void Assign(Guid assigneeId, string assigneeName, IEnumerable<Guid> notificationRecipientIds, Guid updatedBy)
     {
         if (assigneeId == Guid.Empty)
             throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
@@ -68,6 +69,9 @@ public sealed class Ticket : Entity
         AssigneeId = assigneeId;
 
         UpdateAuditInfo(updatedBy);
+        AddDomainEvent(new TicketMemberAssignedEvent(
+            notificationRecipientIds, Id, Title, assigneeId, assigneeName, ProjectId, _clock
+        ));
     }
 
     public void Unassign(Guid updatedBy)
