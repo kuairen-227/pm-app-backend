@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using WebApi.Application.Common;
 using WebApi.Application.Queries.Tickets.Dtos;
 using WebApi.Application.Queries.Tickets.GetTicketById;
 using WebApi.Application.Tests.Helpers.Common;
@@ -83,10 +84,11 @@ public class GetTicketByIdTests : BaseQueryHandlerTest
             .ReturnsAsync((Ticket?)null);
 
         // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
+        var act = async () => await _handler.Handle(query, CancellationToken.None);
 
         // Assert
-        result.Should().BeNull();
+        var ex = await act.Should().ThrowAsync<NotFoundException>();
+        ex.Which.ErrorCode.Should().Be("TICKET_NOT_FOUND");
         _ticketRepository.Verify(x => x.GetByIdAsync(query.TicketId, It.IsAny<CancellationToken>()), Times.Once);
     }
 }

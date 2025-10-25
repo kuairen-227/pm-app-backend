@@ -1,11 +1,13 @@
 using AutoMapper;
 using MediatR;
+using WebApi.Application.Common;
 using WebApi.Application.Queries.Tickets.Dtos;
 using WebApi.Domain.Abstractions.Repositories;
+using WebApi.Domain.Aggregates.TicketAggregate;
 
 namespace WebApi.Application.Queries.Tickets.GetTicketById;
 
-public class GetTicketByIdHandler : IRequestHandler<GetTicketByIdQuery, TicketDetailDto?>
+public class GetTicketByIdHandler : IRequestHandler<GetTicketByIdQuery, TicketDetailDto>
 {
     private readonly ITicketRepository _ticketRepository;
     private readonly IMapper _mapper;
@@ -16,10 +18,10 @@ public class GetTicketByIdHandler : IRequestHandler<GetTicketByIdQuery, TicketDe
         _mapper = mapper;
     }
 
-    public async Task<TicketDetailDto?> Handle(GetTicketByIdQuery request, CancellationToken cancellationToken)
+    public async Task<TicketDetailDto> Handle(GetTicketByIdQuery request, CancellationToken cancellationToken)
     {
-        var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken);
-        if (ticket is null) return null;
+        var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
+            ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
         return _mapper.Map<TicketDetailDto>(ticket);
     }

@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using WebApi.Application.Common;
 using WebApi.Application.Queries.Projects.Dtos;
 using WebApi.Application.Queries.Projects.GetProjectById;
 using WebApi.Application.Tests.Helpers.Common;
@@ -74,10 +75,11 @@ public class GetProjectByIdHandlerTests : BaseQueryHandlerTest
             .ReturnsAsync((Project?)null);
 
         // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
+        var act = async () => await _handler.Handle(query, CancellationToken.None);
 
         // Assert
-        result.Should().BeNull();
+        var ex = await act.Should().ThrowAsync<NotFoundException>();
+        ex.Which.ErrorCode.Should().Be("PROJECT_NOT_FOUND");
         _projectRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

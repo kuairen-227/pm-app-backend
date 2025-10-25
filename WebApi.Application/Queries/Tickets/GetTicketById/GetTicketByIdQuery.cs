@@ -6,7 +6,7 @@ using WebApi.Application.Queries.Tickets.Dtos;
 namespace WebApi.Application.Queries.Tickets.GetTicketById;
 
 [RequiresPermission(TicketPermissions.View)]
-public class GetTicketByIdQuery : IRequest<TicketDetailDto?>, IProjectScopedRequest
+public class GetTicketByIdQuery : IRequest<TicketDetailDto>, IProjectScopedRequest
 {
     public Guid ProjectId { get; }
     public Guid TicketId { get; }
