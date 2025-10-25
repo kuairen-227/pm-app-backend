@@ -7,7 +7,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddDomain(this IServiceCollection services)
     {
-        // ドメインサービス 登録
+        // Domain Services
         services.AddSingleton<ProjectNotificationFactory>();
 
         return services;

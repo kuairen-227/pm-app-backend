@@ -12,13 +12,13 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
     {
-        // DbContext 登録
+        // DbContext
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
-        // UserContext 登録
+        // UserContext
         services.AddScoped<IUserContext, UserContext>();
 
-        // DateTimeProvider 登録
+        // DateTimeProvider
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         return services;
