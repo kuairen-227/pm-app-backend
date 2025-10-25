@@ -13,7 +13,7 @@ public sealed class UserNotificationFactory
         _clock = clock;
     }
 
-    public Notification CreateForUserRegistration(
+    public Notification CreateUserRegisteredNotification(
         Guid recipientId, Guid userId, string userName, Guid createdBy)
     {
         return new Notification(
@@ -26,7 +26,7 @@ public sealed class UserNotificationFactory
         );
     }
 
-    public Notification CreateForUserRoleChange(
+    public Notification CreateUserRoleChangedNotification(
         Guid recipientId, Guid userId, SystemRole.RoleType newRole, Guid createdBy)
     {
         return new Notification(

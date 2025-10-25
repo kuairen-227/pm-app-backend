@@ -25,7 +25,7 @@ public sealed class MemberInvitedHandler
 
     public async Task Handle(MemberInvitedNotification notification, CancellationToken cancellationToken)
     {
-        var notificationEntity = _notificationFactory.CreateForProjectInvitation(
+        var notificationEntity = _notificationFactory.CreateMemberInvitedNotification(
             notification.UserId,
             notification.ProjectId,
             notification.ProjectName,

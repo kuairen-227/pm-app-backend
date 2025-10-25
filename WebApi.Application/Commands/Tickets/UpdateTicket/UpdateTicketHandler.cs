@@ -47,7 +47,7 @@ public class UpdateTicketHandler : BaseCommandHandler, IRequestHandler<UpdateTic
             .Select(recipientId =>
             {
                 project.EnsureMember(recipientId);
-                return _notificationFactory.CreateForTicketUpdate(
+                return _notificationFactory.CreateTicketUpdatedNotification(
                     recipientId,
                     ticket.Id,
                     ticket.Title.Value,

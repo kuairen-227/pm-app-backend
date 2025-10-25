@@ -25,7 +25,7 @@ public sealed class UserRoleChangedHandler
 
     public async Task Handle(UserRoleChangedNotification notification, CancellationToken cancellationToken)
     {
-        var notificationEntity = _notificationFactory.CreateForUserRoleChange(
+        var notificationEntity = _notificationFactory.CreateUserRoleChangedNotification(
             notification.UserId,
             notification.UserId,
             notification.Role,

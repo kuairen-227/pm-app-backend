@@ -27,7 +27,7 @@ public sealed class UserRegisteredHandler
 
     public async Task Handle(UserRegisteredNotification notification, CancellationToken cancellationToken)
     {
-        var notificationEntity = _notificationFactory.CreateForUserRegistration(
+        var notificationEntity = _notificationFactory.CreateUserRegisteredNotification(
             notification.UserId,
             notification.UserId,
             notification.UserName,

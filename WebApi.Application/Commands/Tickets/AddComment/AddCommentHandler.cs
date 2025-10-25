@@ -47,7 +47,7 @@ public class AddCommentHandler : BaseCommandHandler, IRequestHandler<AddCommentC
             .Select(recipientId =>
             {
                 project.EnsureMember(recipientId);
-                return _notificationFactory.CreateForCommentAdded(
+                return _notificationFactory.CreateCommentAddedNotification(
                     recipientId,
                     ticket.Id,
                     ticket.Title.Value,

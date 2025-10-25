@@ -13,7 +13,7 @@ public sealed class ProjectNotificationFactory
         _clock = clock;
     }
 
-    public Notification CreateForProjectInvitation(
+    public Notification CreateMemberInvitedNotification(
         Guid recipientId, Guid projectId, string projectName, Guid createdBy)
     {
         return new Notification(
@@ -26,7 +26,7 @@ public sealed class ProjectNotificationFactory
         );
     }
 
-    public Notification CreateForProjectChangeMemberRole(
+    public Notification CreateProjectRoleChangedNotification(
         Guid recipientId, Guid memberId, ProjectRole.RoleType newRoleType, Guid createdBy)
     {
         return new Notification(

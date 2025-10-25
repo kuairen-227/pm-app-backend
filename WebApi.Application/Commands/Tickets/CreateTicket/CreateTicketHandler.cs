@@ -54,7 +54,7 @@ public class CreateTicketHandler : BaseCommandHandler, IRequestHandler<CreateTic
             .Select(recipientId =>
             {
                 project.EnsureMember(recipientId);
-                return _notificationFactory.CreateForTicketCreation(
+                return _notificationFactory.CreateTicketCreatedNotification(
                     recipientId,
                     ticket.Id,
                     ticket.Title,

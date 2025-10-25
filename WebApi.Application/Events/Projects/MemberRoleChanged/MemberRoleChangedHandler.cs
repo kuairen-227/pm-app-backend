@@ -25,7 +25,7 @@ public sealed class MemberRoleChangedHandler
 
     public async Task Handle(MemberRoleChangedNotification notification, CancellationToken cancellationToken)
     {
-        var notificationEntity = _notificationFactory.CreateForProjectChangeMemberRole(
+        var notificationEntity = _notificationFactory.CreateProjectRoleChangedNotification(
             notification.UserId,
             notification.ProjectId,
             notification.Role,

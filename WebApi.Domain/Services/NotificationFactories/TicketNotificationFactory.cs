@@ -13,7 +13,7 @@ public sealed class TicketNotificationFactory
         _clock = clock;
     }
 
-    public Notification CreateForTicketCreation(
+    public Notification CreateTicketCreatedNotification(
         Guid recipientId, Guid ticketId, TicketTitle ticketTitle, Guid createdBy)
     {
         return new Notification(
@@ -26,7 +26,7 @@ public sealed class TicketNotificationFactory
         );
     }
 
-    public Notification CreateForTicketUpdate(
+    public Notification CreateTicketUpdatedNotification(
         Guid recipientId, Guid ticketId, string ticketTitle, Guid createdBy)
     {
         return new Notification(
@@ -39,7 +39,7 @@ public sealed class TicketNotificationFactory
         );
     }
 
-    public Notification CreateForTicketMemberAssigned(
+    public Notification CreateMemberAssignedNotification(
         Guid recipientId, Guid ticketId, string ticketTitle, string assigneeName, Guid createdBy)
     {
         return new Notification(
@@ -52,7 +52,7 @@ public sealed class TicketNotificationFactory
         );
     }
 
-    public Notification CreateForCommentAdded(
+    public Notification CreateCommentAddedNotification(
         Guid recipientId, Guid ticketId, string ticketTitle, Guid createdBy)
     {
         return new Notification(

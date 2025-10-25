@@ -39,7 +39,7 @@ public sealed class MemberAssignedHandler
         var notificationEntities = recipientIds.Select(recipientId =>
         {
             project.EnsureMember(recipientId);
-            return _notificationFactory.CreateForTicketMemberAssigned(
+            return _notificationFactory.CreateMemberAssignedNotification(
                 recipientId,
                 notification.TicketId,
                 notification.TicketTitle,
