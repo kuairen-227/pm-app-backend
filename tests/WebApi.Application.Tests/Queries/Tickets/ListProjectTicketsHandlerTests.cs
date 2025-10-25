@@ -1,8 +1,10 @@
 using FluentAssertions;
 using Moq;
+using WebApi.Application.Queries.Tickets;
 using WebApi.Application.Queries.Tickets.Dtos;
 using WebApi.Application.Queries.Tickets.ListProjectTickets;
 using WebApi.Application.Tests.Helpers.Common;
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Tests.Helpers.Builders;
@@ -50,7 +52,11 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
             _ticketBuilder.WithTitle("チケット2").WithProjectId(project.Id).Build(),
         };
 
-        _ticketRepository.Setup(r => r.ListByProjectIdAsync(project.Id, It.IsAny<CancellationToken>()))
+        _ticketRepository
+            .Setup(r => r.ListByProjectIdAsync(
+                project.Id,
+                It.IsAny<ISpecification<Ticket>>(),
+                It.IsAny<CancellationToken>()))
             .ReturnsAsync(tickets);
 
         // Act
@@ -69,5 +75,87 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
             result.ElementAt(i).Status.Should().Be(tickets[i].Status.Value.ToString());
             result.ElementAt(i).CompletionCriteria.Should().Be(tickets[i].CompletionCriteria);
         }
+
+        _ticketRepository.Verify(r => r.ListByProjectIdAsync(
+            project.Id,
+            It.IsAny<ISpecification<Ticket>>(),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task 正常系_Handle_Filterが単独条件の場合()
+    {
+        // Arrange
+        var project = _projectBuilder.Build();
+        var tickets = new List<Ticket>
+        {
+            _ticketBuilder.WithTitle("チケット1").WithProjectId(project.Id).Build(),
+            _ticketBuilder.WithTitle("チケット2").WithProjectId(project.Id).Build(),
+        };
+
+        _ticketRepository
+            .Setup(r => r.ListByProjectIdAsync(
+                project.Id,
+                It.IsAny<ISpecification<Ticket>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(tickets);
+
+        // Act
+        var filter = new TicketFilter
+        {
+            Title = "チケット1"
+        };
+        var query = new ListProjectTicketsQuery(project.Id) { Filter = filter };
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        // Assert
+        result.Should().HaveCount(tickets.Count);
+        _ticketRepository.Verify(r => r.ListByProjectIdAsync(
+            project.Id,
+            It.Is<ISpecification<Ticket>>(spec =>
+                spec.ToExpression().Compile().Invoke(tickets[0]) &&
+                !spec.ToExpression().Compile().Invoke(tickets[1])
+            ),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task 正常系_Handle_Filterが複合条件()
+    {
+        // Arrange
+        var project = _projectBuilder.Build();
+        var tickets = new List<Ticket>
+        {
+            _ticketBuilder.WithTitle("チケット1").WithProjectId(project.Id).WithStatus(TicketStatus.StatusType.Todo).Build(),
+            _ticketBuilder.WithTitle("チケット1").WithProjectId(project.Id).WithStatus(TicketStatus.StatusType.InProgress).Build(),
+            _ticketBuilder.WithTitle("チケット2").WithProjectId(project.Id).WithStatus(TicketStatus.StatusType.Todo).Build(),
+        };
+
+        _ticketRepository
+            .Setup(r => r.ListByProjectIdAsync(
+                project.Id,
+                It.IsAny<ISpecification<Ticket>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(tickets);
+
+        // Act
+        var filter = new TicketFilter
+        {
+            Title = "チケット1",
+            Status = TicketStatus.StatusType.Todo.ToString()
+        };
+        var query = new ListProjectTicketsQuery(project.Id) { Filter = filter };
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        // Assert
+        result.Should().HaveCount(tickets.Count);
+        _ticketRepository.Verify(r => r.ListByProjectIdAsync(
+            project.Id,
+            It.Is<ISpecification<Ticket>>(spec =>
+                spec.ToExpression().Compile().Invoke(tickets[0]) &&
+                !spec.ToExpression().Compile().Invoke(tickets[1]) &&
+                !spec.ToExpression().Compile().Invoke(tickets[2])
+            ),
+            It.IsAny<CancellationToken>()), Times.Once);
     }
 }
