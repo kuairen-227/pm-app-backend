@@ -136,4 +136,9 @@ public sealed class Ticket : Entity
 
         _comments.Remove(comment);
     }
+
+    internal void SetDeadlineForTest(DateOnly? deadline)
+    {
+        Deadline = Deadline?.Rehydrate(deadline, _clock);
+    }
 }

@@ -61,11 +61,16 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
             _projectId,
             _title,
             _assigneeId,
-            _deadline,
+            null,
             _completionCriteria,
             _createdBy,
             _clock
         );
+
+        if (_deadline.HasValue)
+        {
+            ticket.SetDeadlineForTest(_deadline);
+        }
 
         if (_status != TicketStatus.StatusType.Todo)
         {
