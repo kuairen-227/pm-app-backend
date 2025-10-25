@@ -51,7 +51,7 @@ public class ListUsersHandlerTests : BaseQueryHandlerTest
         };
 
         _userRepository
-            .Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
+            .Setup(x => x.ListAllAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(users);
 
         // Act
@@ -73,6 +73,6 @@ public class ListUsersHandlerTests : BaseQueryHandlerTest
             result.ElementAt(i).UpdatedAt.Should().Be(users[i].UpdatedAt);
         }
 
-        _userRepository.Verify(x => x.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _userRepository.Verify(x => x.ListAllAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 }

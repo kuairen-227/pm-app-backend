@@ -44,11 +44,11 @@ public class ListProjectsHandler : IRequestHandler<ListProjectsQuery, IEnumerabl
         IEnumerable<Project> projects;
         if (canViewAll)
         {
-            projects = await _projectRepository.GetAllAsync(cancellationToken);
+            projects = await _projectRepository.ListAllAsync(cancellationToken);
         }
         else
         {
-            projects = await _projectRepository.GetByUserIdAsync(user.Id, cancellationToken);
+            projects = await _projectRepository.ListByUserIdAsync(user.Id, cancellationToken);
         }
 
         return _mapper.Map<IEnumerable<ProjectDto>>(projects);

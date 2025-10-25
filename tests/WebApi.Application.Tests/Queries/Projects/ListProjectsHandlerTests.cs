@@ -64,7 +64,7 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
         var user = _userBuilder.WithRole(SystemRole.RoleType.Admin).Build();
 
         _projectRepository
-            .Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
+            .Setup(x => x.ListAllAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(projects);
         _userRepository
             .Setup(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
@@ -91,8 +91,8 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
             result.ElementAt(i).UpdatedAt.Should().Be(projects[i].UpdatedAt);
         }
 
-        _projectRepository.Verify(x => x.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
-        _projectRepository.Verify(x => x.GetByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+        _projectRepository.Verify(x => x.ListAllAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _projectRepository.Verify(x => x.ListByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -107,7 +107,7 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
         var user = _userBuilder.WithRole(SystemRole.RoleType.User).Build();
 
         _projectRepository
-            .Setup(x => x.GetByUserIdAsync(user.Id, It.IsAny<CancellationToken>()))
+            .Setup(x => x.ListByUserIdAsync(user.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync([projects[0]]);
         _userRepository
             .Setup(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
@@ -131,8 +131,8 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
         result.ElementAt(0).UpdatedBy.Should().Be(projects[0].UpdatedBy);
         result.ElementAt(0).UpdatedAt.Should().Be(projects[0].UpdatedAt);
 
-        _projectRepository.Verify(x => x.GetAllAsync(It.IsAny<CancellationToken>()), Times.Never);
-        _projectRepository.Verify(x => x.GetByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Once);
+        _projectRepository.Verify(x => x.ListAllAsync(It.IsAny<CancellationToken>()), Times.Never);
+        _projectRepository.Verify(x => x.ListByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -142,7 +142,7 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
         var user = _userBuilder.WithRole(SystemRole.RoleType.Admin).Build();
 
         _projectRepository
-            .Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
+            .Setup(x => x.ListAllAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Project>());
         _userRepository
             .Setup(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
@@ -158,7 +158,7 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
         // Assert
         result.Should().BeEmpty();
 
-        _projectRepository.Verify(x => x.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
-        _projectRepository.Verify(x => x.GetByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+        _projectRepository.Verify(x => x.ListAllAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _projectRepository.Verify(x => x.ListByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 }
