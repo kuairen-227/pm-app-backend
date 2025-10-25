@@ -7,7 +7,7 @@ using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Tests.Helpers.Builders;
 
-namespace WebApi.Application.Tests.Queries.Tickets.ListExpiringTickets;
+namespace WebApi.Application.Tests.Queries.Tickets;
 
 public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
 {
