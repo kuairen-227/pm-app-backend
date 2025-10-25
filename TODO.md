@@ -1,1 +1,1 @@
-- Query に必要なクエリパラメータを追加
+- Infrastructure 層の実装
