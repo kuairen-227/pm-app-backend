@@ -9,6 +9,7 @@ namespace WebApi.Application.Queries.Tickets.ListProjectTickets;
 public class ListProjectTicketsQuery : IRequest<IEnumerable<TicketDto>>, IProjectScopedRequest
 {
     public Guid ProjectId { get; }
+    public TicketFilter? Filter { get; init; }
 
     public ListProjectTicketsQuery(Guid projectId)
     {

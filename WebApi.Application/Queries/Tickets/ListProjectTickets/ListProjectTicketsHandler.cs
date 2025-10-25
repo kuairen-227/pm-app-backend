@@ -18,7 +18,11 @@ public class ListProjectTicketsHandler : IRequestHandler<ListProjectTicketsQuery
 
     public async Task<IEnumerable<TicketDto>> Handle(ListProjectTicketsQuery request, CancellationToken cancellationToken)
     {
-        var tickets = await _ticketRepository.ListByProjectIdAsync(request.ProjectId, cancellationToken);
+        var tickets = await _ticketRepository.ListByProjectIdAsync(
+            request.ProjectId,
+            request.Filter?.ToSpecification(),
+            cancellationToken
+        );
         return _mapper.Map<IEnumerable<TicketDto>>(tickets);
     }
 }
