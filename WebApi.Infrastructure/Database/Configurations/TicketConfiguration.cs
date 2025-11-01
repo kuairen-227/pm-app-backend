@@ -28,6 +28,11 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
                 .IsRequired();
         });
 
+        builder.OwnsMany(t => t.Comments, comment =>
+        {
+            comment.ToTable("ticket_comments");
+        });
+
         builder.OwnsMany(t => t.AssignmentHistories, history =>
         {
             history.ToTable("assignment_histories");
