@@ -5,8 +5,8 @@ namespace WebApi.Domain.Common;
 public abstract class Entity
 {
     public Guid Id { get; protected set; } = Guid.NewGuid();
-    public Guid CreatedBy { get; }
-    public DateTime CreatedAt { get; }
+    public Guid CreatedBy { get; private set; }
+    public DateTime CreatedAt { get; private set; }
     public Guid UpdatedBy { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
