@@ -13,7 +13,8 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
     {
         // DbContext
-        services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
 
         // UserContext
         services.AddScoped<IUserContext, UserContext>();
