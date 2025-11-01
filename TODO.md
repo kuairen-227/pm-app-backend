@@ -1,1 +1,3 @@
-- Infrastructure 層の実装
+- created_by, created_by がない問題
+- 値オブジェクトのテーブルに Audit カラムをつけたい　※Entity にしてしまう？
+- Repository の実装
