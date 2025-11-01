@@ -1,9 +1,18 @@
 using Microsoft.EntityFrameworkCore;
+using WebApi.Domain.Aggregates.NotificationAggregate;
+using WebApi.Domain.Aggregates.ProjectAggregate;
+using WebApi.Domain.Aggregates.TicketAggregate;
+using WebApi.Domain.Aggregates.UserAggregate;
 
 namespace WebApi.Infrastructure.Database;
 
 public class AppDbContext : DbContext
 {
+    public DbSet<User> Users { get; set; }
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<Ticket> Tickets { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
@@ -16,6 +25,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
     }
 }
