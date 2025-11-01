@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WebApi.Domain.Aggregates.ProjectAggregate;
+using WebApi.Domain.Aggregates.UserAggregate;
 
 namespace WebApi.Infrastructure.Database.Configurations;
 
@@ -13,6 +14,11 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
             member.ToTable("project_members");
             member.Property(m => m.Id).ValueGeneratedOnAdd();
             member.HasKey(m => m.Id);
+
+            member.HasOne<User>()
+                .WithMany()
+                .HasForeignKey(m => m.UserId)
+                .IsRequired();
         });
     }
 }

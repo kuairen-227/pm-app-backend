@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WebApi.Domain.Aggregates.NotificationAggregate;
+using WebApi.Domain.Aggregates.UserAggregate;
 
 namespace WebApi.Infrastructure.Database.Configurations;
 
@@ -17,5 +18,10 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
                 .HasColumnName("category")
                 .IsRequired();
         });
+
+        builder.HasOne<User>()
+            .WithMany()
+            .HasForeignKey(n => n.RecipientId)
+            .IsRequired();
     }
 }
