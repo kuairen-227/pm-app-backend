@@ -9,6 +9,8 @@ public class AuditInfo
     public Guid UpdatedBy { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
+    private AuditInfo() { } // EF Core 用
+
     public AuditInfo(Guid createdBy, IDateTimeProvider clock)
     {
         CreatedBy = createdBy;

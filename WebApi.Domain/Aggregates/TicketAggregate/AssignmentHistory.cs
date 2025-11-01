@@ -11,7 +11,9 @@ public sealed class AssignmentHistory : ValueObject
     public Guid? AssigneeId { get; private set; }
     public Guid? PreviousAssigneeId { get; private set; }
     public DateTime ChangedAt { get; private set; }
-    public AuditInfo AuditInfo { get; private set; }  // DB 用の監査情報
+    public AuditInfo AuditInfo { get; private set; } = null!;  // DB 用の監査情報
+
+    private AssignmentHistory() { } // EF Core 用
 
     private AssignmentHistory(
         AssignmentChangeType changeType,
