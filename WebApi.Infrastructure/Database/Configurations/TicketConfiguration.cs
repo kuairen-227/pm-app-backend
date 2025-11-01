@@ -27,5 +27,12 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
                 .HasColumnName("status")
                 .IsRequired();
         });
+
+        builder.OwnsMany(t => t.AssignmentHistories, history =>
+        {
+            history.ToTable("assignment_histories");
+            history.Property(h => h.Id).ValueGeneratedOnAdd();
+            history.HasKey(h => h.Id);
+        });
     }
 }

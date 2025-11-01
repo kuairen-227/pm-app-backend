@@ -4,6 +4,7 @@ namespace WebApi.Domain.Aggregates.TicketAggregate;
 
 public sealed class AssignmentHistory : ValueObject
 {
+    public Guid Id { get; private set; }  // EF Core 用
     public enum AssignmentChangeType { Assigned, Changed, Unassigned }
     public AssignmentChangeType ChangeType { get; private set; }
     public Guid? AssigneeId { get; private set; }
