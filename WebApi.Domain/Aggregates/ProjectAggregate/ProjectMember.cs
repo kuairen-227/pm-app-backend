@@ -1,16 +1,17 @@
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.ProjectAggregate;
 
-public sealed class ProjectMember : ValueObject
+public sealed class ProjectMember : Entity
 {
-    public Guid Id { get; }  // EF Core 用
     public Guid UserId { get; }
-    public ProjectRole Role { get; } = null!;
+    public ProjectRole Role { get; private set; } = null!;
 
     private ProjectMember() { } // EF Core 用
 
-    public ProjectMember(Guid userId, ProjectRole role)
+    public ProjectMember(Guid userId, ProjectRole role, Guid createdBy, IDateTimeProvider clock)
+        : base(createdBy, clock)
     {
         if (userId == Guid.Empty)
             throw new DomainException("USER_ID_REQUIRED", "UserId は必須です");
@@ -19,11 +20,9 @@ public sealed class ProjectMember : ValueObject
         Role = role;
     }
 
-    public static ProjectMember Create(Guid userId, ProjectRole role) => new ProjectMember(userId, role);
-
-    protected override IEnumerable<object?> GetEqualityComponents()
+    public void ChangeRole(ProjectRole newRole, Guid updatedBy)
     {
-        yield return UserId;
-        yield return Role;
+        Role = newRole;
+        UpdateAuditInfo(updatedBy);
     }
 }

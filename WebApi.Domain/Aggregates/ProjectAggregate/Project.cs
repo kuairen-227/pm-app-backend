@@ -40,13 +40,13 @@ public sealed class Project : Entity
         UpdateAuditInfo(updatedBy);
     }
 
-    public void InviteMember(Guid userId, ProjectRole.RoleType roleType)
+    public void InviteMember(Guid userId, ProjectRole.RoleType roleType, Guid invitedBy)
     {
         if (_members.Any(m => m.UserId == userId))
             throw new DomainException("USER_ALREADY_JOINED", "User はすでにプロジェクトメンバーです");
 
         var role = ProjectRole.Create(roleType);
-        var member = ProjectMember.Create(userId, role);
+        var member = new ProjectMember(userId, role, invitedBy, _clock);
         _members.Add(member);
 
         AddDomainEvent(new ProjectMemberInvitedEvent(Id, Name, userId, _clock));
@@ -60,15 +60,12 @@ public sealed class Project : Entity
         _members.Remove(member);
     }
 
-    public void ChangeMemberRole(Guid userId, ProjectRole.RoleType newRoleType)
+    public void ChangeMemberRole(Guid userId, ProjectRole.RoleType newRoleType, Guid changedBy)
     {
-        var index = _members.FindIndex(m => m.UserId == userId);
-        if (index < 0)
-            throw new DomainException("USER_NOT_PROJECT_MEMBER", "User はプロジェクトメンバーではありません");
+        var member = _members.FirstOrDefault(m => m.UserId == userId)
+            ?? throw new DomainException("USER_NOT_PROJECT_MEMBER", "User はプロジェクトメンバーではありません");
 
-        var role = ProjectRole.Create(newRoleType);
-        _members[index] = ProjectMember.Create(userId, role);
-
+        member.ChangeRole(ProjectRole.Create(newRoleType), changedBy);
         AddDomainEvent(new ProjectRoleChangedEvent(Id, userId, newRoleType, _clock));
     }
 
