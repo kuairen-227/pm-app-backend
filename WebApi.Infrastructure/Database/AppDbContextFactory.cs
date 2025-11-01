@@ -15,7 +15,7 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 
         // マイグレーションファイル生成用のための接続文字列を直接指定
         optionsBuilder
-            .UseNpgsql("Host=db;Port=5432;Database=db;Username=postgres;Password=postgres")
+            .UseNpgsql("Host=db;Port=5432;Database=db;Username=postgres;Password=postgres;Application Name=pm-app-backend")
             .UseSnakeCaseNamingConvention();
 
         return new AppDbContext(optionsBuilder.Options);
