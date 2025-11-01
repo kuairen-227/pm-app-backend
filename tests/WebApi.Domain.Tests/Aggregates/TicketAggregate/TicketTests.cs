@@ -222,8 +222,8 @@ public class TicketTests : BaseDomainTest
         ticket.Comments.Should().ContainSingle();
         ticket.Comments.First().AuthorId.Should().Be(author.Id);
         ticket.Comments.First().Content.Should().Be(content);
-        ticket.Comments.First().CreatedBy.Should().Be(createdBy);
-        ticket.Comments.First().CreatedAt.Should().Be(Clock.Now);
+        ticket.Comments.First().AuditInfo.CreatedBy.Should().Be(createdBy);
+        ticket.Comments.First().AuditInfo.CreatedAt.Should().Be(Clock.Now);
     }
 
     [Fact]
@@ -245,10 +245,10 @@ public class TicketTests : BaseDomainTest
         ticket.Comments.ElementAt(1).AuthorId.Should().Be(authors[1].Id);
         ticket.Comments.ElementAt(0).Content.Should().Be(contents[0]);
         ticket.Comments.ElementAt(1).Content.Should().Be(contents[1]);
-        ticket.Comments.ElementAt(0).CreatedBy.Should().Be(createdBys[0]);
-        ticket.Comments.ElementAt(1).CreatedBy.Should().Be(createdBys[1]);
-        ticket.Comments.ElementAt(0).CreatedAt.Should().Be(Clock.Now);
-        ticket.Comments.ElementAt(1).CreatedAt.Should().Be(Clock.Now);
+        ticket.Comments.ElementAt(0).AuditInfo.CreatedBy.Should().Be(createdBys[0]);
+        ticket.Comments.ElementAt(1).AuditInfo.CreatedBy.Should().Be(createdBys[1]);
+        ticket.Comments.ElementAt(0).AuditInfo.CreatedAt.Should().Be(Clock.Now);
+        ticket.Comments.ElementAt(1).AuditInfo.CreatedAt.Should().Be(Clock.Now);
     }
 
     [Fact]

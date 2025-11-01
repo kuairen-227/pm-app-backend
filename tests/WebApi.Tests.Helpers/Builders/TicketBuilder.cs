@@ -79,7 +79,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
 
         foreach (var comment in _comments)
         {
-            ticket.AddComment(comment.AuthorId, comment.Content, comment.CreatedBy);
+            ticket.AddComment(comment.AuthorId, comment.Content, comment.AuditInfo.CreatedBy);
         }
 
         return ticket;
