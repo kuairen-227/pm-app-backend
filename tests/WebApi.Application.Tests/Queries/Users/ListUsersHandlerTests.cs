@@ -28,10 +28,10 @@ public class ListUsersHandlerTests : BaseQueryHandlerTest
                     Name = u.Name,
                     Email = u.Email.Value,
                     Role = u.Role.Value.ToString(),
-                    CreatedBy = u.CreatedBy,
-                    CreatedAt = u.CreatedAt,
-                    UpdatedBy = u.UpdatedBy,
-                    UpdatedAt = u.UpdatedAt,
+                    CreatedBy = u.AuditInfo.CreatedBy,
+                    CreatedAt = u.AuditInfo.CreatedAt,
+                    UpdatedBy = u.AuditInfo.UpdatedBy,
+                    UpdatedAt = u.AuditInfo.UpdatedAt,
                 }));
 
         _handler = new ListUsersHandler(
@@ -67,10 +67,10 @@ public class ListUsersHandlerTests : BaseQueryHandlerTest
             result.ElementAt(i).Name.Should().Be(users[i].Name);
             result.ElementAt(i).Email.Should().Be(users[i].Email.Value);
             result.ElementAt(i).Role.Should().Be(users[i].Role.Value.ToString());
-            result.ElementAt(i).CreatedBy.Should().Be(users[i].CreatedBy);
-            result.ElementAt(i).CreatedAt.Should().Be(users[i].CreatedAt);
-            result.ElementAt(i).UpdatedBy.Should().Be(users[i].UpdatedBy);
-            result.ElementAt(i).UpdatedAt.Should().Be(users[i].UpdatedAt);
+            result.ElementAt(i).CreatedBy.Should().Be(users[i].AuditInfo.CreatedBy);
+            result.ElementAt(i).CreatedAt.Should().Be(users[i].AuditInfo.CreatedAt);
+            result.ElementAt(i).UpdatedBy.Should().Be(users[i].AuditInfo.UpdatedBy);
+            result.ElementAt(i).UpdatedAt.Should().Be(users[i].AuditInfo.UpdatedAt);
         }
 
         _userRepository.Verify(x => x.ListAllAsync(It.IsAny<CancellationToken>()), Times.Once);

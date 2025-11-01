@@ -38,7 +38,7 @@ public class ProjectBuilder : BaseBuilder<ProjectBuilder, Project>
 
         foreach (var member in _members)
         {
-            project.InviteMember(member.UserId, member.Role.Value);
+            project.InviteMember(member.UserId, member.Role.Value, _createdBy);
         }
 
         return project;

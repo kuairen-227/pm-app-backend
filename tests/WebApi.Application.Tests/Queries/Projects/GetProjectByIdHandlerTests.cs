@@ -27,10 +27,10 @@ public class GetProjectByIdHandlerTests : BaseQueryHandlerTest
                 Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
-                CreatedBy = p.CreatedBy,
-                CreatedAt = p.CreatedAt,
-                UpdatedBy = p.UpdatedBy,
-                UpdatedAt = p.UpdatedAt,
+                CreatedBy = p.AuditInfo.CreatedBy,
+                CreatedAt = p.AuditInfo.CreatedAt,
+                UpdatedBy = p.AuditInfo.UpdatedBy,
+                UpdatedAt = p.AuditInfo.UpdatedAt,
             });
 
         _handler = new GetProjectByIdHandler(
@@ -57,10 +57,10 @@ public class GetProjectByIdHandlerTests : BaseQueryHandlerTest
         result.Id.Should().Be(project.Id);
         result.Name.Should().Be(project.Name);
         result.Description.Should().Be(project.Description);
-        result.CreatedBy.Should().Be(project.CreatedBy);
-        result.CreatedAt.Should().Be(project.CreatedAt);
-        result.UpdatedBy.Should().Be(project.UpdatedBy);
-        result.UpdatedAt.Should().Be(project.UpdatedAt);
+        result.CreatedBy.Should().Be(project.AuditInfo.CreatedBy);
+        result.CreatedAt.Should().Be(project.AuditInfo.CreatedAt);
+        result.UpdatedBy.Should().Be(project.AuditInfo.UpdatedBy);
+        result.UpdatedAt.Should().Be(project.AuditInfo.UpdatedAt);
 
         _projectRepository.Verify(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()), Times.Once);
     }

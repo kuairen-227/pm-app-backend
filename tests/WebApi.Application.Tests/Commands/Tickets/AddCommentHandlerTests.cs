@@ -23,6 +23,7 @@ public class AddCommentHandlerTests : BaseCommandHandlerTest
     private readonly TicketNotificationFactory _notificationFactory;
     private readonly TicketBuilder _ticketBuilder;
     private readonly ProjectBuilder _projectBuilder;
+    private readonly ProjectMemberBuilder _projectMemberBuilder;
 
     public AddCommentHandlerTests()
     {
@@ -32,6 +33,7 @@ public class AddCommentHandlerTests : BaseCommandHandlerTest
         _notificationFactory = new TicketNotificationFactory(Clock);
         _ticketBuilder = new TicketBuilder();
         _projectBuilder = new ProjectBuilder();
+        _projectMemberBuilder = new ProjectMemberBuilder();
 
         _handler = new AddCommentHandler(
             _ticketRepository.Object,
@@ -49,10 +51,15 @@ public class AddCommentHandlerTests : BaseCommandHandlerTest
     public async Task 正常系_Handle()
     {
         // Arrange
-        var project = _projectBuilder.WithMembers([
-            ProjectMember.Create(Guid.NewGuid(), ProjectRole.Create(ProjectRole.RoleType.ProjectManager)),
-            ProjectMember.Create(Guid.NewGuid(), ProjectRole.Create(ProjectRole.RoleType.Member))
-        ]).Build();
+        var member1 = _projectMemberBuilder
+            .WithUserId(Guid.NewGuid())
+            .WithRole(ProjectRole.RoleType.ProjectManager)
+            .Build();
+        var member2 = _projectMemberBuilder
+            .WithUserId(Guid.NewGuid())
+            .WithRole(ProjectRole.RoleType.Member)
+            .Build();
+        var project = _projectBuilder.WithMembers(member1, member2).Build();
         var ticket = _ticketBuilder.WithProjectId(project.Id).Build();
 
         _ticketRepository

@@ -19,6 +19,7 @@ public class TicketAssignedHandlerTests : BaseEventHandlerTest
     private readonly Mock<IProjectRepository> _projectRepository;
     private readonly TicketBuilder _ticketBuilder;
     private readonly ProjectBuilder _projectBuilder;
+    private readonly ProjectMemberBuilder _projectMemberBuilder;
 
     public TicketAssignedHandlerTests()
     {
@@ -27,6 +28,7 @@ public class TicketAssignedHandlerTests : BaseEventHandlerTest
         _projectRepository = new Mock<IProjectRepository>();
         _ticketBuilder = new TicketBuilder();
         _projectBuilder = new ProjectBuilder();
+        _projectMemberBuilder = new ProjectMemberBuilder();
 
         _handler = new MemberAssignedHandler(
             _notificationFactory,
@@ -41,10 +43,15 @@ public class TicketAssignedHandlerTests : BaseEventHandlerTest
     public async Task 正常系_Handle()
     {
         // Arrange
-        var project = _projectBuilder.WithMembers([
-            new ProjectMember(Guid.NewGuid(), ProjectRole.Create(ProjectRole.RoleType.ProjectManager)),
-            new ProjectMember(Guid.NewGuid(), ProjectRole.Create(ProjectRole.RoleType.Member))
-        ]).Build();
+        var member1 = _projectMemberBuilder
+            .WithUserId(Guid.NewGuid())
+            .WithRole(ProjectRole.RoleType.ProjectManager)
+            .Build();
+        var member2 = _projectMemberBuilder
+            .WithUserId(Guid.NewGuid())
+            .WithRole(ProjectRole.RoleType.Member)
+            .Build();
+        var project = _projectBuilder.WithMembers(member1, member2).Build();
         var ticket = _ticketBuilder
             .WithProjectId(project.Id)
             .WithAssigneeId(project.Members[1].UserId).Build();

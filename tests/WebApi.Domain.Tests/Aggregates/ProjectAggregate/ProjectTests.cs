@@ -1,5 +1,6 @@
 using FluentAssertions;
 using WebApi.Domain.Aggregates.ProjectAggregate;
+using WebApi.Domain.Aggregates.UserAggregate;
 using WebApi.Domain.Common;
 using WebApi.Domain.Tests.Helpers;
 using WebApi.Tests.Helpers.Builders;
@@ -9,11 +10,13 @@ namespace WebApi.Domain.Tests.Aggregates.ProjectAggregate;
 public class ProjectTests : BaseDomainTest
 {
     private readonly ProjectBuilder _projectBuilder;
+    private readonly ProjectMemberBuilder _projectMemberBuilder;
     private readonly UserBuilder _userBuilder;
 
     public ProjectTests()
     {
         _projectBuilder = new ProjectBuilder();
+        _projectMemberBuilder = new ProjectMemberBuilder();
         _userBuilder = new UserBuilder();
     }
 
@@ -95,12 +98,12 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var result = _projectBuilder.Build();
-        result.InviteMember(user.Id, role);
+        result.InviteMember(user.Id, role, UserContext.Id);
 
         // Assert
-        var member = ProjectMember.Create(user.Id, ProjectRole.Create(role));
         result.Members.Count.Should().Be(1);
-        result.Members[0].Should().Be(member);
+        result.Members[0].UserId.Should().Be(user.Id);
+        result.Members[0].Role.Value.Should().Be(role);
     }
 
     [Fact]
@@ -109,12 +112,14 @@ public class ProjectTests : BaseDomainTest
         // Arrange
         var user = _userBuilder.Build();
         var role = ProjectRole.Create(ProjectRole.RoleType.Member);
-        var project = _projectBuilder
-            .WithMembers(ProjectMember.Create(user.Id, role))
+        var member = _projectMemberBuilder
+            .WithUserId(user.Id)
+            .WithRole(role.Value)
             .Build();
+        var project = _projectBuilder.WithMembers(member).Build();
 
         // Act
-        var act = () => project.InviteMember(user.Id, role.Value);
+        var act = () => project.InviteMember(user.Id, role.Value, UserContext.Id);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -127,9 +132,11 @@ public class ProjectTests : BaseDomainTest
         // Arrange
         var user = _userBuilder.Build();
         var role = ProjectRole.Create(ProjectRole.RoleType.Member);
-        var result = _projectBuilder
-            .WithMembers(ProjectMember.Create(user.Id, role))
+        var member = _projectMemberBuilder
+            .WithUserId(user.Id)
+            .WithRole(role.Value)
             .Build();
+        var result = _projectBuilder.WithMembers(member).Build();
 
         // Act
         result.RemoveMember(user.Id);
@@ -158,18 +165,19 @@ public class ProjectTests : BaseDomainTest
         // Arrange
         var user = _userBuilder.Build();
         var role = ProjectRole.Create(ProjectRole.RoleType.Member);
-        var result = _projectBuilder
-            .WithMembers(ProjectMember.Create(user.Id, role))
+        var member = _projectMemberBuilder
+            .WithUserId(user.Id)
+            .WithRole(role.Value)
             .Build();
+        var result = _projectBuilder.WithMembers(member).Build();
 
         // Act
         var newRole = ProjectRole.RoleType.ProjectManager;
-        result.ChangeMemberRole(user.Id, newRole);
+        result.ChangeMemberRole(user.Id, newRole, UserContext.Id);
 
         // Assert
-        var member = ProjectMember.Create(user.Id, ProjectRole.Create(newRole));
         result.Members.Count.Should().Be(1);
-        result.Members[0].Should().Be(member);
+        result.Members[0].Role.Value.Should().Be(newRole);
     }
 
     [Fact]
@@ -180,7 +188,7 @@ public class ProjectTests : BaseDomainTest
         var role = ProjectRole.RoleType.Member;
 
         // Act
-        var act = () => project.ChangeMemberRole(Guid.NewGuid(), role);
+        var act = () => project.ChangeMemberRole(Guid.NewGuid(), role, UserContext.Id);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -193,9 +201,11 @@ public class ProjectTests : BaseDomainTest
         // Arrange
         var user = _userBuilder.Build();
         var role = ProjectRole.Create(ProjectRole.RoleType.Member);
-        var project = _projectBuilder
-            .WithMembers(ProjectMember.Create(user.Id, role))
+        var member = _projectMemberBuilder
+            .WithUserId(user.Id)
+            .WithRole(role.Value)
             .Build();
+        var project = _projectBuilder.WithMembers(member).Build();
 
         // Act
         var act = () => project.EnsureMember(user.Id);

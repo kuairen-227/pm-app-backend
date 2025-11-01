@@ -54,10 +54,10 @@ public class RegisterUserHandlerTests : BaseCommandHandlerTest
         capturedUser.Name.Should().Be(user.Name);
         capturedUser.Email.Should().Be(user.Email);
         capturedUser.Role.Should().Be(user.Role);
-        capturedUser.CreatedBy.Should().Be(UserContext.Object.Id);
-        capturedUser.CreatedAt.Should().Be(Clock.Now);
-        capturedUser.UpdatedBy.Should().Be(UserContext.Object.Id);
-        capturedUser.UpdatedAt.Should().Be(Clock.Now);
+        capturedUser.AuditInfo.CreatedBy.Should().Be(UserContext.Object.Id);
+        capturedUser.AuditInfo.CreatedAt.Should().Be(Clock.Now);
+        capturedUser.AuditInfo.UpdatedBy.Should().Be(UserContext.Object.Id);
+        capturedUser.AuditInfo.UpdatedAt.Should().Be(Clock.Now);
 
         _userRepository.Verify(x => x.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Once);
         UnitOfWork.Verify(x => x.SaveChangesAsync(

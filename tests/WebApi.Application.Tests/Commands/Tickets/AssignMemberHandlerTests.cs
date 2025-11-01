@@ -22,6 +22,7 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
     private readonly TicketBuilder _ticketBuilder;
     private readonly UserBuilder _userBuilder;
     private readonly ProjectBuilder _projectBuilder;
+    private readonly ProjectMemberBuilder _projectMemberBuilder;
 
     public AssignMemberHandlerTests()
     {
@@ -31,6 +32,7 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
         _ticketBuilder = new TicketBuilder();
         _userBuilder = new UserBuilder();
         _projectBuilder = new ProjectBuilder();
+        _projectMemberBuilder = new ProjectMemberBuilder();
 
         _handler = new AssignMemberHandler(
             _ticketRepository.Object,
@@ -49,11 +51,11 @@ public class AssignMemberHandlerTests : BaseCommandHandlerTest
         // Arrange
         var ticket = _ticketBuilder.Build();
         var user = _userBuilder.Build();
-        var project = _projectBuilder
-            .WithMembers(ProjectMember.Create(
-                user.Id, ProjectRole.Create(ProjectRole.RoleType.Member)
-            ))
+        var member = _projectMemberBuilder
+            .WithUserId(user.Id)
+            .WithRole(ProjectRole.RoleType.Member)
             .Build();
+        var project = _projectBuilder.WithMembers(member).Build();
 
         _ticketRepository
             .Setup(x => x.GetByIdAsync(ticket.Id, It.IsAny<CancellationToken>()))

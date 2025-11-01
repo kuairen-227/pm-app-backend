@@ -52,8 +52,8 @@ public class UpdateProjectHandlerTests : BaseCommandHandlerTest
         result.Should().Be(Unit.Value);
         project.Name.Should().Be(command.Name);
         project.Description.Should().Be(command.Description);
-        project.UpdatedBy.Should().Be(UserContext.Object.Id);
-        project.UpdatedAt.Should().Be(Clock.Now);
+        project.AuditInfo.UpdatedBy.Should().Be(UserContext.Object.Id);
+        project.AuditInfo.UpdatedAt.Should().Be(Clock.Now);
 
         UnitOfWork.Verify(x => x.SaveChangesAsync(
             It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),

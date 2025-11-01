@@ -18,6 +18,7 @@ public class ChangeMemberRoleHandlerTests : BaseCommandHandlerTest
     private readonly Mock<IProjectRepository> _projectRepository;
     private readonly Mock<IUserRepository> _userRepository;
     private readonly ProjectBuilder _projectBuilder;
+    private readonly ProjectMemberBuilder _projectMemberBuilder;
     private readonly UserBuilder _userBuilder;
 
     public ChangeMemberRoleHandlerTests()
@@ -25,6 +26,7 @@ public class ChangeMemberRoleHandlerTests : BaseCommandHandlerTest
         _projectRepository = new Mock<IProjectRepository>();
         _userRepository = new Mock<IUserRepository>();
         _projectBuilder = new ProjectBuilder();
+        _projectMemberBuilder = new ProjectMemberBuilder();
         _userBuilder = new UserBuilder();
 
         _handler = new ChangeMemberRoleHandler(
@@ -42,8 +44,12 @@ public class ChangeMemberRoleHandlerTests : BaseCommandHandlerTest
     {
         // Arrange
         var user = _userBuilder.Build();
+        var member = _projectMemberBuilder
+            .WithUserId(user.Id)
+            .WithRole(ProjectRole.RoleType.Member)
+            .Build();
         var project = _projectBuilder
-            .WithMembers(ProjectMember.Create(user.Id, ProjectRole.Create(ProjectRole.RoleType.Member)))
+            .WithMembers(member)
             .Build();
 
         _projectRepository

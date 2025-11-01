@@ -22,6 +22,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
     private readonly TicketNotificationFactory _notificationFactory;
     private readonly TicketBuilder _ticketBuilder;
     private readonly ProjectBuilder _projectBuilder;
+    private readonly ProjectMemberBuilder _projectMemberBuilder;
 
     public CreateTicketHandlerTests()
     {
@@ -31,6 +32,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         _notificationFactory = new TicketNotificationFactory(Clock);
         _ticketBuilder = new TicketBuilder();
         _projectBuilder = new ProjectBuilder();
+        _projectMemberBuilder = new ProjectMemberBuilder();
 
         _handler = new CreateTicketHandler(
             _ticketRepository.Object,
@@ -48,10 +50,15 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
     public async Task 正常系_Handle()
     {
         // Arrange
-        var project = _projectBuilder.WithMembers([
-            ProjectMember.Create(Guid.NewGuid(), ProjectRole.Create(ProjectRole.RoleType.ProjectManager)),
-            ProjectMember.Create(Guid.NewGuid(), ProjectRole.Create(ProjectRole.RoleType.Member))
-        ]).Build();
+        var member1 = _projectMemberBuilder
+            .WithUserId(Guid.NewGuid())
+            .WithRole(ProjectRole.RoleType.ProjectManager)
+            .Build();
+        var member2 = _projectMemberBuilder
+            .WithUserId(Guid.NewGuid())
+            .WithRole(ProjectRole.RoleType.Member)
+            .Build();
+        var project = _projectBuilder.WithMembers(member1, member2).Build();
         var ticket = _ticketBuilder.WithProjectId(project.Id).Build();
 
         Ticket? capturedTicket = null;
@@ -90,10 +97,10 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         capturedTicket.Deadline.Should().Be(ticket.Deadline);
         capturedTicket.Status.Should().Be(ticket.Status);
         capturedTicket.CompletionCriteria.Should().Be(ticket.CompletionCriteria);
-        capturedTicket.CreatedBy.Should().Be(UserContext.Object.Id);
-        capturedTicket.CreatedAt.Should().Be(Clock.Now);
-        capturedTicket.UpdatedBy.Should().Be(UserContext.Object.Id);
-        capturedTicket.UpdatedAt.Should().Be(Clock.Now);
+        capturedTicket.AuditInfo.CreatedBy.Should().Be(UserContext.Object.Id);
+        capturedTicket.AuditInfo.CreatedAt.Should().Be(Clock.Now);
+        capturedTicket.AuditInfo.UpdatedBy.Should().Be(UserContext.Object.Id);
+        capturedTicket.AuditInfo.UpdatedAt.Should().Be(Clock.Now);
         _ticketRepository.Verify(x => x.AddAsync(It.IsAny<Ticket>(), It.IsAny<CancellationToken>()), Times.Once);
 
         for (int i = 0; i < project.Members.Count; i++)

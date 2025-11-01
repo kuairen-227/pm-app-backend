@@ -23,6 +23,7 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
     private readonly TicketNotificationFactory _notificationFactory;
     private readonly TicketBuilder _ticketBuilder;
     private readonly ProjectBuilder _projectBuilder;
+    private readonly ProjectMemberBuilder _projectMemberBuilder;
 
     public ChangeDeadlineHandlerTests()
     {
@@ -32,6 +33,7 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
         _notificationFactory = new TicketNotificationFactory(Clock);
         _ticketBuilder = new TicketBuilder();
         _projectBuilder = new ProjectBuilder();
+        _projectMemberBuilder = new ProjectMemberBuilder();
 
         _handler = new ChangeDeadlineHandler(
             _ticketRepository.Object,
@@ -51,10 +53,15 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
     public async Task 正常系_Handle(bool useDeadline)
     {
         // Arrange
-        var project = _projectBuilder.WithMembers([
-            ProjectMember.Create(Guid.NewGuid(), ProjectRole.Create(ProjectRole.RoleType.ProjectManager)),
-            ProjectMember.Create(Guid.NewGuid(), ProjectRole.Create(ProjectRole.RoleType.Member))
-        ]).Build();
+        var member1 = _projectMemberBuilder
+            .WithUserId(Guid.NewGuid())
+            .WithRole(ProjectRole.RoleType.ProjectManager)
+            .Build();
+        var member2 = _projectMemberBuilder
+            .WithUserId(Guid.NewGuid())
+            .WithRole(ProjectRole.RoleType.Member)
+            .Build();
+        var project = _projectBuilder.WithMembers(member1, member2).Build();
         var ticket = _ticketBuilder.WithProjectId(project.Id).Build();
         DateOnly? deadline = useDeadline ? Clock.Today.AddDays(1) : null;
 
@@ -84,8 +91,8 @@ public class ChangeDeadlineHandlerTests : BaseCommandHandlerTest
         // Assert
         result.Should().Be(Unit.Value);
         ticket.Deadline?.Value.Should().Be(command.Deadline);
-        ticket.UpdatedBy.Should().Be(UserContext.Object.Id);
-        ticket.UpdatedAt.Should().Be(Clock.Now);
+        ticket.AuditInfo.UpdatedBy.Should().Be(UserContext.Object.Id);
+        ticket.AuditInfo.UpdatedAt.Should().Be(Clock.Now);
 
         for (int i = 0; i < project.Members.Count; i++)
         {

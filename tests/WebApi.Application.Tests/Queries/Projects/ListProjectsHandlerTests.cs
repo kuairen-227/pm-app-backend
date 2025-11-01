@@ -37,10 +37,10 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
                     Id = p.Id,
                     Name = p.Name,
                     Description = p.Description,
-                    CreatedBy = p.CreatedBy,
-                    CreatedAt = p.CreatedAt,
-                    UpdatedBy = p.UpdatedBy,
-                    UpdatedAt = p.UpdatedAt,
+                    CreatedBy = p.AuditInfo.CreatedBy,
+                    CreatedAt = p.AuditInfo.CreatedAt,
+                    UpdatedBy = p.AuditInfo.UpdatedBy,
+                    UpdatedAt = p.AuditInfo.UpdatedAt,
                 }));
 
         _handler = new ListProjectsHandler(
@@ -85,10 +85,10 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
             result.ElementAt(i).Id.Should().Be(projects[i].Id);
             result.ElementAt(i).Name.Should().Be(projects[i].Name);
             result.ElementAt(i).Description.Should().Be(projects[i].Description);
-            result.ElementAt(i).CreatedBy.Should().Be(projects[i].CreatedBy);
-            result.ElementAt(i).CreatedAt.Should().Be(projects[i].CreatedAt);
-            result.ElementAt(i).UpdatedBy.Should().Be(projects[i].UpdatedBy);
-            result.ElementAt(i).UpdatedAt.Should().Be(projects[i].UpdatedAt);
+            result.ElementAt(i).CreatedBy.Should().Be(projects[i].AuditInfo.CreatedBy);
+            result.ElementAt(i).CreatedAt.Should().Be(projects[i].AuditInfo.CreatedAt);
+            result.ElementAt(i).UpdatedBy.Should().Be(projects[i].AuditInfo.UpdatedBy);
+            result.ElementAt(i).UpdatedAt.Should().Be(projects[i].AuditInfo.UpdatedAt);
         }
 
         _projectRepository.Verify(x => x.ListAllAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -126,10 +126,10 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
         result.ElementAt(0).Id.Should().Be(projects[0].Id);
         result.ElementAt(0).Name.Should().Be(projects[0].Name);
         result.ElementAt(0).Description.Should().Be(projects[0].Description);
-        result.ElementAt(0).CreatedBy.Should().Be(projects[0].CreatedBy);
-        result.ElementAt(0).CreatedAt.Should().Be(projects[0].CreatedAt);
-        result.ElementAt(0).UpdatedBy.Should().Be(projects[0].UpdatedBy);
-        result.ElementAt(0).UpdatedAt.Should().Be(projects[0].UpdatedAt);
+        result.ElementAt(0).CreatedBy.Should().Be(projects[0].AuditInfo.CreatedBy);
+        result.ElementAt(0).CreatedAt.Should().Be(projects[0].AuditInfo.CreatedAt);
+        result.ElementAt(0).UpdatedBy.Should().Be(projects[0].AuditInfo.UpdatedBy);
+        result.ElementAt(0).UpdatedAt.Should().Be(projects[0].AuditInfo.UpdatedAt);
 
         _projectRepository.Verify(x => x.ListAllAsync(It.IsAny<CancellationToken>()), Times.Never);
         _projectRepository.Verify(x => x.ListByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Once);
