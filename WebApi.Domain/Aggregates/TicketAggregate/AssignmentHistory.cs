@@ -1,3 +1,4 @@
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.TicketAggregate;
@@ -10,20 +11,24 @@ public sealed class AssignmentHistory : ValueObject
     public Guid? AssigneeId { get; private set; }
     public Guid? PreviousAssigneeId { get; private set; }
     public DateTime ChangedAt { get; private set; }
+    public AuditInfo AuditInfo { get; private set; }  // DB 用の監査情報
 
     private AssignmentHistory(
         AssignmentChangeType changeType,
         Guid? assigneeId,
         Guid? previousAssigneeId,
-        DateTime changedAt)
+        Guid createdBy,
+        IDateTimeProvider clock)
     {
         ChangeType = changeType;
         AssigneeId = assigneeId;
         PreviousAssigneeId = previousAssigneeId;
-        ChangedAt = changedAt;
+        ChangedAt = clock.Now;
+        AuditInfo = new AuditInfo(createdBy, clock);
     }
 
-    public static AssignmentHistory Assigned(Guid assigneeId, DateTime assignedAt)
+    public static AssignmentHistory Assigned(
+        Guid assigneeId, Guid assignedBy, IDateTimeProvider clock)
     {
         if (assigneeId == Guid.Empty)
             throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
@@ -32,10 +37,12 @@ public sealed class AssignmentHistory : ValueObject
             AssignmentChangeType.Assigned,
             assigneeId,
             null,
-            assignedAt);
+            assignedBy,
+            clock);
     }
 
-    public static AssignmentHistory Changed(Guid assigneeId, Guid previousAssigneeId, DateTime changedAt)
+    public static AssignmentHistory Changed(
+        Guid assigneeId, Guid previousAssigneeId, Guid changedBy, IDateTimeProvider clock)
     {
         if (assigneeId == Guid.Empty)
             throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
@@ -46,10 +53,12 @@ public sealed class AssignmentHistory : ValueObject
             AssignmentChangeType.Changed,
             assigneeId,
             previousAssigneeId,
-            changedAt);
+            changedBy,
+            clock);
     }
 
-    public static AssignmentHistory Unassigned(Guid previousAssigneeId, DateTime unassignedAt)
+    public static AssignmentHistory Unassigned(
+        Guid previousAssigneeId, Guid changedBy, IDateTimeProvider clock)
     {
         if (previousAssigneeId == Guid.Empty)
             throw new DomainException("PREVIOUS_ASSIGNEE_ID_REQUIRED", "Previous Assignee ID は必須です");
@@ -58,7 +67,8 @@ public sealed class AssignmentHistory : ValueObject
             AssignmentChangeType.Unassigned,
             null,
             previousAssigneeId,
-            unassignedAt);
+            changedBy,
+            clock);
     }
 
     protected override IEnumerable<object?> GetEqualityComponents()

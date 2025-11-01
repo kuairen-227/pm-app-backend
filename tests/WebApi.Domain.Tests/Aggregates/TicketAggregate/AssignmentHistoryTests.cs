@@ -1,16 +1,17 @@
 using FluentAssertions;
 using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Common;
+using WebApi.Domain.Tests.Helpers;
 
 namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 
-public class AssignmentHistoryTests
+public class AssignmentHistoryTests : BaseDomainTest
 {
     [Fact]
     public void 正常系_Assigned()
     {
         // Arrange & Act
-        var result = AssignmentHistory.Assigned(Guid.NewGuid(), DateTime.UtcNow);
+        var result = AssignmentHistory.Assigned(Guid.NewGuid(), Guid.NewGuid(), Clock);
 
         // Assert
         result.Should().NotBeNull();
@@ -23,7 +24,7 @@ public class AssignmentHistoryTests
     public void 異常系_Assigned_AssigneeIdが空の場合()
     {
         // Arrange & Act
-        var act = () => AssignmentHistory.Assigned(Guid.Empty, DateTime.UtcNow);
+        var act = () => AssignmentHistory.Assigned(Guid.Empty, Guid.NewGuid(), Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -34,7 +35,7 @@ public class AssignmentHistoryTests
     public void 正常系_Changed()
     {
         // Arrange & Act
-        var result = AssignmentHistory.Changed(Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+        var result = AssignmentHistory.Changed(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Clock);
 
         // Assert
         result.Should().NotBeNull();
@@ -47,7 +48,7 @@ public class AssignmentHistoryTests
     public void 異常系_Changed_AssigneeIdが空の場合()
     {
         // Arrange & Act
-        var act = () => AssignmentHistory.Changed(Guid.Empty, Guid.NewGuid(), DateTime.UtcNow);
+        var act = () => AssignmentHistory.Changed(Guid.Empty, Guid.NewGuid(), Guid.NewGuid(), Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -58,7 +59,7 @@ public class AssignmentHistoryTests
     public void 異常系_Changed_PreviousAssigneeIdが空の場合()
     {
         // Arrange & Act
-        var act = () => AssignmentHistory.Changed(Guid.NewGuid(), Guid.Empty, DateTime.UtcNow);
+        var act = () => AssignmentHistory.Changed(Guid.NewGuid(), Guid.Empty, Guid.NewGuid(), Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -69,7 +70,7 @@ public class AssignmentHistoryTests
     public void 正常系_Unassigned()
     {
         // Arrange & Act
-        var result = AssignmentHistory.Unassigned(Guid.NewGuid(), DateTime.UtcNow);
+        var result = AssignmentHistory.Unassigned(Guid.NewGuid(), Guid.NewGuid(), Clock);
 
         // Assert
         result.Should().NotBeNull();
@@ -82,7 +83,7 @@ public class AssignmentHistoryTests
     public void 異常系_Unassigned_PreviousAssigneeIdが空の場合()
     {
         // Arrange & Act
-        var act = () => AssignmentHistory.Unassigned(Guid.Empty, DateTime.UtcNow);
+        var act = () => AssignmentHistory.Unassigned(Guid.Empty, Guid.NewGuid(), Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -97,8 +98,8 @@ public class AssignmentHistoryTests
         var assignedAt = DateTime.UtcNow;
 
         // Act
-        var result1 = AssignmentHistory.Assigned(assigneeId, assignedAt);
-        var result2 = AssignmentHistory.Assigned(assigneeId, assignedAt);
+        var result1 = AssignmentHistory.Assigned(assigneeId, Guid.NewGuid(), Clock);
+        var result2 = AssignmentHistory.Assigned(assigneeId, Guid.NewGuid(), Clock);
 
         // Assert
         result1.Should().Be(result2);
@@ -110,8 +111,8 @@ public class AssignmentHistoryTests
     public void 正常系_値が異なる場合()
     {
         // Arrange & Act
-        var result1 = AssignmentHistory.Assigned(Guid.NewGuid(), DateTime.UtcNow);
-        var result2 = AssignmentHistory.Assigned(Guid.NewGuid(), DateTime.UtcNow.AddMinutes(1));
+        var result1 = AssignmentHistory.Assigned(Guid.NewGuid(), Guid.NewGuid(), Clock);
+        var result2 = AssignmentHistory.Assigned(Guid.NewGuid(), Guid.NewGuid(), Clock);
 
         // Assert
         result1.Should().NotBe(result2);

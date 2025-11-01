@@ -58,11 +58,11 @@ public sealed class Ticket : Entity
         AssignmentHistory history;
         if (AssigneeId is null)
         {
-            history = AssignmentHistory.Assigned(assigneeId, _clock.Now);
+            history = AssignmentHistory.Assigned(assigneeId, updatedBy, _clock);
         }
         else
         {
-            history = AssignmentHistory.Changed(assigneeId, AssigneeId.Value, _clock.Now);
+            history = AssignmentHistory.Changed(assigneeId, AssigneeId.Value, updatedBy, _clock);
         }
 
         _assignmentHistories.Add(history);
@@ -79,7 +79,7 @@ public sealed class Ticket : Entity
         if (AssigneeId is null)
             throw new DomainException("NOT_ASSIGNED", "現在割り当てられていません");
 
-        var history = AssignmentHistory.Unassigned(AssigneeId.Value, _clock.Now);
+        var history = AssignmentHistory.Unassigned(AssigneeId.Value, updatedBy, _clock);
         _assignmentHistories.Add(history);
         AssigneeId = null;
 
