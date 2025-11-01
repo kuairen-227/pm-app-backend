@@ -5,10 +5,7 @@ namespace WebApi.Domain.Common;
 public abstract class Entity
 {
     public Guid Id { get; protected set; } = Guid.NewGuid();
-    public Guid CreatedBy { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public Guid UpdatedBy { get; private set; }
-    public DateTime UpdatedAt { get; private set; }
+    public AuditInfo AuditInfo { get; protected set; } = null!;
 
     private readonly List<IDomainEvent> _domainEvents = new();
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
@@ -19,17 +16,13 @@ public abstract class Entity
 
     protected Entity(Guid createdBy, IDateTimeProvider clock)
     {
-        CreatedBy = createdBy;
-        CreatedAt = clock.Now;
-        UpdatedBy = createdBy;
-        UpdatedAt = clock.Now;
+        AuditInfo = new AuditInfo(createdBy, clock);
         _clock = clock;
     }
 
     public void UpdateAuditInfo(Guid updatedBy)
     {
-        UpdatedBy = updatedBy;
-        UpdatedAt = _clock.Now;
+        AuditInfo.Touch(updatedBy, _clock);
     }
 
     public void AddDomainEvent(IDomainEvent domainEvent)
