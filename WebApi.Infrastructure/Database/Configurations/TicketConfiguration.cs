@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Aggregates.UserAggregate;
+using WebApi.Infrastructure.Database.Configurations.Extensions;
 
 namespace WebApi.Infrastructure.Database.Configurations;
 
@@ -30,16 +31,28 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
                 .IsRequired();
         });
 
+        builder.OwnsOne(n => n.AuditInfo, a =>
+        {
+            a.OwnsAuditInfo();
+        });
+
         builder.OwnsMany(t => t.Comments, comment =>
         {
             comment.ToTable("ticket_comments");
+            comment.OwnsOne(c => c.AuditInfo, a =>
+            {
+                a.OwnsAuditInfo();
+            });
         });
 
         builder.OwnsMany(t => t.AssignmentHistories, history =>
         {
             history.ToTable("assignment_histories");
             history.Property(h => h.Id).ValueGeneratedOnAdd();
-            history.HasKey(h => h.Id);
+            history.OwnsOne(h => h.AuditInfo, a =>
+            {
+                a.OwnsAuditInfo();
+            });
         });
 
         builder.HasOne<User>()
