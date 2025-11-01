@@ -5,7 +5,9 @@ namespace WebApi.Domain.Aggregates.ProjectAggregate;
 public sealed class ProjectMember : ValueObject
 {
     public Guid UserId { get; }
-    public ProjectRole Role { get; }
+    public ProjectRole Role { get; } = null!;
+
+    private ProjectMember() { } // EF Core 用
 
     public ProjectMember(Guid userId, ProjectRole role)
     {

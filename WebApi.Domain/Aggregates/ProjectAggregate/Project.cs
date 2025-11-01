@@ -6,11 +6,13 @@ namespace WebApi.Domain.Aggregates.ProjectAggregate;
 
 public sealed class Project : Entity
 {
-    public string Name { get; private set; }
+    public string Name { get; private set; } = null!;
     public string? Description { get; private set; }
 
     private readonly List<ProjectMember> _members = new();
     public IReadOnlyList<ProjectMember> Members => _members.AsReadOnly();
+
+    private Project() { } // EF Core 用
 
     public Project(
         string name, string? description, Guid createdBy, IDateTimeProvider clock)
