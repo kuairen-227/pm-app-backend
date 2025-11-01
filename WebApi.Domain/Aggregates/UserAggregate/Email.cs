@@ -5,7 +5,9 @@ namespace WebApi.Domain.Aggregates.UserAggregate;
 
 public sealed class Email : ValueObject
 {
-    public string Value { get; }
+    public string Value { get; } = null!;
+
+    private Email() { } // EF Core 用
 
     private Email(string value)
     {

@@ -7,6 +7,8 @@ public sealed class Deadline : ValueObject
 {
     public DateOnly Value { get; }
 
+    private Deadline() { } // EF Core 用
+
     private Deadline(DateOnly value, bool checkPast, DateOnly today)
     {
         if (checkPast && value <= today)

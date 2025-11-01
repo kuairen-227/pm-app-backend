@@ -6,6 +6,8 @@ public sealed class NotificationCategory : ValueObject
 {
     public Category Value { get; }
 
+    private NotificationCategory() { } // EF Core 用
+
     private NotificationCategory(Category value)
     {
         Value = value;

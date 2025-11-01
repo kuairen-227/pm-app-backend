@@ -7,6 +7,8 @@ public sealed class ProjectRole : ValueObject
     public enum RoleType { ProjectManager, Member }
     public RoleType Value { get; }
 
+    private ProjectRole() { } // EF Core 用
+
     private ProjectRole(RoleType value)
     {
         Value = value;

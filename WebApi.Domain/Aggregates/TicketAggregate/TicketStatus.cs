@@ -7,6 +7,8 @@ public sealed class TicketStatus : ValueObject
     public enum StatusType { Todo, InProgress, Resolved, Done }
     public StatusType Value { get; }
 
+    private TicketStatus() { } // EF Core 用
+
     private TicketStatus(StatusType value)
     {
         Value = value;

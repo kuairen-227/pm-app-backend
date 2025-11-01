@@ -4,7 +4,9 @@ namespace WebApi.Domain.Aggregates.TicketAggregate;
 
 public sealed class TicketTitle : ValueObject
 {
-    public string Value { get; }
+    public string Value { get; } = null!;
+
+    private TicketTitle() { } // EF Core 用
 
     private TicketTitle(string value)
     {

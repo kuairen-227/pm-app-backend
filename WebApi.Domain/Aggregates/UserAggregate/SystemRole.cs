@@ -7,6 +7,8 @@ public sealed class SystemRole : ValueObject
     public enum RoleType { Admin, User }
     public RoleType Value { get; }
 
+    private SystemRole() { } // EF Core 用
+
     private SystemRole(RoleType value)
     {
         Value = value;
