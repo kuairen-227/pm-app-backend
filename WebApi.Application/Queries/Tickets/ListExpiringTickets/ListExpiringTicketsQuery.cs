@@ -14,6 +14,6 @@ public class ListExpiringTicketsQuery : IRequest<IEnumerable<TicketDto>>
     public ListExpiringTicketsQuery(Guid userId, TimeSpan? dueWithin = null)
     {
         UserId = userId;
-        DueWithin = dueWithin ?? TimeSpan.FromDays(7);
+        DueWithin = dueWithin;
     }
 }

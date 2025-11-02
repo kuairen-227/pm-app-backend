@@ -18,8 +18,10 @@ public class ListExpiringTicketsHandler : IRequestHandler<ListExpiringTicketsQue
 
     public async Task<IEnumerable<TicketDto>> Handle(ListExpiringTicketsQuery request, CancellationToken cancellationToken)
     {
+        var dueWithin = request.DueWithin ?? TimeSpan.FromDays(7);
+
         var tickets = await _ticketRepository.ListExpiringTicketsByAssigneeIdAsync(
-            request.UserId, request.DueWithin, cancellationToken);
+            request.UserId, dueWithin, cancellationToken);
         return _mapper.Map<IEnumerable<TicketDto>>(tickets);
     }
 }
