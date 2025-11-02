@@ -24,6 +24,15 @@ public static class DependencyInjection
         // DateTimeProvider
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
+        // Repositories
+        services.Scan(scan => scan
+            .FromApplicationDependencies()
+            .AddClasses(c => c
+                .InNamespaces("WebApi.Infrastructure.Repositories")
+                .Where(type => type.Name.EndsWith("Repository")))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
+
         return services;
     }
 }
