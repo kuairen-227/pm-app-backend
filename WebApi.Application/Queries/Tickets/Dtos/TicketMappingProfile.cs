@@ -3,9 +3,9 @@ using WebApi.Domain.Aggregates.TicketAggregate;
 
 namespace WebApi.Application.Queries.Tickets.Dtos;
 
-public class TicketDetailMappingProfile : Profile
+public class TicketMappingProfile : Profile
 {
-    public TicketDetailMappingProfile()
+    public TicketMappingProfile()
     {
         CreateMap<Ticket, TicketBaseDto>()
             .Include<Ticket, TicketDto>()
