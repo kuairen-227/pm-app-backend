@@ -11,7 +11,7 @@ public interface ITicketRepository
         CancellationToken cancellationToken = default);
     Task<IEnumerable<Ticket>> ListByAssigneeIdAsync(Guid assigneeId, CancellationToken cancellationToken = default);
     Task<IEnumerable<Ticket>> ListExpiringTicketsByAssigneeIdAsync(
-        Guid assigneeId, TimeSpan? dueWithin, CancellationToken cancellationToken = default);
+        Guid assigneeId, TimeSpan dueWithin, CancellationToken cancellationToken = default);
     Task<Ticket?> GetByIdAsync(Guid ticketId, CancellationToken cancellationToken = default);
     Task AddAsync(Ticket ticket, CancellationToken cancellationToken = default);
     Task DeleteAsync(Ticket ticket, CancellationToken cancellationToken = default);
