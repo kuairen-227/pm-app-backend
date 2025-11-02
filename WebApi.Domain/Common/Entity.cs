@@ -2,7 +2,7 @@ using WebApi.Domain.Abstractions;
 
 namespace WebApi.Domain.Common;
 
-public abstract class Entity
+public abstract class Entity : IHasDomainEvents
 {
     public Guid Id { get; protected set; } = Guid.NewGuid();
     public AuditInfo AuditInfo { get; protected set; } = null!;
