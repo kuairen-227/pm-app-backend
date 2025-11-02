@@ -17,21 +17,26 @@ public class UnitOfWork : IUnitOfWork
         CancellationToken cancellationToken = default
     )
     {
-        var domainEvents = _dbContext.ChangeTracker
-            .Entries<IHasDomainEvents>()
+        // 1. 永続化
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        // 2. ドメインイベント発行
+        var entries = _dbContext.ChangeTracker.Entries<IHasDomainEvents>().ToList();
+        if (entries.Count == 0) return;
+
+        var domainEvents = entries
             .SelectMany(e => e.Entity.DomainEvents)
             .ToList();
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        if (domainEvents.Count == 0) return;
 
         foreach (var domainEvent in domainEvents)
         {
             await domainEventPublisher.PublishAsync(domainEvent, cancellationToken);
         }
 
-        foreach (var entity in _dbContext.ChangeTracker.Entries<IHasDomainEvents>())
+        foreach (var entry in entries)
         {
-            entity.Entity.ClearDomainEvents();
+            entry.Entity.ClearDomainEvents();
         }
     }
 }
