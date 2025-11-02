@@ -6,7 +6,7 @@ using WebApi.Application.Queries.Projects.Dtos;
 namespace WebApi.Application.Queries.Projects.GetProjectById;
 
 [RequiresPermission(ProjectPermissions.View)]
-public class GetProjectByIdQuery : IRequest<ProjectDto>, IProjectScopedRequest
+public class GetProjectByIdQuery : IRequest<ProjectDetailDto>, IProjectScopedRequest
 {
     public Guid ProjectId { get; }
 

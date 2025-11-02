@@ -7,7 +7,7 @@ using WebApi.Domain.Aggregates.ProjectAggregate;
 
 namespace WebApi.Application.Queries.Projects.GetProjectById;
 
-public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, ProjectDto>
+public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, ProjectDetailDto>
 {
     private readonly IProjectRepository _projectRepository;
     private readonly IMapper _mapper;
@@ -18,11 +18,11 @@ public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, Projec
         _mapper = mapper;
     }
 
-    public async Task<ProjectDto> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
+    public async Task<ProjectDetailDto> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
     {
         var project = await _projectRepository.GetByIdAsync(request.ProjectId, cancellationToken)
             ?? throw new NotFoundException(nameof(Project), request.ProjectId);
 
-        return _mapper.Map<ProjectDto>(project);
+        return _mapper.Map<ProjectDetailDto>(project);
     }
 }

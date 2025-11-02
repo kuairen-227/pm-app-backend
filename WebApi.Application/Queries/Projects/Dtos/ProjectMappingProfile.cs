@@ -8,5 +8,7 @@ public class ProjectMappingProfile : Profile
     public ProjectMappingProfile()
     {
         CreateMap<Project, ProjectDto>();
+
+        CreateMap<ProjectMember, ProjectMemberDto>();
     }
 }
