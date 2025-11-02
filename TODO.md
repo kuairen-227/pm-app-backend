@@ -1,1 +1,3 @@
-- Repository の実装
+- MappingProfile の見直し
+- 存在チェックのために単体取得で Include したデータを返すべきなのか？
+- Repository のテスト
