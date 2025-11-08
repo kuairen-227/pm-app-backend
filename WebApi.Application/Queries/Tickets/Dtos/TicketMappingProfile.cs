@@ -7,8 +7,7 @@ public class TicketMappingProfile : Profile
 {
     public TicketMappingProfile()
     {
-        CreateMap<Ticket, TicketBaseDto>()
-            .Include<Ticket, TicketDto>()
+        CreateMap<Ticket, TicketDto>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Value.ToString()))
             .ForMember(dest => dest.Deadline,
                 opt => opt.MapFrom(src => src.Deadline != null ? src.Deadline.Value : (DateOnly?)null));
