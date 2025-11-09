@@ -5,7 +5,6 @@ using WebApi.Application.Abstractions;
 using WebApi.Application.Commands.Notifications.MarkNotificationAsRead;
 using WebApi.Application.Common;
 using WebApi.Application.Tests.Helpers.Common;
-using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.NotificationAggregate;
 using WebApi.Tests.Helpers.Builders;
