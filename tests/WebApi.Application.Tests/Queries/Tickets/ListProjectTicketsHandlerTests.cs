@@ -35,6 +35,10 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
                     Deadline = t.Deadline?.Value,
                     Status = t.Status.Value.ToString(),
                     CompletionCriteria = t.CompletionCriteria,
+                    CreatedBy = t.AuditInfo.CreatedBy,
+                    CreatedAt = t.AuditInfo.CreatedAt,
+                    UpdatedBy = t.AuditInfo.UpdatedBy,
+                    UpdatedAt = t.AuditInfo.UpdatedAt
                 }).ToList());
 
         _handler = new ListProjectTicketsHandler(

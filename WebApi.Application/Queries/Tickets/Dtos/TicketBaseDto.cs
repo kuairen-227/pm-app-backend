@@ -8,4 +8,8 @@ public abstract class TicketBaseDto
     public DateOnly? Deadline { get; init; }
     public string Status { get; init; } = string.Empty;
     public string? CompletionCriteria { get; init; }
+    public Guid CreatedBy { get; init; }
+    public DateTime CreatedAt { get; init; }
+    public Guid UpdatedBy { get; init; }
+    public DateTime UpdatedAt { get; init; }
 }

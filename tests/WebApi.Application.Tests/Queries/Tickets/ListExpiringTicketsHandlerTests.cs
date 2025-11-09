@@ -69,7 +69,11 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
                     AssigneeId = t.AssigneeId,
                     Deadline = t.Deadline?.Value,
                     Status = t.Status.Value.ToString(),
-                    CompletionCriteria = t.CompletionCriteria
+                    CompletionCriteria = t.CompletionCriteria,
+                    CreatedBy = t.AuditInfo.CreatedBy,
+                    CreatedAt = t.AuditInfo.CreatedAt,
+                    UpdatedBy = t.AuditInfo.UpdatedBy,
+                    UpdatedAt = t.AuditInfo.UpdatedAt
                 }),
                 options => options.WithStrictOrdering()
             );
