@@ -4,6 +4,6 @@ namespace WebApi.Application.Common.Pagination;
 
 public sealed class SortingOptions
 {
-    public string SortBy { get; init; } = "UpdateAt";
+    public string SortBy { get; init; } = "UpdatedAt";
     public SortOrder SortOrder { get; init; } = SortOrder.Desc;
 }
