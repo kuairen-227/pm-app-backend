@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.NotificationAggregate;
+using WebApi.Domain.Common;
 using WebApi.Infrastructure.Database;
 
 namespace WebApi.Infrastructure.Repositories;
@@ -14,14 +15,28 @@ public class NotificationRepository : INotificationRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<Notification>> ListByRecipientIdAsync(
-        Guid recipientId, CancellationToken cancellationToken = default
+    public async Task<PagedResult<Notification>> ListByRecipientIdAsync(
+        Guid recipientId,
+        int skip = 0,
+        int take = 20,
+        string? sortBy = null,
+        SortOrder? sortOrder = SortOrder.Desc,
+        CancellationToken cancellationToken = default
 )
     {
-        return await _dbContext.Notifications
+        IQueryable<Notification> query = _dbContext.Notifications
             .AsNoTracking()
-            .Where(n => n.RecipientId == recipientId)
-            .ToListAsync(cancellationToken);
+            .Where(n => n.RecipientId == recipientId);
+
+        if (!string.IsNullOrEmpty(sortBy))
+            query = sortOrder == SortOrder.Desc
+                ? query.OrderByDescending(e => EF.Property<object>(e, sortBy))
+                : query.OrderBy(e => EF.Property<object>(e, sortBy));
+
+        var totalCount = await query.CountAsync(cancellationToken);
+        var items = await query.Skip(skip).Take(take).ToListAsync(cancellationToken);
+
+        return new PagedResult<Notification>(items, totalCount);
     }
 
     public async Task<Notification?> GetByIdAsync(Guid notificationId, CancellationToken cancellationToken = default)
