@@ -7,7 +7,7 @@ using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.UserAggregate;
 using WebApi.Tests.Helpers.Builders;
 
-namespace WebApi.Application.Commands.Users;
+namespace WebApi.Application.Tests.Commands.Users;
 
 public class RegisterUserHandlerTests : BaseCommandHandlerTest
 {
