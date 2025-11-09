@@ -1,10 +1,11 @@
 using FluentAssertions;
 using WebApi.Domain.Common;
+using WebApi.Domain.Tests.Helpers;
 using WebApi.Tests.Helpers.Builders;
 
 namespace WebApi.Domain.Tests.Aggregates.NotificationAggregate;
 
-public class NotificationTests
+public class NotificationTests : BaseDomainTest
 {
     private readonly NotificationBuilder _notificationBuilder;
 
@@ -59,12 +60,26 @@ public class NotificationTests
     public void 正常系_MarkAsRead()
     {
         // Arrange
-        var result = _notificationBuilder.Build();
+        var result = _notificationBuilder.WithRecipientId(UserContext.Id).Build();
 
         // Act
-        result.MarkAsRead();
+        result.MarkAsRead(UserContext.Id);
 
         // Assert
         result.IsRead.Should().BeTrue();
+    }
+
+    [Fact]
+    public void 異常系_MarkAsRead_通知の対象ユーザー出ない場合()
+    {
+        // Arrange
+        var notification = _notificationBuilder.WithRecipientId(Guid.NewGuid()).Build();
+
+        // Act
+        var act = () => notification.MarkAsRead(UserContext.Id);
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("NOT_NOTIFICATION_RECIPIENT");
     }
 }

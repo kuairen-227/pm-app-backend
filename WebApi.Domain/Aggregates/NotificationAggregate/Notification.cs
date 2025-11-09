@@ -36,5 +36,11 @@ public sealed class Notification : Entity
         IsRead = false;
     }
 
-    public void MarkAsRead() => IsRead = true;
+    public void MarkAsRead(Guid markedBy)
+    {
+        if (markedBy != RecipientId)
+            throw new DomainException("NOT_NOTIFICATION_RECIPIENT", "Notification の対象者のみが既読にできます");
+
+        IsRead = true;
+    }
 }

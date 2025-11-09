@@ -54,7 +54,7 @@ public class NotificationBuilder : BaseBuilder<NotificationBuilder, Notification
 
         if (_isRead)
         {
-            notification.MarkAsRead();
+            notification.MarkAsRead(_recipientId);
         }
 
         return notification;
