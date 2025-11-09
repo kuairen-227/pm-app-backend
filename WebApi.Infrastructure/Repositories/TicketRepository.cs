@@ -1,7 +1,10 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Application.Common.Pagination;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.TicketAggregate;
+using WebApi.Domain.Common;
 using WebApi.Infrastructure.Database;
 
 namespace WebApi.Infrastructure.Repositories;
@@ -17,8 +20,14 @@ public class TicketRepository : ITicketRepository
         _clock = clock;
     }
 
-    public async Task<IEnumerable<Ticket>> ListByProjectIdAsync(
-        Guid projectId, ISpecification<Ticket>? specification = null, CancellationToken cancellationToken = default
+    public async Task<PagedResult<Ticket>> ListByProjectIdAsync(
+        Guid projectId,
+        ISpecification<Ticket>? specification = null,
+        int skip = 0,
+        int take = 20,
+        string? sortBy = null,
+        SortOrder? sortOrder = SortOrder.Desc,
+        CancellationToken cancellationToken = default
     )
     {
         IQueryable<Ticket> query = _dbContext.Tickets
@@ -26,11 +35,17 @@ public class TicketRepository : ITicketRepository
             .Where(t => t.ProjectId == projectId);
 
         if (specification != null)
-        {
             query = query.Where(specification.ToExpression());
-        }
 
-        return await query.ToListAsync(cancellationToken);
+        if (!string.IsNullOrEmpty(sortBy))
+            query = sortOrder == SortOrder.Desc
+                ? query.OrderByDescending(e => EF.Property<object>(e, sortBy))
+                : query.OrderBy(e => EF.Property<object>(e, sortBy));
+
+        var totalCount = await query.CountAsync(cancellationToken);
+        var items = await query.Skip(skip).Take(take).ToListAsync(cancellationToken);
+
+        return new PagedResult<Ticket>(items, totalCount);
     }
 
     public async Task<IEnumerable<Ticket>> ListByAssigneeIdAsync(

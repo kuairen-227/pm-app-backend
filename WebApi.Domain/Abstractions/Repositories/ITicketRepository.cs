@@ -1,13 +1,17 @@
-using System.Linq.Expressions;
 using WebApi.Domain.Aggregates.TicketAggregate;
+using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Abstractions.Repositories;
 
 public interface ITicketRepository
 {
-    Task<IEnumerable<Ticket>> ListByProjectIdAsync(
+    Task<PagedResult<Ticket>> ListByProjectIdAsync(
         Guid projectId,
         ISpecification<Ticket>? specification = null,
+        int skip = 0,
+        int take = 20,
+        string? sortBy = null,
+        SortOrder? sortOrder = SortOrder.Desc,
         CancellationToken cancellationToken = default);
     Task<IEnumerable<Ticket>> ListByAssigneeIdAsync(Guid assigneeId, CancellationToken cancellationToken = default);
     Task<IEnumerable<Ticket>> ListExpiringTicketsByAssigneeIdAsync(
