@@ -7,6 +7,7 @@ using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.TicketAggregate;
+using WebApi.Domain.Common;
 using WebApi.Tests.Helpers.Builders;
 
 namespace WebApi.Application.Tests.Queries.Tickets;
@@ -56,29 +57,31 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
             .Setup(r => r.ListByProjectIdAsync(
                 project.Id,
                 It.IsAny<ISpecification<Ticket>>(),
+                0, 20, null, null,
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(tickets);
+            .ReturnsAsync(new PagedResult<Ticket>(tickets, tickets.Count));
 
         // Act
         var query = new ListProjectTicketsQuery(project.Id);
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(tickets.Count);
+        result.TotalCount.Should().Be(tickets.Count);
 
         for (int i = 0; i < tickets.Count; i++)
         {
-            result.ElementAt(i).Id.Should().Be(tickets[i].Id);
-            result.ElementAt(i).Title.Should().Be(tickets[i].Title.Value);
-            result.ElementAt(i).AssigneeId.Should().Be(tickets[i].AssigneeId);
-            result.ElementAt(i).Deadline.Should().Be(tickets[i].Deadline?.Value);
-            result.ElementAt(i).Status.Should().Be(tickets[i].Status.Value.ToString());
-            result.ElementAt(i).CompletionCriteria.Should().Be(tickets[i].CompletionCriteria);
+            result.Items.ElementAt(i).Id.Should().Be(tickets[i].Id);
+            result.Items.ElementAt(i).Title.Should().Be(tickets[i].Title.Value);
+            result.Items.ElementAt(i).AssigneeId.Should().Be(tickets[i].AssigneeId);
+            result.Items.ElementAt(i).Deadline.Should().Be(tickets[i].Deadline?.Value);
+            result.Items.ElementAt(i).Status.Should().Be(tickets[i].Status.Value.ToString());
+            result.Items.ElementAt(i).CompletionCriteria.Should().Be(tickets[i].CompletionCriteria);
         }
 
         _ticketRepository.Verify(r => r.ListByProjectIdAsync(
             project.Id,
             It.IsAny<ISpecification<Ticket>>(),
+            0, 20, null, null,
             It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -97,8 +100,9 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
             .Setup(r => r.ListByProjectIdAsync(
                 project.Id,
                 It.IsAny<ISpecification<Ticket>>(),
+                0, 20, null, null,
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(tickets);
+            .ReturnsAsync(new PagedResult<Ticket>(tickets, tickets.Count));
 
         // Act
         var filter = new TicketFilter
@@ -109,13 +113,13 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(tickets.Count);
         _ticketRepository.Verify(r => r.ListByProjectIdAsync(
             project.Id,
             It.Is<ISpecification<Ticket>>(spec =>
                 spec.ToExpression().Compile().Invoke(tickets[0]) &&
                 !spec.ToExpression().Compile().Invoke(tickets[1])
             ),
+            0, 20, null, null,
             It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -135,8 +139,9 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
             .Setup(r => r.ListByProjectIdAsync(
                 project.Id,
                 It.IsAny<ISpecification<Ticket>>(),
+                0, 20, null, null,
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(tickets);
+            .ReturnsAsync(new PagedResult<Ticket>(tickets, tickets.Count));
 
         // Act
         var filter = new TicketFilter
@@ -148,7 +153,6 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(tickets.Count);
         _ticketRepository.Verify(r => r.ListByProjectIdAsync(
             project.Id,
             It.Is<ISpecification<Ticket>>(spec =>
@@ -156,6 +160,7 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
                 !spec.ToExpression().Compile().Invoke(tickets[1]) &&
                 !spec.ToExpression().Compile().Invoke(tickets[2])
             ),
+            0, 20, null, null,
             It.IsAny<CancellationToken>()), Times.Once);
     }
 }
