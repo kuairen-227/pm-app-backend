@@ -57,7 +57,7 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
             .Setup(r => r.ListByProjectIdAsync(
                 project.Id,
                 It.IsAny<ISpecification<Ticket>>(),
-                0, 20, null, null,
+                0, 20, "UpdatedAt", SortOrder.Desc,
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(new PagedResult<Ticket>(tickets, tickets.Count));
 
@@ -81,7 +81,7 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
         _ticketRepository.Verify(r => r.ListByProjectIdAsync(
             project.Id,
             It.IsAny<ISpecification<Ticket>>(),
-            0, 20, null, null,
+            0, 20, "UpdatedAt", SortOrder.Desc,
             It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -100,7 +100,7 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
             .Setup(r => r.ListByProjectIdAsync(
                 project.Id,
                 It.IsAny<ISpecification<Ticket>>(),
-                0, 20, null, null,
+                0, 20, "UpdatedAt", SortOrder.Desc,
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(new PagedResult<Ticket>(tickets, tickets.Count));
 
@@ -119,7 +119,7 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
                 spec.ToExpression().Compile().Invoke(tickets[0]) &&
                 !spec.ToExpression().Compile().Invoke(tickets[1])
             ),
-            0, 20, null, null,
+            0, 20, "UpdatedAt", SortOrder.Desc,
             It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -139,7 +139,7 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
             .Setup(r => r.ListByProjectIdAsync(
                 project.Id,
                 It.IsAny<ISpecification<Ticket>>(),
-                0, 20, null, null,
+                0, 20, "UpdatedAt", SortOrder.Desc,
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(new PagedResult<Ticket>(tickets, tickets.Count));
 
@@ -160,7 +160,7 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
                 !spec.ToExpression().Compile().Invoke(tickets[1]) &&
                 !spec.ToExpression().Compile().Invoke(tickets[2])
             ),
-            0, 20, null, null,
+            0, 20, "UpdatedAt", SortOrder.Desc,
             It.IsAny<CancellationToken>()), Times.Once);
     }
 }

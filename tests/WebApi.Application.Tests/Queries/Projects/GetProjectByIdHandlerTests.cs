@@ -21,8 +21,8 @@ public class GetProjectByIdHandlerTests : BaseQueryHandlerTest
         _projectRepository = new Mock<IProjectRepository>();
         _projectBuilder = new ProjectBuilder();
 
-        Mapper.Setup(m => m.Map<ProjectDto>(It.IsAny<Project>()))
-            .Returns<Project>(p => new ProjectDto
+        Mapper.Setup(m => m.Map<ProjectDetailDto>(It.IsAny<Project>()))
+            .Returns<Project>(p => new ProjectDetailDto
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -44,12 +44,12 @@ public class GetProjectByIdHandlerTests : BaseQueryHandlerTest
     {
         // Arrange
         var project = _projectBuilder.Build();
-        var query = new GetProjectByIdQuery(project.Id);
         _projectRepository
             .Setup(x => x.GetByIdAsync(project.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(project);
 
         // Act
+        var query = new GetProjectByIdQuery(project.Id);
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
