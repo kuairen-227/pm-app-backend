@@ -1,11 +1,10 @@
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Application.Common.Pagination;
 using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Common;
 using WebApi.Infrastructure.Database;
+using WebApi.Infrastructure.Repositories.Extensions;
 
 namespace WebApi.Infrastructure.Repositories;
 
@@ -37,13 +36,11 @@ public class TicketRepository : ITicketRepository
         if (specification != null)
             query = query.Where(specification.ToExpression());
 
-        if (!string.IsNullOrEmpty(sortBy))
-            query = sortOrder == SortOrder.Desc
-                ? query.OrderByDescending(e => EF.Property<object>(e, sortBy))
-                : query.OrderBy(e => EF.Property<object>(e, sortBy));
-
         var totalCount = await query.CountAsync(cancellationToken);
-        var items = await query.Skip(skip).Take(take).ToListAsync(cancellationToken);
+        var items = await query
+            .ApplyPaging(skip, take)
+            .ApplySorting(sortBy, sortOrder)
+            .ToListAsync(cancellationToken);
 
         return new PagedResult<Ticket>(items, totalCount);
     }
