@@ -11,7 +11,7 @@ using WebApi.Domain.Common.Authorization;
 
 namespace WebApi.Application.Queries.Projects.ListProjects;
 
-public class ListProjectsHandler : IRequestHandler<ListProjectsQuery, IEnumerable<ProjectDto>>
+public class ListProjectsHandler : IRequestHandler<ListProjectsQuery, IReadOnlyList<ProjectDto>>
 {
     private readonly IProjectRepository _projectRepository;
     private readonly IUserRepository _userRepository;
@@ -34,7 +34,7 @@ public class ListProjectsHandler : IRequestHandler<ListProjectsQuery, IEnumerabl
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ProjectDto>> Handle(ListProjectsQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<ProjectDto>> Handle(ListProjectsQuery request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(_userContext.Id, cancellationToken)
             ?? throw new NotFoundException(nameof(User), _userContext.Id);
@@ -51,6 +51,6 @@ public class ListProjectsHandler : IRequestHandler<ListProjectsQuery, IEnumerabl
             projects = await _projectRepository.ListByUserIdAsync(user.Id, cancellationToken);
         }
 
-        return _mapper.Map<IEnumerable<ProjectDto>>(projects);
+        return _mapper.Map<IReadOnlyList<ProjectDto>>(projects);
     }
 }

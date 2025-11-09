@@ -20,7 +20,7 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
         _ticketRepository = new Mock<ITicketRepository>();
         _ticketBuilder = new TicketBuilder();
 
-        Mapper.Setup(m => m.Map<IEnumerable<TicketDto>>(It.IsAny<IEnumerable<Ticket>>()))
+        Mapper.Setup(m => m.Map<IReadOnlyList<TicketDto>>(It.IsAny<IEnumerable<Ticket>>()))
             .Returns<IEnumerable<Ticket>>(tickets =>
                 tickets.Select(t => new TicketDto
                 {
@@ -30,7 +30,7 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
                     Deadline = t.Deadline?.Value,
                     Status = t.Status.Value.ToString(),
                     CompletionCriteria = t.CompletionCriteria,
-                }));
+                }).ToList());
 
         _handler = new ListExpiringTicketsHandler(
             _ticketRepository.Object,
@@ -59,20 +59,25 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(2);
+        result.Should().NotBeNull()
+            .And.HaveCount(2)
+            .And.BeEquivalentTo(
+                tickets.Select(t => new TicketDto
+                {
+                    Id = t.Id,
+                    Title = t.Title.Value,
+                    AssigneeId = t.AssigneeId,
+                    Deadline = t.Deadline?.Value,
+                    Status = t.Status.Value.ToString(),
+                    CompletionCriteria = t.CompletionCriteria
+                }),
+                options => options.WithStrictOrdering()
+            );
 
-        for (int i = 0; i < result.Count(); i++)
-        {
-            result.ElementAt(i).Id.Should().Be(tickets[i].Id);
-            result.ElementAt(i).Title.Should().Be(tickets[i].Title.Value);
-            result.ElementAt(i).AssigneeId.Should().Be(tickets[i].AssigneeId);
-            result.ElementAt(i).Deadline.Should().Be(tickets[i].Deadline?.Value);
-            result.ElementAt(i).Status.Should().Be(tickets[i].Status.Value.ToString());
-            result.ElementAt(i).CompletionCriteria.Should().Be(tickets[i].CompletionCriteria);
-        }
-
-        _ticketRepository.Verify(x => x.ListExpiringTicketsByAssigneeIdAsync(
-            UserContext.Object.Id, TimeSpan.FromDays(7), It.IsAny<CancellationToken>()), Times.Once);
+        _ticketRepository.Verify(x =>
+            x.ListExpiringTicketsByAssigneeIdAsync(
+                UserContext.Object.Id, TimeSpan.FromDays(7), It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 
     [Theory]
@@ -92,29 +97,37 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
             _ticketBuilder.WithTitle("期限に余裕のあるチケット").WithDeadline(Clock.Today.AddDays(8)).Build(),
         };
 
+        var expected = tickets
+            .Where(t => t.Deadline != null && t.Deadline.Value <= Clock.Today.AddDays(days))
+            .ToList();
+
         _ticketRepository
             .Setup(x => x.ListExpiringTicketsByAssigneeIdAsync(
                 UserContext.Object.Id, dueWithin, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(tickets.Where(t => t.Deadline != null && t.Deadline.Value <= Clock.Today.AddDays(days)).ToList());
+            .ReturnsAsync(expected);
 
         // Act
         var query = new ListExpiringTicketsQuery(UserContext.Object.Id, dueWithin);
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(tickets.Count(t => t.Deadline != null && t.Deadline.Value <= Clock.Today.AddDays(days)));
+        result.Should().HaveCount(expected.Count)
+            .And.BeEquivalentTo(
+                expected.Select(t => new TicketDto
+                {
+                    Id = t.Id,
+                    Title = t.Title.Value,
+                    AssigneeId = t.AssigneeId,
+                    Deadline = t.Deadline?.Value,
+                    Status = t.Status.Value.ToString(),
+                    CompletionCriteria = t.CompletionCriteria
+                }),
+                options => options.WithStrictOrdering()
+            );
 
-        for (int i = 0; i < result.Count(); i++)
-        {
-            result.ElementAt(i).Id.Should().Be(tickets[i].Id);
-            result.ElementAt(i).Title.Should().Be(tickets[i].Title.Value);
-            result.ElementAt(i).AssigneeId.Should().Be(tickets[i].AssigneeId);
-            result.ElementAt(i).Deadline.Should().Be(tickets[i].Deadline?.Value);
-            result.ElementAt(i).Status.Should().Be(tickets[i].Status.Value.ToString());
-            result.ElementAt(i).CompletionCriteria.Should().Be(tickets[i].CompletionCriteria);
-        }
-
-        _ticketRepository.Verify(x => x.ListExpiringTicketsByAssigneeIdAsync(
-            UserContext.Object.Id, dueWithin, It.IsAny<CancellationToken>()), Times.Once);
+        _ticketRepository.Verify(x =>
+            x.ListExpiringTicketsByAssigneeIdAsync(
+                UserContext.Object.Id, dueWithin, It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 }

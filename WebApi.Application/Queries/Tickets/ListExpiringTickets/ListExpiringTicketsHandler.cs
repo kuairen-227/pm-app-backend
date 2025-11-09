@@ -5,7 +5,7 @@ using WebApi.Domain.Abstractions.Repositories;
 
 namespace WebApi.Application.Queries.Tickets.ListExpiringTickets;
 
-public class ListExpiringTicketsHandler : IRequestHandler<ListExpiringTicketsQuery, IEnumerable<TicketDto>>
+public class ListExpiringTicketsHandler : IRequestHandler<ListExpiringTicketsQuery, IReadOnlyList<TicketDto>>
 {
     private readonly ITicketRepository _ticketRepository;
     private readonly IMapper _mapper;
@@ -16,12 +16,12 @@ public class ListExpiringTicketsHandler : IRequestHandler<ListExpiringTicketsQue
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<TicketDto>> Handle(ListExpiringTicketsQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<TicketDto>> Handle(ListExpiringTicketsQuery request, CancellationToken cancellationToken)
     {
         var dueWithin = request.DueWithin ?? TimeSpan.FromDays(7);
 
         var tickets = await _ticketRepository.ListExpiringTicketsByAssigneeIdAsync(
             request.UserId, dueWithin, cancellationToken);
-        return _mapper.Map<IEnumerable<TicketDto>>(tickets);
+        return _mapper.Map<IReadOnlyList<TicketDto>>(tickets);
     }
 }

@@ -25,7 +25,7 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
         _ticketBuilder = new TicketBuilder();
         _projectBuilder = new ProjectBuilder();
 
-        Mapper.Setup(m => m.Map<IEnumerable<TicketDto>>(It.IsAny<IEnumerable<Ticket>>()))
+        Mapper.Setup(m => m.Map<IReadOnlyList<TicketDto>>(It.IsAny<IEnumerable<Ticket>>()))
             .Returns<IEnumerable<Ticket>>(tickets =>
                 tickets.Select(t => new TicketDto
                 {
@@ -35,7 +35,7 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
                     Deadline = t.Deadline?.Value,
                     Status = t.Status.Value.ToString(),
                     CompletionCriteria = t.CompletionCriteria,
-                }));
+                }).ToList());
 
         _handler = new ListProjectTicketsHandler(
             _ticketRepository.Object,

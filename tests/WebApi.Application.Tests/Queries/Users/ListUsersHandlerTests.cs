@@ -20,7 +20,7 @@ public class ListUsersHandlerTests : BaseQueryHandlerTest
         _userRepository = new Mock<IUserRepository>();
         _userBuilder = new UserBuilder();
 
-        Mapper.Setup(m => m.Map<IEnumerable<UserDto>>(It.IsAny<IEnumerable<User>>()))
+        Mapper.Setup(m => m.Map<IReadOnlyList<UserDto>>(It.IsAny<IEnumerable<User>>()))
             .Returns<IEnumerable<User>>(users =>
                 users.Select(u => new UserDto
                 {
@@ -32,7 +32,7 @@ public class ListUsersHandlerTests : BaseQueryHandlerTest
                     CreatedAt = u.AuditInfo.CreatedAt,
                     UpdatedBy = u.AuditInfo.UpdatedBy,
                     UpdatedAt = u.AuditInfo.UpdatedAt,
-                }));
+                }).ToList());
 
         _handler = new ListUsersHandler(
             _userRepository.Object,

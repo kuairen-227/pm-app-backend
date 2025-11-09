@@ -6,7 +6,7 @@ using WebApi.Application.Queries.Users.Dtos;
 namespace WebApi.Application.Queries.Users.ListUsers;
 
 [RequiresPermission(UserPermissions.View)]
-public class ListUsersQuery : IRequest<IEnumerable<UserDto>>
+public class ListUsersQuery : IRequest<IReadOnlyList<UserDto>>
 {
     public ListUsersQuery()
     {

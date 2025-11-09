@@ -6,7 +6,7 @@ using WebApi.Application.Queries.Tickets.Dtos;
 namespace WebApi.Application.Queries.Tickets.ListExpiringTickets;
 
 [RequiresPermission(TicketPermissions.View)]
-public class ListExpiringTicketsQuery : IRequest<IEnumerable<TicketDto>>
+public class ListExpiringTicketsQuery : IRequest<IReadOnlyList<TicketDto>>
 {
     public Guid UserId { get; }
     public TimeSpan? DueWithin { get; init; }

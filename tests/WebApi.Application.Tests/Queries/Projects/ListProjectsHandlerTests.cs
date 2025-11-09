@@ -30,7 +30,7 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
         _projectBuilder = new ProjectBuilder();
         _userBuilder = new UserBuilder();
 
-        Mapper.Setup(m => m.Map<IEnumerable<ProjectDto>>(It.IsAny<IEnumerable<Project>>()))
+        Mapper.Setup(m => m.Map<IReadOnlyList<ProjectDto>>(It.IsAny<IEnumerable<Project>>()))
             .Returns<IEnumerable<Project>>(projects =>
                 projects.Select(p => new ProjectDto
                 {
@@ -41,7 +41,7 @@ public class ListProjectsHandlerTests : BaseQueryHandlerTest
                     CreatedAt = p.AuditInfo.CreatedAt,
                     UpdatedBy = p.AuditInfo.UpdatedBy,
                     UpdatedAt = p.AuditInfo.UpdatedAt,
-                }));
+                }).ToList());
 
         _handler = new ListProjectsHandler(
             _projectRepository.Object,
