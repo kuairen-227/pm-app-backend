@@ -1,6 +1,6 @@
 namespace WebApi.Application.Common;
 
-public abstract class ApplicationException : Exception
+public class ApplicationException : Exception
 {
     public string ErrorCode { get; }
 
