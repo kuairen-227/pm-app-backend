@@ -9,6 +9,10 @@ public static class DependencyInjection
         // Controllers
         services.AddControllers();
 
+        // Swagger
+        services.AddOpenApi();
+        services.AddOpenApiDocument();
+
         // CORS
         services.AddCors(options =>
         {

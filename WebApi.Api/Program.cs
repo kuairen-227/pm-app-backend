@@ -1,11 +1,10 @@
+using WebApi.Api;
 using WebApi.Application;
 using WebApi.Domain;
 using WebApi.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ASP.NET Core API 用の DI
-builder.Services.AddOpenApi();
 // DDD の各層 DI
 builder.Services.AddApi();
 builder.Services.AddApplication();
@@ -22,6 +21,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseOpenApi();
+    app.UseSwaggerUi();
 }
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontEnd");
