@@ -2,8 +2,14 @@ using Asp.Versioning;
 
 namespace WebApi.Api;
 
+/// <summary>
+/// API層のDI
+/// </summary>
 public static class DependencyInjection
 {
+    /// <summary>
+    /// API層のDIを追加
+    /// </summary>
     public static IServiceCollection AddApi(this IServiceCollection services)
     {
         // Controllers

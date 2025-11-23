@@ -5,17 +5,29 @@ using ApplicationException = WebApi.Application.Common.ApplicationException;
 
 namespace WebApi.Api.Middlewares;
 
+/// <summary>
+/// エラーハンドリング用のカスタムミドルウェア
+/// </summary>
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
     public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
     {
         _next = next;
         _logger = logger;
     }
 
+    /// <summary>
+    /// ミドルウェア呼び出し
+    /// </summary>
+    /// <remarks>
+    /// ASP.NET Coreのミドルウェアパイプラインから自動的に呼ばれる
+    /// </remarks>
     public async Task Invoke(HttpContext context)
     {
         try
