@@ -6,17 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // ASP.NET Core API 用の DI
 builder.Services.AddOpenApi();
-builder.Services.AddControllers();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowFrontEnd",
-        policy => policy.WithOrigins()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod());
-});
-builder.Services.AddHttpContextAccessor();
-
-// DDD プロジェクトごとの DI
+// DDD の各層 DI
+builder.Services.AddApi();
 builder.Services.AddApplication();
 builder.Services.AddDomain();
 builder.Services.AddInfrastructure(
