@@ -45,15 +45,15 @@ public class UserCommandController : ControllerBase
     /// <summary>
     /// ユーザー削除
     /// </summary>
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{userId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteAsync(
-        Guid id, CancellationToken cancellationToken)
+        Guid userId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteUserCommand(id), cancellationToken);
+        await _mediator.Send(new DeleteUserCommand(userId), cancellationToken);
         return NoContent();
     }
 }
