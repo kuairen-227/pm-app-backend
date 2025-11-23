@@ -30,7 +30,7 @@ public class TicketTitleTests
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("TICKET_TITLE_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.TICKET_TITLE_REQUIRED");
     }
 
     [Fact]

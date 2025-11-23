@@ -34,6 +34,6 @@ public class UserTests
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("USER_NAME_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.USER_NAME_REQUIRED");
     }
 }

@@ -27,7 +27,7 @@ public class EmailTests
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("EMAIL_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.EMAIL_REQUIRED");
     }
 
     [Theory]
@@ -43,7 +43,7 @@ public class EmailTests
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("EMAIL_INVALID");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.EMAIL_INVALID");
     }
 
     [Fact]

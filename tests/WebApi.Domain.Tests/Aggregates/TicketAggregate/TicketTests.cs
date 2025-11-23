@@ -38,7 +38,7 @@ public class TicketTests : BaseDomainTest
 
         // Then
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("PROJECT_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.PROJECT_ID_REQUIRED");
     }
 
     [Fact]
@@ -69,7 +69,7 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("TICKET_TITLE_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.TICKET_TITLE_REQUIRED");
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("ASSIGNEE_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.ASSIGNEE_ID_REQUIRED");
     }
 
     [Fact]
@@ -114,7 +114,7 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("ALREADY_ASSIGNED_SAME_USER");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.ALREADY_ASSIGNED_SAME_USER");
     }
 
     [Fact]
@@ -143,7 +143,7 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("NOT_ASSIGNED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.NOT_ASSIGNED");
     }
 
     [Theory]
@@ -203,7 +203,7 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("COMPLETION_CRITERIA_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.COMPLETION_CRITERIA_REQUIRED");
     }
 
     [Fact]
@@ -279,7 +279,7 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("TICKET_COMMENT_NOT_FOUND");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.TICKET_COMMENT_NOT_FOUND");
     }
 
     [Fact]
@@ -295,7 +295,7 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("NOT_TICKET_COMMENT_AUTHOR");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.NOT_TICKET_COMMENT_AUTHOR");
     }
 
     [Fact]
@@ -326,7 +326,7 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("TICKET_COMMENT_NOT_FOUND");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.TICKET_COMMENT_NOT_FOUND");
     }
 
     [Fact]
@@ -341,6 +341,6 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("NOT_TICKET_COMMENT_AUTHOR");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.NOT_TICKET_COMMENT_AUTHOR");
     }
 }

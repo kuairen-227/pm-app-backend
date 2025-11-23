@@ -36,7 +36,7 @@ public class NotificationTests : BaseDomainTest
 
         // Then
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("NOTIFICATION_RECIPIENT_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.NOTIFICATION_RECIPIENT_ID_REQUIRED");
     }
 
     [Theory]
@@ -53,7 +53,7 @@ public class NotificationTests : BaseDomainTest
 
         // Then
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("NOTIFICATION_MESSAGE_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.NOTIFICATION_MESSAGE_REQUIRED");
     }
 
     [Fact]
@@ -80,6 +80,6 @@ public class NotificationTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("NOT_NOTIFICATION_RECIPIENT");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.NOT_NOTIFICATION_RECIPIENT");
     }
 }

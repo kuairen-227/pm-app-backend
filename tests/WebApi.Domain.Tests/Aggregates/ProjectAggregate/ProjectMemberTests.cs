@@ -42,7 +42,7 @@ public class ProjectMemberTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("USER_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.USER_ID_REQUIRED");
     }
 
     [Fact]

@@ -4,14 +4,8 @@ public class DomainException : Exception
 {
     public string ErrorCode { get; }
 
-    public DomainException(string errorCode, string message) : base(message)
+    public DomainException(string errorCode, string message, Exception? inner = null) : base(message, inner)
     {
-        ErrorCode = errorCode;
-    }
-
-    public DomainException(string errorCode, string message, Exception innerException)
-        : base(message, innerException)
-    {
-        ErrorCode = errorCode;
+        ErrorCode = $"DOMAIN.{errorCode}";
     }
 }

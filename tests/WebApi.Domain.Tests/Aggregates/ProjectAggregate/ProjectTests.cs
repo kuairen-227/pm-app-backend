@@ -41,7 +41,7 @@ public class ProjectTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("PROJECT_NAME_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.PROJECT_NAME_REQUIRED");
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class ProjectTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("PROJECT_NAME_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.PROJECT_NAME_REQUIRED");
     }
 
     [Fact]
@@ -123,7 +123,7 @@ public class ProjectTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("USER_ALREADY_JOINED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.USER_ALREADY_JOINED");
     }
 
     [Fact]
@@ -156,7 +156,7 @@ public class ProjectTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("USER_NOT_PROJECT_MEMBER");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.USER_NOT_PROJECT_MEMBER");
     }
 
     [Fact]
@@ -192,7 +192,7 @@ public class ProjectTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("USER_NOT_PROJECT_MEMBER");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.USER_NOT_PROJECT_MEMBER");
     }
 
     [Fact]
@@ -225,6 +225,6 @@ public class ProjectTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("USER_NOT_PROJECT_MEMBER");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.USER_NOT_PROJECT_MEMBER");
     }
 }

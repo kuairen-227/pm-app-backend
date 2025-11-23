@@ -28,7 +28,7 @@ public class AssignmentHistoryTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("ASSIGNEE_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.ASSIGNEE_ID_REQUIRED");
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public class AssignmentHistoryTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("ASSIGNEE_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.ASSIGNEE_ID_REQUIRED");
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class AssignmentHistoryTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("PREVIOUS_ASSIGNEE_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.PREVIOUS_ASSIGNEE_ID_REQUIRED");
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public class AssignmentHistoryTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("PREVIOUS_ASSIGNEE_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.PREVIOUS_ASSIGNEE_ID_REQUIRED");
     }
 
     [Fact]

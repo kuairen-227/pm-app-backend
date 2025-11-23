@@ -31,7 +31,7 @@ public class DeadlineTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("DEADLINE_PAST_NOT_ALLOWED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.DEADLINE_PAST_NOT_ALLOWED");
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public class DeadlineTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("DEADLINE_PAST_NOT_ALLOWED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.DEADLINE_PAST_NOT_ALLOWED");
     }
 
     [Fact]

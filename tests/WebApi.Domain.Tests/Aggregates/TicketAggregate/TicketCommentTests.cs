@@ -32,7 +32,7 @@ public class TicketCommentTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("TICKET_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.TICKET_ID_REQUIRED");
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class TicketCommentTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("AUTHOR_ID_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.AUTHOR_ID_REQUIRED");
     }
 
     [Theory]
@@ -57,7 +57,7 @@ public class TicketCommentTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("CONTENT_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.CONTENT_REQUIRED");
     }
 
     [Fact]
@@ -87,6 +87,6 @@ public class TicketCommentTests : BaseDomainTest
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("CONTENT_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.CONTENT_REQUIRED");
     }
 }
