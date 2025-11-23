@@ -1,4 +1,5 @@
 using WebApi.Api;
+using WebApi.Api.Middlewares;
 using WebApi.Application;
 using WebApi.Domain;
 using WebApi.Infrastructure;
@@ -29,5 +30,6 @@ app.UseCors("AllowFrontEnd");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseCustomMiddleware();
 
 app.Run();
