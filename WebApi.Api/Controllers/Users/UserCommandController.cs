@@ -33,7 +33,8 @@ public class UserCommandController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> RegisterAsync(
+        [FromBody] RegisterUserCommand command, CancellationToken cancellationToken)
     {
         await _mediator.Send(command, cancellationToken);
         return Created();
@@ -49,7 +50,8 @@ public class UserCommandController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteAsync(
+        Guid id, CancellationToken cancellationToken)
     {
         await _mediator.Send(new DeleteUserCommand(id), cancellationToken);
         return NoContent();
