@@ -14,6 +14,7 @@ builder.Services.AddCors(options =>
                         .AllowAnyHeader()
                         .AllowAnyMethod());
 });
+builder.Services.AddHttpContextAccessor();
 
 // DDD プロジェクトごとの DI
 builder.Services.AddApplication();

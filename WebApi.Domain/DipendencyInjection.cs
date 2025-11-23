@@ -8,7 +8,9 @@ public static class DependencyInjection
     public static IServiceCollection AddDomain(this IServiceCollection services)
     {
         // Domain Services
-        services.AddSingleton<ProjectNotificationFactory>();
+        services.AddTransient<UserNotificationFactory>();
+        services.AddTransient<ProjectNotificationFactory>();
+        services.AddTransient<TicketNotificationFactory>();
 
         return services;
     }
