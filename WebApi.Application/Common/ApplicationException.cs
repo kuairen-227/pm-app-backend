@@ -6,7 +6,7 @@ public abstract class ApplicationException : Exception
 
     public ApplicationException(string errorCode, string message) : base(message)
     {
-        ErrorCode = errorCode;
+        ErrorCode = $"APPLICATION.{errorCode}";
     }
 }
 

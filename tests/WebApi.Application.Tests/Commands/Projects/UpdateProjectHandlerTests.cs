@@ -78,7 +78,7 @@ public class UpdateProjectHandlerTests : BaseCommandHandlerTest
 
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
-        ex.Which.ErrorCode.Should().Be("PROJECT_NOT_FOUND");
+        ex.Which.ErrorCode.Should().Be("APPLICATION.PROJECT_NOT_FOUND");
         UnitOfWork.Verify(x => x.SaveChangesAsync(
             It.IsAny<IDomainEventPublisher>(), It.IsAny<CancellationToken>()),
             Times.Never);

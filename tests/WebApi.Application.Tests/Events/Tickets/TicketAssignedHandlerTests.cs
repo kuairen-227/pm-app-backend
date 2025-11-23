@@ -117,7 +117,7 @@ public class TicketAssignedHandlerTests : BaseEventHandlerTest
 
         // Assert
         var ex = await act.Should().ThrowAsync<NotFoundException>();
-        ex.Which.ErrorCode.Should().Be("PROJECT_NOT_FOUND");
+        ex.Which.ErrorCode.Should().Be("APPLICATION.PROJECT_NOT_FOUND");
         _notificationRepository.Verify(x => x.AddRangeAsync(
             It.IsAny<List<Notification>>(), It.IsAny<CancellationToken>()),
             Times.Never);
