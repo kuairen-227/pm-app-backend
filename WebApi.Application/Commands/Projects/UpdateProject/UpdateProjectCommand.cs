@@ -11,9 +11,9 @@ public class UpdateProjectCommand : IRequest<Unit>, IProjectScopedRequest
     public string Name { get; }
     public string? Description { get; }
 
-    public UpdateProjectCommand(Guid id, string name, string? description)
+    public UpdateProjectCommand(Guid projectId, string name, string? description)
     {
-        ProjectId = id;
+        ProjectId = projectId;
         Name = name;
         Description = description;
     }
