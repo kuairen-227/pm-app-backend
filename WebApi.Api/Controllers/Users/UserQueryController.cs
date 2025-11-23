@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Api.Dtos;
 using WebApi.Application.Queries.Users.Dtos;
 using WebApi.Application.Queries.Users.ListUsers;
 
@@ -29,7 +30,8 @@ public class UserQueryController : ControllerBase
     /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<UserDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IReadOnlyList<UserDto>>> ListAllAsync(CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new ListUsersQuery(), cancellationToken);
