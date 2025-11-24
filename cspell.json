@@ -13,6 +13,7 @@
     "coveragereport",
     "Dtos",
     "globaltool",
+    "Mapster",
     "marocchino",
     "Mediat",
     "Npgsql",
