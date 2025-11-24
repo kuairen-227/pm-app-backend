@@ -4,25 +4,41 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.Api.Dtos;
 using WebApi.Application.Commands.Users.DeleteUser;
 using WebApi.Application.Commands.Users.RegisterUser;
+using WebApi.Application.Queries.Users.Dtos;
+using WebApi.Application.Queries.Users.ListUsers;
 
 namespace WebApi.Api.Controllers.Users;
 
 /// <summary>
-/// User（Command）
+/// Users Controller
 /// </summary>
 [ApiController]
 [ApiVersion(1.0)]
 [Route("api/v{version:apiVersion}/users")]
-public class UserCommandController : ControllerBase
+public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    public UserCommandController(IMediator mediator)
+    public UsersController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    /// <summary>
+    /// ユーザー一覧取得
+    /// </summary>
+    [HttpGet]
+    [ProducesResponseType(typeof(IReadOnlyList<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IReadOnlyList<UserDto>>> ListAllAsync(CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new ListUsersQuery(), cancellationToken);
+        return Ok(result);
     }
 
     /// <summary>
