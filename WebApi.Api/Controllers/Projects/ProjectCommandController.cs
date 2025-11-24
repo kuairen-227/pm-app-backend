@@ -45,8 +45,8 @@ public class ProjectCommandController : ControllerBase
         var projectId = await _mediator.Send(command, cancellationToken);
 
         return CreatedAtAction(
-            actionName: "GetByIdAsync",
-            controllerName: "ProjectQuery",
+            actionName: nameof(ProjectQueryController.GetByIdAsync),
+            controllerName: nameof(ProjectQueryController).Replace("Controller", ""),
             routeValues: new { projectId },
             value: null
         );
