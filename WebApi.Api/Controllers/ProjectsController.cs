@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Api.Dtos;
@@ -9,7 +10,6 @@ using WebApi.Application.Commands.Projects.InviteMember;
 using WebApi.Application.Commands.Projects.LaunchProject;
 using WebApi.Application.Commands.Projects.RemoveMember;
 using WebApi.Application.Commands.Projects.UpdateProject;
-using WebApi.Application.Common.Mapper;
 using WebApi.Application.Queries.Projects.Dtos;
 using WebApi.Application.Queries.Projects.GetProjectById;
 using WebApi.Application.Queries.Projects.ListProjects;
@@ -69,10 +69,10 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> LaunchAsync(
-        [FromBody] LaunchProjectCommand command, CancellationToken cancellationToken)
+        [FromBody] LaunchProjectRequest request, CancellationToken cancellationToken)
     {
+        var command = request.Adapt<LaunchProjectCommand>();
         var projectId = await _mediator.Send(command, cancellationToken);
-
         return CreatedAtAction(
             actionName: nameof(GetByIdAsync),
             controllerName: nameof(ProjectsController).Replace("Controller", ""),
@@ -93,12 +93,7 @@ public class ProjectsController : ControllerBase
     public async Task<IActionResult> UpdateAsync(
         Guid projectId, [FromBody] UpdateProjectRequest request, CancellationToken cancellationToken)
     {
-        var command = new UpdateProjectCommand(
-            projectId: projectId,
-            name: request.Name,
-            description: request.Description
-        );
-
+        var command = (projectId, request).Adapt<UpdateProjectCommand>();
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -129,12 +124,7 @@ public class ProjectsController : ControllerBase
     public async Task<IActionResult> InviteMemberAsync(
         Guid projectId, [FromBody] InviteMemberRequest request, CancellationToken cancellationToken)
     {
-        var command = new InviteMemberCommand(
-            projectId: projectId,
-            userId: request.UserId,
-            projectRole: ProjectRoleMapper.Map(request.ProjectRole)
-        );
-
+        var command = (projectId, request).Adapt<InviteMemberCommand>();
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -151,12 +141,7 @@ public class ProjectsController : ControllerBase
     public async Task<IActionResult> ChangeMemberRoleAsync(
         Guid projectId, Guid userId, [FromBody] ChangeMemberRoleRequest request, CancellationToken cancellationToken)
     {
-        var command = new ChangeMemberRoleCommand(
-            projectId: projectId,
-            userId: userId,
-            projectRole: ProjectRoleMapper.Map(request.ProjectRole)
-        );
-
+        var command = (projectId, userId, request).Adapt<ChangeMemberRoleCommand>();
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
