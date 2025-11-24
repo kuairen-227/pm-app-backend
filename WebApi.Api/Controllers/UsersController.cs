@@ -39,7 +39,8 @@ public class UsersController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IReadOnlyList<UserDto>>> ListAllAsync(CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new ListUsersQuery(), cancellationToken);
+        var query = new ListUsersQuery();
+        var result = await _mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 

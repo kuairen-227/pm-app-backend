@@ -42,7 +42,8 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<IReadOnlyList<ProjectDto>>> ListAsync(CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new ListProjectsQuery(), cancellationToken);
+        var query = new ListProjectsQuery();
+        var result = await _mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 
@@ -56,7 +57,8 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProjectDetailDto>> GetByIdAsync(Guid projectId, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GetProjectByIdQuery(projectId), cancellationToken);
+        var query = new GetProjectByIdQuery(projectId);
+        var result = await _mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 
