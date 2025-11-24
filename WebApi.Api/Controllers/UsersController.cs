@@ -1,7 +1,9 @@
 using Asp.Versioning;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Api.Dtos;
+using WebApi.Api.Dtos.Users;
 using WebApi.Application.Commands.Users.DeleteUser;
 using WebApi.Application.Commands.Users.RegisterUser;
 using WebApi.Application.Queries.Users.Dtos;
@@ -50,8 +52,9 @@ public class UsersController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> RegisterAsync(
-        [FromBody] RegisterUserCommand command, CancellationToken cancellationToken)
+        [FromBody] RegisterUserRequest request, CancellationToken cancellationToken)
     {
+        var command = request.Adapt<RegisterUserCommand>();
         await _mediator.Send(command, cancellationToken);
         return Created();
     }
