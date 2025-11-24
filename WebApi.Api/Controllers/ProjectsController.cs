@@ -14,7 +14,7 @@ using WebApi.Application.Queries.Projects.Dtos;
 using WebApi.Application.Queries.Projects.GetProjectById;
 using WebApi.Application.Queries.Projects.ListProjects;
 
-namespace WebApi.Api.Controllers.Projects;
+namespace WebApi.Api.Controllers;
 
 /// <summary>
 /// Projects Controller

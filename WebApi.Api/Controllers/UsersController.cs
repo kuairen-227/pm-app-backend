@@ -9,7 +9,7 @@ using WebApi.Application.Commands.Users.RegisterUser;
 using WebApi.Application.Queries.Users.Dtos;
 using WebApi.Application.Queries.Users.ListUsers;
 
-namespace WebApi.Api.Controllers.Users;
+namespace WebApi.Api.Controllers;
 
 /// <summary>
 /// Users Controller
