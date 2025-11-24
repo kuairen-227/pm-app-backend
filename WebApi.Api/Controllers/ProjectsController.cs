@@ -75,6 +75,7 @@ public class ProjectsController : ControllerBase
     {
         var command = request.Adapt<LaunchProjectCommand>();
         var projectId = await _mediator.Send(command, cancellationToken);
+
         return CreatedAtAction(
             actionName: nameof(GetByIdAsync),
             controllerName: nameof(ProjectsController).Replace("Controller", ""),
@@ -111,7 +112,8 @@ public class ProjectsController : ControllerBase
     public async Task<IActionResult> DeleteAsync(
         Guid projectId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteProjectCommand(projectId), cancellationToken);
+        var command = new DeleteProjectCommand(projectId);
+        await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
 
@@ -159,7 +161,8 @@ public class ProjectsController : ControllerBase
     public async Task<IActionResult> RemoveMemberAsync(
         Guid projectId, Guid userId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new RemoveMemberCommand(projectId, userId), cancellationToken);
+        var command = new RemoveMemberCommand(projectId, userId);
+        await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
 }

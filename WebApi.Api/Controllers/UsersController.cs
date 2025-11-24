@@ -73,7 +73,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> DeleteAsync(
         Guid userId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteUserCommand(userId), cancellationToken);
+        var command = new DeleteUserCommand(userId);
+        await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
 }
