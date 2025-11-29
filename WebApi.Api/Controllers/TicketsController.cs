@@ -4,8 +4,11 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Api.Dtos;
 using WebApi.Api.Dtos.Tickets;
+using WebApi.Application.Commands.Tickets.AddComment;
 using WebApi.Application.Commands.Tickets.CreateTicket;
+using WebApi.Application.Commands.Tickets.DeleteComment;
 using WebApi.Application.Commands.Tickets.DeleteTicket;
+using WebApi.Application.Commands.Tickets.EditComment;
 using WebApi.Application.Commands.Tickets.UpdateTicket;
 using WebApi.Application.Common.Pagination;
 using WebApi.Application.Queries.Projects.ListProjects;
@@ -114,6 +117,61 @@ public class TicketsController : ControllerBase
         Guid projectId, Guid ticketId, CancellationToken cancellationToken)
     {
         var command = new DeleteTicketCommand(projectId, ticketId);
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// チケットコメント投稿
+    /// </summary>
+    [HttpPost("{ticketId:guid}/comments")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AddCommentAsync(
+        Guid projectId, Guid ticketId, AddTicketCommentRequest request, CancellationToken cancellationToken)
+    {
+        var command = (projectId, ticketId, request).Adapt<AddCommentCommand>();
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// チケットコメント編集
+    /// </summary>
+    [HttpPatch("{ticketId:guid}/comments/{commentId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> EditCommentAsync(
+        Guid projectId,
+        Guid ticketId,
+        Guid commentId,
+        EditTicketCommentRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = (projectId, ticketId, commentId, request).Adapt<EditCommentCommand>();
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// チケットコメント削除
+    /// </summary>
+    [HttpDelete("{ticketId:guid}/comments/{commentId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteCommentAsync(
+        Guid projectId, Guid ticketId, Guid commentId, CancellationToken cancellationToken)
+    {
+        var command = new DeleteCommentCommand(projectId, ticketId, commentId);
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
