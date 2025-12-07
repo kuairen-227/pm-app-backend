@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Api.Dtos;
 using WebApi.Api.Dtos.Projects;
@@ -20,6 +21,7 @@ namespace WebApi.Api.Controllers;
 /// Projects Controller
 /// </summary>
 [ApiController]
+[Authorize]
 [ApiVersion(1.0)]
 [Route("api/v{version:apiVersion}/projects")]
 public class ProjectsController : ControllerBase

@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Api.Dtos;
 using WebApi.Api.Dtos.Users;
@@ -15,6 +16,7 @@ namespace WebApi.Api.Controllers;
 /// Users Controller
 /// </summary>
 [ApiController]
+[Authorize]
 [ApiVersion(1.0)]
 [Route("api/v{version:apiVersion}/users")]
 public class UsersController : ControllerBase

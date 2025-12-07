@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Api.Dtos;
 using WebApi.Api.Dtos.Tickets;
@@ -21,6 +22,7 @@ namespace WebApi.Api.Controllers;
 /// Tickets Controller
 /// </summary>
 [ApiController]
+[Authorize]
 [ApiVersion(1.0)]
 [Route("api/v{version:apiVersion}/projects/{projectId:guid}/tickets")]
 public class TicketsController : ControllerBase
