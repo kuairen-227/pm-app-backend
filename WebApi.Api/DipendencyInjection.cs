@@ -1,4 +1,7 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApi.Api;
 
@@ -10,7 +13,8 @@ public static class DependencyInjection
     /// <summary>
     /// API層のDIを追加
     /// </summary>
-    public static IServiceCollection AddApi(this IServiceCollection services)
+    public static IServiceCollection AddApi(
+        this IServiceCollection services, IConfigurationSection jwtSection)
     {
         // Controllers
         services.AddControllers();
@@ -39,6 +43,24 @@ public static class DependencyInjection
             options.ReportApiVersions = true;
             options.DefaultApiVersion = new ApiVersion(1, 0);
         });
+
+        // Authentication
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSection["Issuer"],
+                    ValidAudience = jwtSection["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        System.Text.Encoding.UTF8.GetBytes(
+                            jwtSection["SecretKey"] ?? throw new InvalidOperationException("Jwt::SecretKey は必須です")))
+                };
+            });
 
         return services;
     }

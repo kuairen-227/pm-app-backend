@@ -7,7 +7,7 @@ using WebApi.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 // DDD の各層 DI
-builder.Services.AddApi();
+builder.Services.AddApi(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddApplication();
 builder.Services.AddDomain();
 builder.Services.AddInfrastructure(
