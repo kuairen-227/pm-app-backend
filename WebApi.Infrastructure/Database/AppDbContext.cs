@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using WebApi.Domain.Aggregates.AuthAggregate;
 using WebApi.Domain.Aggregates.NotificationAggregate;
 using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Aggregates.UserAggregate;
-using WebApi.Infrastructure.Database.Entities;
 
 namespace WebApi.Infrastructure.Database;
 

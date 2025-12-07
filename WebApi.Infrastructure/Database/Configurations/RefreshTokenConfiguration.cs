@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WebApi.Domain.Aggregates.AuthAggregate;
 using WebApi.Domain.Aggregates.UserAggregate;
 using WebApi.Infrastructure.Database.Configurations.Extensions;
-using WebApi.Infrastructure.Database.Entities;
 
 namespace WebApi.Infrastructure.Database.Configurations;
 
