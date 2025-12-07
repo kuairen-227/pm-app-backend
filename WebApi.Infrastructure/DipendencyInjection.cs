@@ -33,6 +33,15 @@ public static class DependencyInjection
             .AsImplementedInterfaces()
             .WithScopedLifetime());
 
+        // Services
+        services.Scan(scan => scan
+            .FromApplicationDependencies()
+            .AddClasses(c => c
+                .InNamespaces("WebApi.Infrastructure.Services")
+                .Where(type => type.Name.EndsWith("Service")))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
+
         return services;
     }
 }
