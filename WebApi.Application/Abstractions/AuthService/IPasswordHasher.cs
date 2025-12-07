@@ -1,4 +1,4 @@
-namespace WebApi.Application.Abstractions;
+namespace WebApi.Application.Abstractions.AuthService;
 
 public interface IPasswordHashService
 {

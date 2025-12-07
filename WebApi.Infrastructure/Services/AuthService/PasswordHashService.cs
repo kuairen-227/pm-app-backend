@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
-using WebApi.Application.Abstractions;
+using WebApi.Application.Abstractions.AuthService;
 
-namespace WebApi.Infrastructure.Services;
+namespace WebApi.Infrastructure.Services.AuthService;
 
 public class PasswordHashService : IPasswordHashService
 {
