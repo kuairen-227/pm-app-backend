@@ -1,4 +1,4 @@
-namespace WebApi.Infrastructure.Common;
+namespace WebApi.Infrastructure.Services.AuthService;
 
 public class JwtSettings
 {
