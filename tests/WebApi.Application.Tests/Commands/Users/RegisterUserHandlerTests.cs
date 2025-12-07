@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Moq;
 using WebApi.Application.Abstractions;
+using WebApi.Application.Abstractions.AuthService;
 using WebApi.Application.Commands.Users.RegisterUser;
 using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions.Repositories;
@@ -13,15 +14,18 @@ public class RegisterUserHandlerTests : BaseCommandHandlerTest
 {
     private readonly RegisterUserHandler _handler;
     private readonly Mock<IUserRepository> _userRepository;
+    private readonly Mock<IPasswordHashService> _passwordHashService;
     private readonly UserBuilder _userBuilder;
 
     public RegisterUserHandlerTests()
     {
         _userRepository = new Mock<IUserRepository>();
+        _passwordHashService = new Mock<IPasswordHashService>();
         _userBuilder = new UserBuilder();
 
         _handler = new RegisterUserHandler(
             _userRepository.Object,
+            _passwordHashService.Object,
             UnitOfWork.Object,
             DomainEventPublisher.Object,
             UserContext.Object,
@@ -35,15 +39,21 @@ public class RegisterUserHandlerTests : BaseCommandHandlerTest
         // Arrange
         var user = _userBuilder.Build();
         User? capturedUser = null;
+
         _userRepository
             .Setup(x => x.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
             .Callback<User, CancellationToken>((u, _) => capturedUser = u)
             .Returns(Task.CompletedTask);
 
+        _passwordHashService
+            .Setup(x => x.Hash(It.IsAny<string>()))
+            .Returns((string pwd) => $"hashed_{pwd}");
+
         // Act
         var command = new RegisterUserCommand(
             user.Name,
             user.Email.Value,
+            user.PasswordHash,
             user.Role.Value
         );
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -53,6 +63,7 @@ public class RegisterUserHandlerTests : BaseCommandHandlerTest
         capturedUser.Should().NotBeNull();
         capturedUser.Name.Should().Be(user.Name);
         capturedUser.Email.Should().Be(user.Email);
+        capturedUser.PasswordHash.Should().Be($"hashed_{user.PasswordHash}");
         capturedUser.Role.Should().Be(user.Role);
         capturedUser.AuditInfo.CreatedBy.Should().Be(UserContext.Object.Id);
         capturedUser.AuditInfo.CreatedAt.Should().Be(Clock.Now);

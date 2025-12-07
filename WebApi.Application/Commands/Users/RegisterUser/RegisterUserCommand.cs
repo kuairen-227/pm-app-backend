@@ -10,12 +10,15 @@ public class RegisterUserCommand : IRequest<Guid>
 {
     public string Name { get; }
     public string Email { get; }
+    public string Password { get; }
     public SystemRole.RoleType Role { get; }
 
-    public RegisterUserCommand(string name, string email, SystemRole.RoleType role)
+    public RegisterUserCommand(
+        string name, string email, string password, SystemRole.RoleType role)
     {
         Name = name;
         Email = email;
+        Password = password;
         Role = role;
     }
 }

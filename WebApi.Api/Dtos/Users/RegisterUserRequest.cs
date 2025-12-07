@@ -20,6 +20,12 @@ public class RegisterUserRequest
     public string Email { get; set; } = default!;
 
     /// <summary>
+    /// パスワード
+    /// </summary>
+    [Required]
+    public string Password { get; set; } = default!;
+
+    /// <summary>
     /// システムロール
     /// </summary>
     public string Role { get; set; } = default!;
