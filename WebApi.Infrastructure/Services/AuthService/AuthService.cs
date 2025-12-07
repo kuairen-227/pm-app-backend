@@ -20,9 +20,9 @@ public class AuthService : IAuthService
         _jwtService = jwtService;
     }
 
-    public async Task<AuthResult> LoginAsync(string email, string password)
+    public async Task<AuthResult> LoginAsync(string email, string password, CancellationToken cancellationToken = default)
     {
-        var user = await _userRepository.GetByEmailAsync(email)
+        var user = await _userRepository.GetByEmailAsync(email, cancellationToken)
             ?? throw new AuthenticationException("INVALID_CREDENTIAL", "メールアドレスまたはパスワードが正しくありません。");
 
         var isValidPassword = _passwordHashService.Verify(user.PasswordHash, password);
