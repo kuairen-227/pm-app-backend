@@ -3,6 +3,7 @@ using WebApi.Domain.Aggregates.NotificationAggregate;
 using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Aggregates.UserAggregate;
+using WebApi.Infrastructure.Database.Entities;
 
 namespace WebApi.Infrastructure.Database;
 
@@ -12,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<Project> Projects { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
     public DbSet<Notification> Notifications { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
