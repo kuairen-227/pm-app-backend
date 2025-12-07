@@ -16,6 +16,9 @@ public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
 
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
     public AuthController(IAuthService authService)
     {
         _authService = authService;
