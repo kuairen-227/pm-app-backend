@@ -1,5 +1,4 @@
 using MediatR;
-using WebApi.Domain.Aggregates.AuthAggregate;
 
 namespace WebApi.Application.Commands.Auth.GenerateRefreshToken;
 
