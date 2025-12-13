@@ -1,20 +1,25 @@
+using MediatR;
 using WebApi.Application.Abstractions.AuthService;
+using WebApi.Application.Commands.Auth.GenerateRefreshToken;
 using WebApi.Application.Common;
 using WebApi.Domain.Abstractions.Repositories;
 
-namespace WebApi.Infrastructure.Services.AuthService;
+namespace WebApi.Application.Services;
 
 public class AuthService : IAuthService
 {
+    private readonly IMediator _mediator;
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHashService _passwordHashService;
     private readonly IJwtService _jwtService;
 
     public AuthService(
+        IMediator mediator,
         IUserRepository userRepository,
         IPasswordHashService passwordHashService,
         IJwtService jwtService)
     {
+        _mediator = mediator;
         _userRepository = userRepository;
         _passwordHashService = passwordHashService;
         _jwtService = jwtService;
@@ -31,8 +36,10 @@ public class AuthService : IAuthService
             throw new AuthenticationException("INVALID_CREDENTIAL", "メールアドレスまたはパスワードが正しくありません。");
         }
 
-        var token = _jwtService.GenerateAccessToken(user.Id);
+        var accessToken = _jwtService.GenerateAccessToken(user.Id);
+        var refreshToken = await _mediator.Send(
+            new GenerateRefreshTokenCommand(), cancellationToken);
 
-        return new AuthResult(user.Id, token);
+        return new AuthResult(user.Id, accessToken, refreshToken.RefreshToken);
     }
 }

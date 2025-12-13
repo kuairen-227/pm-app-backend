@@ -40,7 +40,8 @@ public class AuthController : ControllerBase
         var response = new LoginResponse
         {
             UserId = result.UserId,
-            AccessToken = result.AccessToken
+            AccessToken = result.AccessToken,
+            RefreshToken = result.RefreshToken
         };
 
         return Ok(response);
