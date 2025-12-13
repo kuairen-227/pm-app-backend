@@ -30,11 +30,6 @@ public class RefreshAccessTokenHandler : BaseCommandHandler, IRequestHandler<Ref
         var refreshToken = await _refreshTokenRepository.GetByTokenAsync(request.RefreshToken, cancellationToken)
             ?? throw new AuthenticationException("INVALID_REFRESH_TOKEN", "リフレッシュトークンが無効です。");
 
-        if (refreshToken.IsExpired(Clock))
-        {
-            throw new AuthenticationException("EXPIRED_REFRESH_TOKEN", "リフレッシュトークンの有効期限が切れています。");
-        }
-
         var accessToken = _jwtService.GenerateAccessToken(refreshToken.UserId);
 
         return new AuthResult(

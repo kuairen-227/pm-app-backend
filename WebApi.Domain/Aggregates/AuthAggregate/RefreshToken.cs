@@ -18,7 +18,7 @@ public class RefreshToken : Entity
     {
         if (string.IsNullOrWhiteSpace(token))
             throw new DomainException("REFRESH_TOKEN_REQUIRED", "Token は必須です");
-        if (expiresAt <= clock.Now)
+        if (expiresAt < clock.Now)
             throw new DomainException("REFRESH_TOKEN_INVALID_EXPIRY", "ExpiresAt は現在時刻より後である必要があります");
 
         UserId = userId;
@@ -35,10 +35,5 @@ public class RefreshToken : Entity
         IsRevoked = true;
         RevokedAt = clock.Now;
         UpdateAuditInfo(revokedBy);
-    }
-
-    public bool IsExpired(IDateTimeProvider clock)
-    {
-        return clock.Now >= ExpiresAt;
     }
 }
