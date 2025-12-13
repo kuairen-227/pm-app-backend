@@ -6,6 +6,7 @@ using WebApi.Api.Dtos;
 using WebApi.Api.Dtos.Auth;
 using WebApi.Application.Abstractions.AuthService;
 using WebApi.Application.Commands.Auth.RefreshAccessToken;
+using WebApi.Application.Commands.Auth.RevokeRefreshToken;
 
 namespace WebApi.Api.Controllers;
 
@@ -73,5 +74,20 @@ public class AuthController : ControllerBase
         };
 
         return Ok(response);
+    }
+
+    /// <summary>
+    /// ログアウト
+    /// </summary>
+    [HttpPost("logout")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> LogoutAsync(
+        [FromBody] LogoutRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.Adapt<RevokeRefreshTokenCommand>();
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
     }
 }

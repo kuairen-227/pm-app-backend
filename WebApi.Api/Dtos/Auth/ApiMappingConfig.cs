@@ -1,5 +1,6 @@
 using Mapster;
 using WebApi.Application.Commands.Auth.RefreshAccessToken;
+using WebApi.Application.Commands.Auth.RevokeRefreshToken;
 
 namespace WebApi.Api.Dtos.Auth;
 
@@ -14,5 +15,6 @@ public class ApiMappingConfig : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config.NewConfig<RefreshRequest, RefreshAccessTokenCommand>();
+        config.NewConfig<LogoutRequest, RevokeRefreshTokenCommand>();
     }
 }
