@@ -34,7 +34,7 @@ public class NotificationTests : BaseDomainTest
         // Act
         var act = () => builder.Build();
 
-        // Then
+        // Assert
         var ex = act.Should().Throw<DomainException>();
         ex.Which.ErrorCode.Should().Be("DOMAIN.NOTIFICATION_RECIPIENT_ID_REQUIRED");
     }
@@ -51,7 +51,7 @@ public class NotificationTests : BaseDomainTest
         // Act
         var act = () => builder.Build();
 
-        // Then
+        // Assert
         var ex = act.Should().Throw<DomainException>();
         ex.Which.ErrorCode.Should().Be("DOMAIN.NOTIFICATION_MESSAGE_REQUIRED");
     }
