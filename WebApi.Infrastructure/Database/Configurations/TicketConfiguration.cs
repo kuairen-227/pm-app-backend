@@ -18,6 +18,13 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
                 .IsRequired();
         });
 
+        builder.OwnsOne(t => t.Description, description =>
+        {
+            description.Property(d => d.Value)
+                .HasColumnName("description")
+                .IsRequired();
+        });
+
         builder.OwnsOne(t => t.Deadline, deadline =>
         {
             deadline.Property(d => d.Value)
