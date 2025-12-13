@@ -19,6 +19,7 @@
     "tests",
     "package",
     // Domain
+    "auth",
     "docs",
     "user",
     "project",
