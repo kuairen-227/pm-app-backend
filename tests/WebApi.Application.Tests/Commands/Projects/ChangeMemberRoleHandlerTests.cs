@@ -71,7 +71,7 @@ public class ChangeMemberRoleHandlerTests : BaseCommandHandlerTest
     }
 
     [Fact]
-    public async Task 異常系_Projectが存在しない場合()
+    public async Task 異常系_Handle_Projectが存在しない場合()
     {
         // Arrange
         var user = _userBuilder.Build();
