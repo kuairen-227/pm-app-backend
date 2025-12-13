@@ -8,6 +8,7 @@ public sealed class Ticket : Entity
 {
     public Guid ProjectId { get; private set; }
     public TicketTitle Title { get; private set; } = null!;
+    public TicketDescription Description { get; private set; } = null!;
     public Guid? AssigneeId { get; private set; }
     public Deadline? Deadline { get; private set; } = null!;
     public TicketStatus Status { get; private set; } = null!;
@@ -24,6 +25,7 @@ public sealed class Ticket : Entity
     public Ticket(
         Guid projectId,
         string title,
+        string description,
         Guid? assigneeId,
         DateOnly? deadline,
         string? completionCriteria,
@@ -36,6 +38,7 @@ public sealed class Ticket : Entity
 
         ProjectId = projectId;
         Title = TicketTitle.Create(title);
+        Description = TicketDescription.Create(description);
         AssigneeId = assigneeId;
         Deadline = Deadline.CreateNullable(deadline, clock);
         Status = TicketStatus.Create(TicketStatus.StatusType.Todo);
@@ -45,6 +48,12 @@ public sealed class Ticket : Entity
     public void ChangeTitle(string title, Guid updatedBy)
     {
         Title = TicketTitle.Create(title);
+        UpdateAuditInfo(updatedBy);
+    }
+
+    public void ChangeDescription(string description, Guid updatedBy)
+    {
+        Description = TicketDescription.Create(description);
         UpdateAuditInfo(updatedBy);
     }
 

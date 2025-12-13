@@ -39,6 +39,7 @@ public class CreateTicketHandler : BaseCommandHandler, IRequestHandler<CreateTic
         var ticket = new Ticket(
             request.ProjectId,
             request.Title,
+            request.Description,
             request.AssigneeId,
             request.Deadline,
             request.CompletionCriteria,

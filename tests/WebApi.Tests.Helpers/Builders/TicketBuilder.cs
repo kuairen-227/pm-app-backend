@@ -7,6 +7,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
 {
     private Guid _projectId = Guid.NewGuid();
     private string _title = "デフォルトチケット";
+    private string _description = "デフォルト説明文";
     private Guid? _assigneeId = null;
     private DateOnly? _deadline = null;
     private TicketStatus.StatusType _status = TicketStatus.StatusType.Todo;
@@ -22,6 +23,12 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
     public TicketBuilder WithTitle(string title)
     {
         _title = title;
+        return this;
+    }
+
+    public TicketBuilder WithDescription(string description)
+    {
+        _description = description;
         return this;
     }
 
@@ -60,6 +67,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
         var ticket = new Ticket(
             _projectId,
             _title,
+            _description,
             _assigneeId,
             null,
             _completionCriteria,

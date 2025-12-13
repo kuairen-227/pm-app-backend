@@ -81,6 +81,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         var command = new CreateTicketCommand(
             ticket.ProjectId,
             ticket.Title.Value,
+            ticket.Description.Value,
             ticket.AssigneeId,
             ticket.Deadline?.Value,
             ticket.CompletionCriteria,
@@ -142,6 +143,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         var command = new CreateTicketCommand(
             ticket.ProjectId,
             ticket.Title.Value,
+            ticket.Description.Value,
             ticket.AssigneeId,
             ticket.Deadline?.Value,
             ticket.CompletionCriteria,
