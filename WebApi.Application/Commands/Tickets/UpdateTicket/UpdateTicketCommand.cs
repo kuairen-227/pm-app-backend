@@ -10,18 +10,21 @@ public class UpdateTicketCommand : IRequest<Unit>, IProjectScopedRequest
     public Guid ProjectId { get; }
     public Guid TicketId { get; }
     public string Title { get; }
+    public string Description { get; }
     public IReadOnlyCollection<Guid> NotificationRecipientIds { get; } = Array.Empty<Guid>();
 
     public UpdateTicketCommand(
         Guid projectId,
         Guid ticketId,
         string title,
+        string description,
         IReadOnlyCollection<Guid> notificationRecipientIds
     )
     {
         ProjectId = projectId;
         TicketId = ticketId;
         Title = title;
+        Description = description;
         NotificationRecipientIds = notificationRecipientIds;
     }
 }

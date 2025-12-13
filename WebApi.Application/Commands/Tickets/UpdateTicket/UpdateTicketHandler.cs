@@ -35,10 +35,11 @@ public class UpdateTicketHandler : BaseCommandHandler, IRequestHandler<UpdateTic
 
     public async Task<Unit> Handle(UpdateTicketCommand request, CancellationToken cancellationToken)
     {
-        // 1. タイトルの更新
+        // 1. タイトル・説明の更新
         var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
         ticket.ChangeTitle(request.Title, UserContext.Id);
+        ticket.ChangeDescription(request.Description, UserContext.Id);
 
         // 2. 通知作成
         var project = await _projectRepository.GetByIdAsync(ticket.ProjectId)

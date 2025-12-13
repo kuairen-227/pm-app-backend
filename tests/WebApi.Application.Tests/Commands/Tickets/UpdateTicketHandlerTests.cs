@@ -81,6 +81,7 @@ public class UpdateTicketHandlerTests : BaseCommandHandlerTest
             ticket.ProjectId,
             ticket.Id,
             ticket.Title.Value,
+            ticket.Description.Value,
             project.Members.Select(m => m.UserId).ToList()
         );
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -89,6 +90,7 @@ public class UpdateTicketHandlerTests : BaseCommandHandlerTest
         result.Should().Be(Unit.Value);
         ticket.ProjectId.Should().Be(command.ProjectId);
         ticket.Title.Value.Should().Be(command.Title);
+        ticket.Description.Value.Should().Be(command.Description);
         ticket.AuditInfo.UpdatedBy.Should().Be(UserContext.Object.Id);
         ticket.AuditInfo.UpdatedAt.Should().Be(Clock.Now);
 
@@ -118,7 +120,7 @@ public class UpdateTicketHandlerTests : BaseCommandHandlerTest
             Guid.NewGuid(),
             Guid.NewGuid(),
             "タイトル",
-
+            "説明",
             []
         );
         _ticketRepository
@@ -155,6 +157,7 @@ public class UpdateTicketHandlerTests : BaseCommandHandlerTest
             ticket.ProjectId,
             ticket.Id,
             "タイトル",
+            "説明",
             []
         );
         var act = async () => await _handler.Handle(command, CancellationToken.None);
