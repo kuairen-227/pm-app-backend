@@ -20,6 +20,11 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
                 .IsRequired();
         });
 
+        builder.Property(n => n.Message)
+                .HasColumnName("message")
+                .HasMaxLength(500)
+                .IsRequired();
+
         builder.OwnsOne(n => n.AuditInfo, a =>
         {
             a.OwnsAuditInfo();

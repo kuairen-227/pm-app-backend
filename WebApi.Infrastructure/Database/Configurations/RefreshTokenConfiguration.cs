@@ -10,6 +10,11 @@ public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
 {
     public void Configure(EntityTypeBuilder<RefreshToken> builder)
     {
+        builder.Property(rt => rt.Token)
+            .HasColumnName("token")
+            .HasMaxLength(256)
+            .IsRequired();
+
         builder.OwnsOne(rt => rt.AuditInfo, a =>
         {
             a.OwnsAuditInfo();

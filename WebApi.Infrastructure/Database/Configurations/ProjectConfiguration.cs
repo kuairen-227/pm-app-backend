@@ -10,6 +10,15 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
 {
     public void Configure(EntityTypeBuilder<Project> builder)
     {
+        builder.Property(p => p.Name)
+            .HasColumnName("name")
+            .HasMaxLength(200)
+            .IsRequired();
+
+        builder.Property(p => p.Description)
+            .HasColumnName("description")
+            .HasMaxLength(1000);
+
         builder.OwnsOne(p => p.AuditInfo, a =>
         {
             a.OwnsAuditInfo();

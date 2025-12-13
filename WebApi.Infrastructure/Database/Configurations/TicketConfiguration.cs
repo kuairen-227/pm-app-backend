@@ -15,6 +15,7 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
         {
             title.Property(t => t.Value)
                 .HasColumnName("title")
+                .HasMaxLength(100)
                 .IsRequired();
         });
 
@@ -37,6 +38,10 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
                 .HasColumnName("status")
                 .IsRequired();
         });
+
+        builder.Property(t => t.CompletionCriteria)
+            .HasColumnName("completion_criteria")
+            .HasMaxLength(100);
 
         builder.OwnsOne(n => n.AuditInfo, a =>
         {
