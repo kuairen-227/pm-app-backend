@@ -9,7 +9,8 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
     private string _title = "デフォルトチケット";
     private string _description = "デフォルト説明文";
     private Guid? _assigneeId = null;
-    private DateOnly? _deadline = null;
+    private DateOnly? _startDate = null;
+    private DateOnly? _endDate = null;
     private TicketStatus.StatusType _status = TicketStatus.StatusType.Todo;
     private string? _completionCriteria = null;
     private List<TicketComment> _comments = new();
@@ -38,9 +39,15 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
         return this;
     }
 
-    public TicketBuilder WithDeadline(DateOnly deadline)
+    public TicketBuilder WithStartDate(DateOnly startDate)
     {
-        _deadline = deadline;
+        _startDate = startDate;
+        return this;
+    }
+
+    public TicketBuilder WithEndDate(DateOnly endDate)
+    {
+        _endDate = endDate;
         return this;
     }
 
@@ -69,16 +76,12 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
             _title,
             _description,
             _assigneeId,
-            null,
+            _startDate,
+            _endDate,
             _completionCriteria,
             _createdBy,
             _clock
         );
-
-        if (_deadline.HasValue)
-        {
-            ticket.SetDeadlineForTest(_deadline);
-        }
 
         if (_status != TicketStatus.StatusType.Todo)
         {

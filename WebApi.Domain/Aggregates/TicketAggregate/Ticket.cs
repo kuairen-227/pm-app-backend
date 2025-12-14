@@ -10,7 +10,7 @@ public sealed class Ticket : Entity
     public TicketTitle Title { get; private set; } = null!;
     public TicketDescription Description { get; private set; } = null!;
     public Guid? AssigneeId { get; private set; }
-    public Deadline? Deadline { get; private set; } = null!;
+    public TicketSchedule Schedule { get; private set; } = null!;
     public TicketStatus Status { get; private set; } = null!;
     public string? CompletionCriteria { get; private set; }
 
@@ -27,7 +27,8 @@ public sealed class Ticket : Entity
         string title,
         string description,
         Guid? assigneeId,
-        DateOnly? deadline,
+        DateOnly? startDate,
+        DateOnly? endDate,
         string? completionCriteria,
         Guid createdBy,
         IDateTimeProvider clock
@@ -40,7 +41,7 @@ public sealed class Ticket : Entity
         Title = TicketTitle.Create(title);
         Description = TicketDescription.Create(description);
         AssigneeId = assigneeId;
-        Deadline = Deadline.CreateNullable(deadline, clock);
+        Schedule = TicketSchedule.Create(startDate, endDate);
         Status = TicketStatus.Create(TicketStatus.StatusType.Todo);
         CompletionCriteria = completionCriteria;
     }
@@ -95,9 +96,9 @@ public sealed class Ticket : Entity
         UpdateAuditInfo(updatedBy);
     }
 
-    public void ChangeDeadline(DateOnly? newDeadline, Guid updatedBy)
+    public void ChangeSchedule(DateOnly? newStartDate, DateOnly? newEndDate, Guid updatedBy)
     {
-        Deadline = Deadline.CreateNullable(newDeadline, _clock);
+        Schedule = TicketSchedule.Create(newStartDate, newEndDate);
         UpdateAuditInfo(updatedBy);
     }
 
@@ -144,10 +145,5 @@ public sealed class Ticket : Entity
             throw new DomainException("NOT_TICKET_COMMENT_AUTHOR", "Ticket Comment の作成者のみが削除できます");
 
         _comments.Remove(comment);
-    }
-
-    internal void SetDeadlineForTest(DateOnly? deadline)
-    {
-        Deadline = Deadline?.Rehydrate(deadline, _clock);
     }
 }

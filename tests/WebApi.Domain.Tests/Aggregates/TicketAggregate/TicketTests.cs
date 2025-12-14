@@ -146,20 +146,20 @@ public class TicketTests : BaseDomainTest
         ex.Which.ErrorCode.Should().Be("DOMAIN.NOT_ASSIGNED");
     }
 
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public void 正常系_ChangeDeadline(bool useDeadline)
+    [Fact]
+    public void 正常系_ChangeSchedule()
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        DateOnly? deadline = useDeadline ? Clock.Today.AddDays(1) : null;
+        var startDate = DateOnly.Parse("2025-01-01");
+        var endDate = DateOnly.Parse("2025-12-31");
 
         // Act
-        ticket.ChangeDeadline(deadline, UserContext.Id);
+        ticket.ChangeSchedule(startDate, endDate, UserContext.Id);
 
         // Assert
-        ticket.Deadline?.Value.Should().Be(deadline);
+        ticket.Schedule.StartDate.Should().Be(startDate);
+        ticket.Schedule.EndDate.Should().Be(endDate);
     }
 
     [Fact]
