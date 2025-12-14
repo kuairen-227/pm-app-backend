@@ -30,10 +30,36 @@ public sealed class User : Entity
         AddDomainEvent(new UserRegisteredEvent(Id, Name, clock));
     }
 
-    public void ChangeUserRole(Guid userId, SystemRole.RoleType newRole)
+    public void ChangeName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new DomainException("USER_NAME_REQUIRED", "Name は必須です");
+
+        Name = name;
+        UpdateAuditInfo(Id);
+        AddDomainEvent(new UserUpdatedEvent(Id, _clock));
+    }
+
+    public void ChangeEmail(string newEmail)
+    {
+        Email = Email.Create(newEmail);
+        UpdateAuditInfo(Id);
+        AddDomainEvent(new UserUpdatedEvent(Id, _clock));
+    }
+
+    public void ChangePassword(string newPasswordHash)
+    {
+        if (string.IsNullOrWhiteSpace(newPasswordHash))
+            throw new DomainException("USER_PASSWORD_REQUIRED", "PasswordHash は必須です");
+
+        PasswordHash = newPasswordHash;
+        UpdateAuditInfo(Id);
+    }
+
+    public void ChangeUserRole(SystemRole.RoleType newRole)
     {
         Role = SystemRole.Create(newRole);
-        UpdateAuditInfo(userId);
-        AddDomainEvent(new UserRoleChangedEvent(Id, newRole, _clock));
+        UpdateAuditInfo(Id);
+        AddDomainEvent(new UserUpdatedEvent(Id, _clock));
     }
 }

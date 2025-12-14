@@ -1,5 +1,6 @@
 using Mapster;
 using WebApi.Application.Commands.Users.RegisterUser;
+using WebApi.Application.Commands.Users.UpdateUser;
 using WebApi.Application.Common.Mapper;
 
 namespace WebApi.Api.Dtos.Users;
@@ -15,6 +16,8 @@ public class ApiMappingConfig : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config.NewConfig<RegisterUserRequest, RegisterUserCommand>()
+            .Map(dest => dest.Role, src => SystemRoleMapper.Map(src.Role));
+        config.NewConfig<UpdateUserRequest, UpdateUserCommand>()
             .Map(dest => dest.Role, src => SystemRoleMapper.Map(src.Role));
     }
 }

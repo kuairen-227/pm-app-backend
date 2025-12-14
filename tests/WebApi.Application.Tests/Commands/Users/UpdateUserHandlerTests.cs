@@ -2,29 +2,32 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using WebApi.Application.Abstractions;
-using WebApi.Application.Commands.Users.ChangeUserRole;
+using WebApi.Application.Abstractions.AuthService;
+using WebApi.Application.Commands.Users.UpdateUser;
 using WebApi.Application.Common;
 using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions.Repositories;
-using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Aggregates.UserAggregate;
 using WebApi.Tests.Helpers.Builders;
 
-namespace WebApi.Application.Tests.Commands.Projects;
+namespace WebApi.Application.Tests.Commands.Users;
 
-public class ChangeUserRoleHandlerTests : BaseCommandHandlerTest
+public class UpdateUserHandlerTests : BaseCommandHandlerTest
 {
-    private ChangeUserRoleHandler _handler;
+    private UpdateUserHandler _handler;
     private readonly Mock<IUserRepository> _userRepository;
+    private readonly Mock<IPasswordHashService> _passwordHashService;
     private readonly UserBuilder _userBuilder;
 
-    public ChangeUserRoleHandlerTests()
+    public UpdateUserHandlerTests()
     {
         _userRepository = new Mock<IUserRepository>();
+        _passwordHashService = new Mock<IPasswordHashService>();
         _userBuilder = new UserBuilder();
 
-        _handler = new ChangeUserRoleHandler(
+        _handler = new UpdateUserHandler(
             _userRepository.Object,
+            _passwordHashService.Object,
             UnitOfWork.Object,
             DomainEventPublisher.Object,
             UserContext.Object,
@@ -42,8 +45,18 @@ public class ChangeUserRoleHandlerTests : BaseCommandHandlerTest
             .Setup(x => x.GetByIdAsync(user.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
+        _passwordHashService
+            .Setup(x => x.Hash(It.IsAny<string>()))
+            .Returns((string pwd) => $"hashed_{pwd}");
+
         // Act
-        var command = new ChangeUserRoleCommand(user.Id, SystemRole.RoleType.User);
+        var command = new UpdateUserCommand(
+            userId: user.Id,
+            name: "New Name",
+            email: "new@example.com",
+            password: "newPassword",
+            systemRole: SystemRole.RoleType.User
+        );
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
@@ -57,7 +70,13 @@ public class ChangeUserRoleHandlerTests : BaseCommandHandlerTest
     public async Task 異常系_Userが存在しない場合()
     {
         // Arrange
-        var command = new ChangeUserRoleCommand(Guid.NewGuid(), SystemRole.RoleType.User);
+        var command = new UpdateUserCommand(
+            userId: Guid.NewGuid(),
+            name: null,
+            email: null,
+            password: null,
+            systemRole: SystemRole.RoleType.User
+        );
 
         _userRepository
             .Setup(x => x.GetByIdAsync(command.UserId, It.IsAny<CancellationToken>()))

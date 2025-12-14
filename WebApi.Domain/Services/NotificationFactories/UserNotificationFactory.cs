@@ -26,14 +26,13 @@ public sealed class UserNotificationFactory
         );
     }
 
-    public Notification CreateUserRoleChangedNotification(
-        Guid recipientId, Guid userId, SystemRole.RoleType newRole, Guid createdBy)
+    public Notification CreateUserUpdatedNotification(Guid recipientId, Guid userId, Guid createdBy)
     {
         return new Notification(
             recipientId,
-            NotificationCategory.Category.UserRoleChanged,
+            NotificationCategory.Category.UserUpdated,
             userId,
-            $"ユーザー権限が {newRole} に変更されました。",
+            $"ユーザー情報が更新されました。",
             createdBy,
             _clock
         );

@@ -26,7 +26,7 @@ public sealed class NotificationCategory : ValueObject
     {
         // User
         UserRegistered,
-        UserRoleChanged,
+        UserUpdated,
 
         // Project
         ProjectMemberInvited,

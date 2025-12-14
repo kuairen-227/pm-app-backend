@@ -7,6 +7,7 @@ using WebApi.Api.Dtos;
 using WebApi.Api.Dtos.Users;
 using WebApi.Application.Commands.Users.DeleteUser;
 using WebApi.Application.Commands.Users.RegisterUser;
+using WebApi.Application.Commands.Users.UpdateUser;
 using WebApi.Application.Queries.Users.Dtos;
 using WebApi.Application.Queries.Users.ListUsers;
 
@@ -62,7 +63,22 @@ public class UsersController : ControllerBase
         return Created();
     }
 
-    // TODO: ロール変更はユーザー編集APIに変更したい
+    /// <summary>
+    /// ユーザー編集
+    /// </summary>
+    [HttpPatch("{userId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateAsync(
+        Guid userId, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.Adapt<UpdateUserCommand>();
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
 
     /// <summary>
     /// ユーザー削除

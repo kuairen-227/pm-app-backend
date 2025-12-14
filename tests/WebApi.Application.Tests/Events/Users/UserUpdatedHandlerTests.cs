@@ -1,6 +1,6 @@
 using FluentAssertions;
 using Moq;
-using WebApi.Application.Events.Users.UserRoleChanged;
+using WebApi.Application.Events.Users.UserUpdated;
 using WebApi.Application.Tests.Helpers.Common;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.NotificationAggregate;
@@ -10,20 +10,20 @@ using WebApi.Tests.Helpers.Builders;
 
 namespace WebApi.Application.Tests.Events.Users;
 
-public class UserRoleChangedHandlerTests : BaseEventHandlerTest
+public class UserUpdatedHandlerTests : BaseEventHandlerTest
 {
-    private UserRoleChangedHandler _handler;
+    private UserUpdatedHandler _handler;
     private readonly UserNotificationFactory _notificationFactory;
     private readonly Mock<INotificationRepository> _notificationRepository;
     private readonly UserBuilder _userBuilder;
 
-    public UserRoleChangedHandlerTests()
+    public UserUpdatedHandlerTests()
     {
         _notificationFactory = new UserNotificationFactory(Clock);
         _notificationRepository = new Mock<INotificationRepository>();
         _userBuilder = new UserBuilder();
 
-        _handler = new UserRoleChangedHandler(
+        _handler = new UserUpdatedHandler(
             _notificationFactory,
             _notificationRepository.Object,
             UnitOfWork.Object,
@@ -44,15 +44,15 @@ public class UserRoleChangedHandlerTests : BaseEventHandlerTest
             .Returns(Task.CompletedTask);
 
         // Act
-        var notification = new UserRoleChangedNotification(user.Id, SystemRole.RoleType.User);
+        var notification = new UserUpdatedNotification(user.Id);
         await _handler.Handle(notification, CancellationToken.None);
 
         // Assert
         capturedNotification.Should().NotBeNull();
         capturedNotification.RecipientId.Should().Be(user.Id);
-        capturedNotification.Category.Value.Should().Be(NotificationCategory.Category.UserRoleChanged);
+        capturedNotification.Category.Value.Should().Be(NotificationCategory.Category.UserUpdated);
         capturedNotification.SubjectId.Should().Be(user.Id);
-        capturedNotification.Message.Should().Be($"ユーザー権限が {notification.Role} に変更されました。");
+        capturedNotification.Message.Should().Be($"ユーザー情報が更新されました。");
         capturedNotification.IsRead.Should().Be(false);
 
         _notificationRepository.Verify(x => x.AddAsync(
