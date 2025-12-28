@@ -26,10 +26,12 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
                 .IsRequired();
         });
 
-        builder.OwnsOne(t => t.Deadline, deadline =>
+        builder.OwnsOne(t => t.Schedule, schedule =>
         {
-            deadline.Property(d => d.Value)
-                .HasColumnName("deadline");
+            schedule.Property(s => s.StartDate)
+                .HasColumnName("start_date");
+            schedule.Property(s => s.EndDate)
+                .HasColumnName("end_date");
         });
 
         builder.OwnsOne(t => t.Status, status =>

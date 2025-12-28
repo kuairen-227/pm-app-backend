@@ -11,8 +11,10 @@ public class TicketFilter
     public string? Title { get; init; }
     public Guid? AssigneeId { get; init; }
     public string? Status { get; init; }
-    public DateOnly? DeadlineFrom { get; init; }
-    public DateOnly? DeadlineTo { get; init; }
+    public DateOnly? StartDateFrom { get; init; }
+    public DateOnly? StartDateTo { get; init; }
+    public DateOnly? EndDateFrom { get; init; }
+    public DateOnly? EndDateTo { get; init; }
 
     public ISpecification<Ticket>? ToSpecification()
     {
@@ -31,15 +33,25 @@ public class TicketFilter
                 ? new TicketStatusSpecification(Status)
                 : spec.And(new TicketStatusSpecification(Status));
 
-        if (DeadlineFrom.HasValue)
+        if (StartDateFrom.HasValue)
             spec = spec == null
-                ? new TicketDeadlineFromSpecification(DeadlineFrom.Value)
-                : spec.And(new TicketDeadlineFromSpecification(DeadlineFrom.Value));
+                ? new TicketStartDateFromSpecification(StartDateFrom.Value)
+                : spec.And(new TicketStartDateFromSpecification(StartDateFrom.Value));
 
-        if (DeadlineTo.HasValue)
+        if (StartDateTo.HasValue)
             spec = spec == null
-                ? new TicketDeadlineToSpecification(DeadlineTo.Value)
-                : spec.And(new TicketDeadlineToSpecification(DeadlineTo.Value));
+                ? new TicketStartDateToSpecification(StartDateTo.Value)
+                : spec.And(new TicketStartDateToSpecification(StartDateTo.Value));
+
+        if (EndDateFrom.HasValue)
+            spec = spec == null
+                ? new TicketEndDateFromSpecification(EndDateFrom.Value)
+                : spec.And(new TicketEndDateFromSpecification(EndDateFrom.Value));
+
+        if (EndDateTo.HasValue)
+            spec = spec == null
+                ? new TicketEndDateToSpecification(EndDateTo.Value)
+                : spec.And(new TicketEndDateToSpecification(EndDateTo.Value));
 
         return spec;
     }

@@ -9,8 +9,8 @@ public class TicketMappingProfile : Profile
     {
         CreateMap<Ticket, TicketDto>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Value.ToString()))
-            .ForMember(dest => dest.Deadline,
-                opt => opt.MapFrom(src => src.Deadline != null ? src.Deadline.Value : (DateOnly?)null));
+            .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Schedule.StartDate != null ? src.Schedule.StartDate.Value : (DateOnly?)null))
+            .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.Schedule.EndDate != null ? src.Schedule.EndDate.Value : (DateOnly?)null));
 
         CreateMap<TicketComment, TicketCommentDto>();
 

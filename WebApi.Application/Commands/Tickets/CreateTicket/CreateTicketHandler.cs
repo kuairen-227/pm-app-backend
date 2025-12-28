@@ -41,7 +41,8 @@ public class CreateTicketHandler : BaseCommandHandler, IRequestHandler<CreateTic
             request.Title,
             request.Description,
             request.AssigneeId,
-            request.Deadline,
+            request.StartDate,
+            request.EndDate,
             request.CompletionCriteria,
             UserContext.Id,
             Clock

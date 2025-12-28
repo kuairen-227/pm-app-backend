@@ -11,7 +11,8 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
     public string Title { get; }
     public string Description { get; }
     public Guid? AssigneeId { get; }
-    public DateOnly? Deadline { get; }
+    public DateOnly? StartDate { get; }
+    public DateOnly? EndDate { get; }
     public string? CompletionCriteria { get; private set; }
     public IReadOnlyCollection<Guid> NotificationRecipientIds { get; }
 
@@ -20,7 +21,8 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
         string title,
         string description,
         Guid? assigneeId,
-        DateOnly? deadline,
+        DateOnly? startDate,
+        DateOnly? endDate,
         string? completionCriteria,
         IReadOnlyCollection<Guid> notificationRecipientIds
     )
@@ -29,7 +31,8 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
         Title = title;
         Description = description;
         AssigneeId = assigneeId;
-        Deadline = deadline;
+        StartDate = startDate;
+        EndDate = endDate;
         CompletionCriteria = completionCriteria;
         NotificationRecipientIds = notificationRecipientIds;
     }
