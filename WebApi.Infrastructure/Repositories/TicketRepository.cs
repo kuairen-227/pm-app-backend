@@ -63,7 +63,7 @@ public class TicketRepository : ITicketRepository
         return await _dbContext.Tickets
             .AsNoTracking()
             .Where(t => t.AssigneeId == assigneeId)
-            .Where(t => t.Deadline != null && t.Deadline.Value <= _clock.Today)
+            .Where(t => t.Schedule.EndDate != null && t.Schedule.EndDate.Value <= _clock.Today)
             .ToListAsync(cancellationToken);
     }
 

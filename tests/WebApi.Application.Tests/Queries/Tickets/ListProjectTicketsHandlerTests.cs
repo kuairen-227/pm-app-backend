@@ -32,7 +32,8 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
                     Id = t.Id,
                     Title = t.Title.Value,
                     AssigneeId = t.AssigneeId,
-                    Deadline = t.Deadline?.Value,
+                    StartDate = t.Schedule.StartDate,
+                    EndDate = t.Schedule.EndDate,
                     Status = t.Status.Value.ToString(),
                     CompletionCriteria = t.CompletionCriteria,
                     CreatedBy = t.AuditInfo.CreatedBy,
@@ -77,7 +78,8 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
             result.Items.ElementAt(i).Id.Should().Be(tickets[i].Id);
             result.Items.ElementAt(i).Title.Should().Be(tickets[i].Title.Value);
             result.Items.ElementAt(i).AssigneeId.Should().Be(tickets[i].AssigneeId);
-            result.Items.ElementAt(i).Deadline.Should().Be(tickets[i].Deadline?.Value);
+            result.Items.ElementAt(i).StartDate.Should().Be(tickets[i].Schedule.StartDate);
+            result.Items.ElementAt(i).EndDate.Should().Be(tickets[i].Schedule.EndDate);
             result.Items.ElementAt(i).Status.Should().Be(tickets[i].Status.Value.ToString());
             result.Items.ElementAt(i).CompletionCriteria.Should().Be(tickets[i].CompletionCriteria);
         }

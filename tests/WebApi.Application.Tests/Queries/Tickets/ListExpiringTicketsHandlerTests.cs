@@ -27,7 +27,8 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
                     Id = t.Id,
                     Title = t.Title.Value,
                     AssigneeId = t.AssigneeId,
-                    Deadline = t.Deadline?.Value,
+                    StartDate = t.Schedule.StartDate,
+                    EndDate = t.Schedule.EndDate,
                     Status = t.Status.Value.ToString(),
                     CompletionCriteria = t.CompletionCriteria,
                     CreatedBy = t.AuditInfo.CreatedBy,
@@ -47,8 +48,8 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
         // Arrange
         var tickets = new List<Ticket>
         {
-            _ticketBuilder.WithTitle("期限切れチケット").WithDeadline(Clock.Today.AddDays(-1)).Build(),
-            _ticketBuilder.WithTitle("期限が近付いてるチケット").WithDeadline(Clock.Today.AddDays(7)).Build(),
+            _ticketBuilder.WithTitle("期限切れチケット").WithEndDate(Clock.Today.AddDays(-1)).Build(),
+            _ticketBuilder.WithTitle("期限が近付いてるチケット").WithEndDate(Clock.Today.AddDays(7)).Build(),
         };
 
         _ticketRepository
@@ -71,7 +72,8 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
                     Id = t.Id,
                     Title = t.Title.Value,
                     AssigneeId = t.AssigneeId,
-                    Deadline = t.Deadline?.Value,
+                    StartDate = t.Schedule.StartDate,
+                    EndDate = t.Schedule.EndDate,
                     Status = t.Status.Value.ToString(),
                     CompletionCriteria = t.CompletionCriteria,
                     CreatedBy = t.AuditInfo.CreatedBy,
@@ -100,13 +102,13 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
 
         var tickets = new List<Ticket>
         {
-            _ticketBuilder.WithTitle("期限切れチケット").WithDeadline(Clock.Today.AddDays(-1)).Build(),
-            _ticketBuilder.WithTitle("期限が近付いてるチケット").WithDeadline(Clock.Today.AddDays(7)).Build(),
-            _ticketBuilder.WithTitle("期限に余裕のあるチケット").WithDeadline(Clock.Today.AddDays(8)).Build(),
+            _ticketBuilder.WithTitle("期限切れチケット").WithEndDate(Clock.Today.AddDays(-1)).Build(),
+            _ticketBuilder.WithTitle("期限が近付いてるチケット").WithEndDate(Clock.Today.AddDays(7)).Build(),
+            _ticketBuilder.WithTitle("期限に余裕のあるチケット").WithEndDate(Clock.Today.AddDays(8)).Build(),
         };
 
         var expected = tickets
-            .Where(t => t.Deadline != null && t.Deadline.Value <= Clock.Today.AddDays(days))
+            .Where(t => t.Schedule.EndDate != null && t.Schedule.EndDate.Value <= Clock.Today.AddDays(days))
             .ToList();
 
         _ticketRepository
@@ -126,7 +128,8 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
                     Id = t.Id,
                     Title = t.Title.Value,
                     AssigneeId = t.AssigneeId,
-                    Deadline = t.Deadline?.Value,
+                    StartDate = t.Schedule.StartDate,
+                    EndDate = t.Schedule.EndDate,
                     Status = t.Status.Value.ToString(),
                     CompletionCriteria = t.CompletionCriteria
                 }),

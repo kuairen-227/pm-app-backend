@@ -83,7 +83,8 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
             ticket.Title.Value,
             ticket.Description.Value,
             ticket.AssigneeId,
-            ticket.Deadline?.Value,
+            ticket.Schedule.StartDate,
+            ticket.Schedule.EndDate,
             ticket.CompletionCriteria,
             project.Members.Select(m => m.UserId).ToList()
         );
@@ -95,7 +96,8 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         capturedTicket.ProjectId.Should().Be(ticket.ProjectId);
         capturedTicket.Title.Should().Be(ticket.Title);
         capturedTicket.AssigneeId.Should().Be(ticket.AssigneeId);
-        capturedTicket.Deadline.Should().Be(ticket.Deadline);
+        capturedTicket.Schedule.StartDate.Should().Be(ticket.Schedule.StartDate);
+        capturedTicket.Schedule.EndDate.Should().Be(ticket.Schedule.EndDate);
         capturedTicket.Status.Should().Be(ticket.Status);
         capturedTicket.CompletionCriteria.Should().Be(ticket.CompletionCriteria);
         capturedTicket.AuditInfo.CreatedBy.Should().Be(UserContext.Object.Id);
@@ -145,7 +147,8 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
             ticket.Title.Value,
             ticket.Description.Value,
             ticket.AssigneeId,
-            ticket.Deadline?.Value,
+            ticket.Schedule.StartDate,
+            ticket.Schedule.EndDate,
             ticket.CompletionCriteria,
             project.Members.Select(m => m.UserId).ToList()
         );
