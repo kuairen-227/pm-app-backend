@@ -17,8 +17,9 @@ public sealed class Ticket : Entity
     private readonly List<TicketComment> _comments = new();
     public IReadOnlyList<TicketComment> Comments => _comments.AsReadOnly();
 
-    private readonly List<AssignmentHistory> _assignmentHistories = new();
-    public IReadOnlyList<AssignmentHistory> AssignmentHistories => _assignmentHistories.AsReadOnly();
+    private readonly List<TicketHistory> _histories = new();
+    public IReadOnlyList<TicketHistory> Histories => _histories.AsReadOnly();
+    private readonly List<TicketHistoryChange> _pendingChanges = new();
 
     private Ticket() { } // EF Core 用
 
@@ -48,13 +49,25 @@ public sealed class Ticket : Entity
 
     public void ChangeTitle(string title, Guid updatedBy)
     {
-        Title = TicketTitle.Create(title);
+        var newTitle = TicketTitle.Create(title);
+        ChangeWithHistory(
+            TicketField.Title,
+            Title,
+            newTitle,
+            () => Title = newTitle
+        );
         UpdateAuditInfo(updatedBy);
     }
 
     public void ChangeDescription(string description, Guid updatedBy)
     {
-        Description = TicketDescription.Create(description);
+        var newDescription = TicketDescription.Create(description);
+        ChangeWithHistory(
+            TicketField.Description,
+            Description,
+            newDescription,
+            () => Description = newDescription
+        );
         UpdateAuditInfo(updatedBy);
     }
 
@@ -65,18 +78,12 @@ public sealed class Ticket : Entity
         if (AssigneeId == assigneeId)
             throw new DomainException("ALREADY_ASSIGNED_SAME_USER", "既に同じユーザーに割り当てられています");
 
-        AssignmentHistory history;
-        if (AssigneeId is null)
-        {
-            history = AssignmentHistory.Assigned(assigneeId, updatedBy, _clock);
-        }
-        else
-        {
-            history = AssignmentHistory.Changed(assigneeId, AssigneeId.Value, updatedBy, _clock);
-        }
-
-        _assignmentHistories.Add(history);
-        AssigneeId = assigneeId;
+        ChangeWithHistory(
+            TicketField.Assignee,
+            AssigneeId,
+            assigneeId,
+            () => AssigneeId = assigneeId
+        );
 
         UpdateAuditInfo(updatedBy);
         AddDomainEvent(new TicketMemberAssignedEvent(
@@ -89,22 +96,51 @@ public sealed class Ticket : Entity
         if (AssigneeId is null)
             throw new DomainException("NOT_ASSIGNED", "現在割り当てられていません");
 
-        var history = AssignmentHistory.Unassigned(AssigneeId.Value, updatedBy, _clock);
-        _assignmentHistories.Add(history);
-        AssigneeId = null;
+        ChangeWithHistory(
+            TicketField.Assignee,
+            AssigneeId,
+            null,
+            () => AssigneeId = null
+        );
 
         UpdateAuditInfo(updatedBy);
     }
 
     public void ChangeSchedule(DateOnly? newStartDate, DateOnly? newEndDate, Guid updatedBy)
     {
+        if (Schedule.StartDate != newStartDate)
+        {
+            ChangeWithHistory(
+                TicketField.StartDate,
+                Schedule.StartDate,
+                newStartDate,
+                () => { }
+            );
+        }
+
+        if (Schedule.EndDate != newEndDate)
+        {
+            ChangeWithHistory(
+                TicketField.EndDate,
+                Schedule.EndDate,
+                newEndDate,
+                () => { }
+            );
+        }
+
         Schedule = TicketSchedule.Create(newStartDate, newEndDate);
         UpdateAuditInfo(updatedBy);
     }
 
     public void ChangeStatus(TicketStatus.StatusType status, Guid updatedBy)
     {
-        Status = TicketStatus.Create(status);
+        var newStatus = TicketStatus.Create(status);
+        ChangeWithHistory(
+            TicketField.Status,
+            Status,
+            newStatus,
+            () => Status = newStatus
+        );
         UpdateAuditInfo(updatedBy);
     }
 
@@ -113,7 +149,13 @@ public sealed class Ticket : Entity
         if (string.IsNullOrWhiteSpace(completionCriteria))
             throw new DomainException("COMPLETION_CRITERIA_REQUIRED", "Completion criteria は必須です");
 
-        CompletionCriteria = completionCriteria;
+        ChangeWithHistory(
+            TicketField.CompletionCriteria,
+            CompletionCriteria,
+            completionCriteria,
+            () => CompletionCriteria = completionCriteria
+        );
+
         UpdateAuditInfo(updatedBy);
     }
 
@@ -146,4 +188,45 @@ public sealed class Ticket : Entity
 
         _comments.Remove(comment);
     }
+
+    private void ChangeWithHistory<T>(
+        TicketField field,
+        T before,
+        T after,
+        Action apply)
+    {
+        if (Equals(before, after)) return;
+
+        apply();
+
+        var change = TicketHistoryChange.Create(
+            field,
+            TicketHistoryChangeValue.From(before),
+            TicketHistoryChangeValue.From(after)
+        );
+        _pendingChanges.Add(change);
+    }
+
+    public void CommitHistory(
+        TicketHistoryAction action,
+        Guid actorId)
+    {
+        if (!_pendingChanges.Any()) return;
+
+        var history = new TicketHistory(
+            Id,
+            actorId,
+            _clock.Now,
+            action,
+            actorId,
+            _clock
+        );
+
+        foreach (var change in _pendingChanges)
+            history.AddChange(change.Field, change.Before, change.After);
+
+        _histories.Add(history);
+        _pendingChanges.Clear();
+    }
+
 }

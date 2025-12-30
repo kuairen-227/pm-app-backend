@@ -84,7 +84,6 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         result.AssigneeId.Should().Be(user.Id);
-        result.AssignmentHistories.Should().HaveCount(1);
     }
 
     [Fact]
@@ -342,5 +341,81 @@ public class TicketTests : BaseDomainTest
         // Assert
         var ex = act.Should().Throw<DomainException>();
         ex.Which.ErrorCode.Should().Be("DOMAIN.NOT_TICKET_COMMENT_AUTHOR");
+    }
+
+    [Fact]
+    public void 正常系_CommitHistory()
+    {
+        // Arrange
+        var ticket = _ticketBuilder.Build();
+        var beforeTitle = ticket.Title.Value;
+        var afterTitle = "新しいタイトル";
+
+        // Act
+        ticket.ChangeTitle(afterTitle, UserContext.Id);
+        ticket.CommitHistory(TicketHistoryAction.TicketCreated, UserContext.Id);
+
+        // Assert
+        ticket.Histories.Should().ContainSingle();
+        ticket.Histories.First().TicketId.Should().Be(ticket.Id);
+        ticket.Histories.First().ActorId.Should().Be(UserContext.Id);
+        ticket.Histories.First().Action.Should().Be(TicketHistoryAction.TicketCreated);
+        ticket.Histories.First().Changes.Should().ContainSingle(c =>
+            c.Field == TicketField.Title &&
+            c.Before!.Kind == nameof(TicketTitle) &&
+            ((TicketTitle)c.Before.Value!).Value == beforeTitle &&
+            c.After!.Kind == nameof(TicketTitle) &&
+            ((TicketTitle)c.After.Value!).Value == afterTitle
+        );
+    }
+
+    [Fact]
+    public void 正常系_CommitHistory_複数フィールド()
+    {
+        // Arrange
+        var ticket = _ticketBuilder.Build();
+        var beforeDescription = ticket.Description.Value;
+        var afterDescription = "新しい説明";
+        var beforeStatus = ticket.Status.Value;
+        var afterStatus = TicketStatus.StatusType.Done;
+
+        // Act
+        ticket.ChangeDescription(afterDescription, UserContext.Id);
+        ticket.ChangeStatus(afterStatus, UserContext.Id);
+        ticket.CommitHistory(TicketHistoryAction.TicketUpdated, UserContext.Id);
+
+        // Assert
+        ticket.Histories.Should().ContainSingle();
+        ticket.Histories.First().TicketId.Should().Be(ticket.Id);
+        ticket.Histories.First().ActorId.Should().Be(UserContext.Id);
+        ticket.Histories.First().Action.Should().Be(TicketHistoryAction.TicketUpdated);
+        ticket.Histories.First().Changes.Should().HaveCount(2);
+        ticket.Histories.First().Changes.Should().Contain(c =>
+            c.Field == TicketField.Description &&
+            c.Before!.Kind == nameof(TicketDescription) &&
+            ((TicketDescription)c.Before.Value!).Value == beforeDescription &&
+            c.After!.Kind == nameof(TicketDescription) &&
+            ((TicketDescription)c.After.Value!).Value == afterDescription
+        );
+        ticket.Histories.First().Changes.Should().Contain(c =>
+            c.Field == TicketField.Status &&
+            c.Before!.Kind == nameof(TicketStatus) &&
+            ((TicketStatus)c.Before.Value!).Value == beforeStatus &&
+            c.After!.Kind == nameof(TicketStatus) &&
+            ((TicketStatus)c.After.Value!).Value == afterStatus
+        );
+    }
+
+    [Fact]
+    public void 準正常系_CommitHistory_変更なしの場合()
+    {
+        // Arrange
+        var ticket = _ticketBuilder.Build();
+
+        // Act
+        ticket.CommitHistory(TicketHistoryAction.TicketUpdated, UserContext.Id);
+
+        // Assert
+        ticket.Histories.Should().BeEmpty();
     }
 }

@@ -14,6 +14,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
     private TicketStatus.StatusType _status = TicketStatus.StatusType.Todo;
     private string? _completionCriteria = null;
     private List<TicketComment> _comments = new();
+    private List<TicketHistory> _histories = new();
 
     public TicketBuilder WithProjectId(Guid projectId)
     {
@@ -69,6 +70,12 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
         return this;
     }
 
+    public TicketBuilder WithHistories(params TicketHistory[] histories)
+    {
+        _histories = histories.ToList();
+        return this;
+    }
+
     public override Ticket Build()
     {
         var ticket = new Ticket(
@@ -91,6 +98,14 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
         foreach (var comment in _comments)
         {
             ticket.AddComment(comment.AuthorId, comment.Content, comment.AuditInfo.CreatedBy);
+        }
+
+        foreach (var history in _histories)
+        {
+            // テスト用に履歴を直接追加するため、リフレクションを使用
+            var historiesField = typeof(Ticket).GetField("_histories", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var historiesList = (List<TicketHistory>)historiesField!.GetValue(ticket)!;
+            historiesList.Add(history);
         }
 
         return ticket;
