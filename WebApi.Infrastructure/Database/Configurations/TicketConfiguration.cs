@@ -1,5 +1,7 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Domain.Aggregates.ProjectAggregate;
 using WebApi.Domain.Aggregates.TicketAggregate;
 using WebApi.Domain.Aggregates.UserAggregate;
@@ -59,10 +61,15 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
             });
         });
 
-        builder.OwnsMany(t => t.AssignmentHistories, history =>
+        builder.OwnsMany(t => t.Histories, history =>
         {
-            history.ToTable("assignment_histories");
-            history.Property(h => h.Id).ValueGeneratedOnAdd();
+            history.ToTable("ticket_histories");
+            history.Property(h => h.Action)
+                .HasConversion<string>()
+                .HasMaxLength(50);
+            history.Property(h => h.Changes)
+                .HasConversion(new TicketHistoryChangesJsonConverter())
+                .HasColumnType("jsonb");
             history.OwnsOne(h => h.AuditInfo, a =>
             {
                 a.OwnsAuditInfo();
