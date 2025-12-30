@@ -1,4 +1,4 @@
-using WebApi.Domain.Common;
+using WebApi.Domain.Abstractions;
 
 namespace WebApi.Domain.Aggregates.TicketAggregate;
 
@@ -19,7 +19,11 @@ public sealed class TicketHistoryChangeValue
 
         return new TicketHistoryChangeValue(
             value.GetType().Name,
-            value
+            value switch
+            {
+                ITicketHistoryPrimitive primitive => primitive.ToPrimitive(),
+                _ => value.ToString()!,
+            }
         );
     }
 }

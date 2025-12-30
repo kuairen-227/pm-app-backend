@@ -1,8 +1,9 @@
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.TicketAggregate;
 
-public sealed class TicketDescription : ValueObject
+public sealed class TicketDescription : ValueObject, ITicketHistoryPrimitive
 {
     public string Value { get; } = string.Empty;
 
@@ -19,4 +20,6 @@ public sealed class TicketDescription : ValueObject
     {
         yield return Value;
     }
+
+    public object ToPrimitive() => Value;
 }

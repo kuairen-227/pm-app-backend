@@ -1,8 +1,9 @@
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Common;
 
 namespace WebApi.Domain.Aggregates.TicketAggregate;
 
-public sealed class TicketStatus : ValueObject
+public sealed class TicketStatus : ValueObject, ITicketHistoryPrimitive
 {
     public enum StatusType { Todo, InProgress, Resolved, Done }
     public StatusType Value { get; }
@@ -22,4 +23,6 @@ public sealed class TicketStatus : ValueObject
     {
         yield return Value;
     }
+
+    public object ToPrimitive() => Value;
 }
