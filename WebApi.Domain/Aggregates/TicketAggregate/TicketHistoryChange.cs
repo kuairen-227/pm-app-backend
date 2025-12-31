@@ -13,6 +13,14 @@ public sealed class TicketHistoryChange : ValueObject
         TicketHistoryChangeValue? before,
         TicketHistoryChangeValue? after)
     {
+        if (before?.Value?.Equals(after?.Value) == true)
+        {
+            throw new DomainException(
+                "NO_CHANGE_IN_HISTORY",
+                "Before と After の値が同じ場合、 TicketHistoryChangeValue を作成できません"
+            );
+        }
+
         Field = field;
         Before = before;
         After = after;
