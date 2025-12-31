@@ -45,8 +45,10 @@ public class UpdateTicketService : BaseCommandHandler
 
         if (request.Title.HasValue)
             ticket.ChangeTitle(request.Title.Value, UserContext.Id);
+
         if (request.Description.HasValue)
             ticket.ChangeDescription(request.Description.Value, UserContext.Id);
+
         if (request.AssigneeId.HasValue)
         {
             var assigneeId = request.AssigneeId.Value;
@@ -61,6 +63,7 @@ public class UpdateTicketService : BaseCommandHandler
                 ticket.Unassign(UserContext.Id);
             }
         }
+
         if (request.StartDate.HasValue || request.EndDate.HasValue)
         {
             var startDate = request.StartDate.HasValue
@@ -72,14 +75,17 @@ public class UpdateTicketService : BaseCommandHandler
 
             ticket.ChangeSchedule(startDate, endDate, UserContext.Id);
         }
+
         if (request.Status.HasValue)
         {
             var status = TicketStatus.Parse(request.Status.Value);
             ticket.ChangeStatus(status, UserContext.Id);
         }
+
         // TODO: 完了条件周りは見直し
         if (request.CompletionCriteria.HasValue)
             ticket.SetCompletionCriteria(request.CompletionCriteria.Value, UserContext.Id);
+
         if (request.Comment.HasValue)
             ticket.AddComment(UserContext.Id, request.Comment.Value, UserContext.Id);
 
