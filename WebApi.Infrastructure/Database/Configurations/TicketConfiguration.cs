@@ -43,13 +43,20 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
                 .IsRequired();
         });
 
-        builder.Property(t => t.CompletionCriteria)
-            .HasColumnName("completion_criteria")
-            .HasMaxLength(100);
-
         builder.OwnsOne(n => n.AuditInfo, a =>
         {
             a.OwnsAuditInfo();
+        });
+
+        builder.OwnsMany(t => t.CompletionCriteria, criteria =>
+        {
+            criteria.ToTable("ticket_completion_criteria");
+            criteria.Property(c => c.Criterion)
+                .HasMaxLength(200);
+            criteria.OwnsOne(c => c.AuditInfo, a =>
+            {
+                a.OwnsAuditInfo();
+            });
         });
 
         builder.OwnsMany(t => t.Comments, comment =>
