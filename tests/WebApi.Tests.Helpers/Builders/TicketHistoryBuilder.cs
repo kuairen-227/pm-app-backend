@@ -9,7 +9,8 @@ public class TicketHistoryBuilder : BaseBuilder<TicketHistoryBuilder, TicketHist
     private Guid actorId = Guid.NewGuid();
     private DateTime _occurredAt = DateTime.UtcNow;
     private TicketHistoryAction _action = TicketHistoryAction.TicketCreated;
-    private List<(TicketField field, TicketHistoryChangeValue? before, TicketHistoryChangeValue? after)> _changes = new();
+    private List<(TicketField field, TicketHistoryChangeValue? before, TicketHistoryChangeValue? after)> _changes
+        = [(TicketField.Title, null, TicketHistoryChangeValue.From("デフォルトタイトル"))];
 
     public TicketHistoryBuilder WithTicketId(Guid ticketId)
     {

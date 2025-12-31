@@ -36,12 +36,17 @@ public class GetTicketByIdTests : BaseQueryHandlerTest
                     AuthorId = c.AuthorId,
                     Content = c.Content,
                 }).ToList(),
-                AssignmentHistories = t.AssignmentHistories.Select(a => new AssignmentHistoryDto
+                Histories = t.Histories.Select(h => new TicketHistoryDto
                 {
-                    ChangeType = a.ChangeType.ToString(),
-                    AssigneeId = a.AssigneeId,
-                    PreviousAssigneeId = a.PreviousAssigneeId,
-                    ChangedAt = a.ChangedAt,
+                    ActorId = h.ActorId,
+                    OccurredAt = h.OccurredAt,
+                    Action = h.Action.ToString(),
+                    Changes = h.Changes.Select(ch => new TicketHistoryChangeDto
+                    {
+                        Field = ch.Field.ToString(),
+                        Before = ch.Before?.Value?.ToString(),
+                        After = ch.After?.Value?.ToString(),
+                    }).ToList()
                 }).ToList()
             });
 
@@ -73,7 +78,7 @@ public class GetTicketByIdTests : BaseQueryHandlerTest
         result.Status.Should().Be(ticket.Status.Value.ToString());
         result.CompletionCriteria.Should().Be(ticket.CompletionCriteria);
         result.Comments.Should().HaveCount(ticket.Comments.Count);
-        result.AssignmentHistories.Should().HaveCount(ticket.AssignmentHistories.Count);
+        result.Histories.Should().HaveCount(ticket.Histories.Count);
     }
 
     [Fact]

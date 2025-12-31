@@ -14,7 +14,7 @@ public class TicketMappingProfile : Profile
 
         CreateMap<TicketComment, TicketCommentDto>();
 
-        CreateMap<AssignmentHistory, AssignmentHistoryDto>()
-            .ForMember(dest => dest.ChangeType, opt => opt.MapFrom(src => src.ChangeType.ToString()));
+        CreateMap<TicketHistory, TicketHistoryDto>()
+            .ForMember(dest => dest.Action, opt => opt.MapFrom(src => src.Action.ToString()));
     }
 }

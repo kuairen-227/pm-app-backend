@@ -71,7 +71,7 @@ public class TicketRepository : ITicketRepository
     {
         return await _dbContext.Tickets
             .Include(t => t.Comments)
-            .Include(t => t.AssignmentHistories)
+            .Include(t => t.Histories)
             .AsSplitQuery()
             .FirstOrDefaultAsync(t => t.Id == ticketId, cancellationToken);
     }
