@@ -4,12 +4,10 @@ namespace WebApi.Domain.Aggregates.TicketAggregate;
 
 public sealed class TicketHistoryChangeValue
 {
-    public string Kind { get; }
     public object? Value { get; }
 
-    private TicketHistoryChangeValue(string kind, object? value)
+    private TicketHistoryChangeValue(object? value)
     {
-        Kind = kind;
         Value = value;
     }
 
@@ -18,7 +16,6 @@ public sealed class TicketHistoryChangeValue
         if (value is null) return null;
 
         return new TicketHistoryChangeValue(
-            value.GetType().Name,
             value switch
             {
                 ITicketHistoryPrimitive primitive => primitive.ToPrimitive(),

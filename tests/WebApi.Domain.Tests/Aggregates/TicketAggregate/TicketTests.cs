@@ -362,10 +362,8 @@ public class TicketTests : BaseDomainTest
         ticket.Histories.First().Action.Should().Be(TicketHistoryAction.TicketCreated);
         ticket.Histories.First().Changes.Should().ContainSingle(c =>
             c.Field == TicketField.Title &&
-            c.Before!.Kind == nameof(TicketTitle) &&
-            (string)c.Before.Value! == beforeTitle &&
-            c.After!.Kind == nameof(TicketTitle) &&
-            (string)c.After.Value! == afterTitle
+            (string)c.Before!.Value! == beforeTitle &&
+            (string)c.After!.Value! == afterTitle
         );
 
     }
@@ -393,17 +391,13 @@ public class TicketTests : BaseDomainTest
         ticket.Histories.First().Changes.Should().HaveCount(2);
         ticket.Histories.First().Changes.Should().Contain(c =>
             c.Field == TicketField.Description &&
-            c.Before!.Kind == nameof(TicketDescription) &&
-            (string)c.Before.Value! == beforeDescription &&
-            c.After!.Kind == nameof(TicketDescription) &&
-            (string)c.After.Value! == afterDescription
+            (string)c.Before!.Value! == beforeDescription &&
+            (string)c.After!.Value! == afterDescription
         );
         ticket.Histories.First().Changes.Should().Contain(c =>
             c.Field == TicketField.Status &&
-            c.Before!.Kind == nameof(TicketStatus) &&
-            (TicketStatus.StatusType)c.Before.Value! == beforeStatus &&
-            c.After!.Kind == nameof(TicketStatus) &&
-            (TicketStatus.StatusType)c.After.Value! == afterStatus
+            (TicketStatus.StatusType)c.Before!.Value! == beforeStatus &&
+            (TicketStatus.StatusType)c.After!.Value! == afterStatus
         );
     }
 
