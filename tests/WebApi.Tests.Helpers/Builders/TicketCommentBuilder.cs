@@ -5,15 +5,8 @@ namespace WebApi.Tests.Helpers.Builders;
 
 public class TicketCommentBuilder : BaseBuilder<TicketCommentBuilder, TicketComment>
 {
-    private Guid _ticketId = Guid.NewGuid();
     private Guid _authorId = Guid.NewGuid();
     private string _content = "デフォルトのコメント内容";
-
-    public TicketCommentBuilder WithTicketId(Guid ticketId)
-    {
-        _ticketId = ticketId;
-        return this;
-    }
 
     public TicketCommentBuilder WithAuthorId(Guid authorId)
     {
@@ -30,7 +23,6 @@ public class TicketCommentBuilder : BaseBuilder<TicketCommentBuilder, TicketComm
     public override TicketComment Build()
     {
         return new TicketComment(
-            _ticketId,
             _authorId,
             _content,
             _createdBy,

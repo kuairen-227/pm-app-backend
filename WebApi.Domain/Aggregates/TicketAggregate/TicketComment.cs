@@ -5,23 +5,19 @@ namespace WebApi.Domain.Aggregates.TicketAggregate;
 
 public sealed class TicketComment : Entity
 {
-    public Guid TicketId { get; private set; }
     public Guid AuthorId { get; private set; }
     public string Content { get; private set; } = null!;
 
     private TicketComment() { } // EF Core 用
 
-    public TicketComment(Guid ticketId, Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
+    public TicketComment(Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
         : base(createdBy, clock)
     {
-        if (ticketId == Guid.Empty)
-            throw new DomainException("TICKET_ID_REQUIRED", "Ticket ID は必須です");
         if (authorId == Guid.Empty)
             throw new DomainException("AUTHOR_ID_REQUIRED", "Author ID は必須です");
         if (string.IsNullOrWhiteSpace(content))
             throw new DomainException("CONTENT_REQUIRED", "Content は必須です");
 
-        TicketId = ticketId;
         AuthorId = authorId;
         Content = content;
     }

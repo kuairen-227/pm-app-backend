@@ -494,7 +494,6 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         ticket.Histories.Should().ContainSingle();
-        ticket.Histories.First().TicketId.Should().Be(ticket.Id);
         ticket.Histories.First().ActorId.Should().Be(UserContext.Id);
         ticket.Histories.First().Action.Should().Be(TicketHistoryAction.TicketCreated);
         ticket.Histories.First().Changes.Should().ContainSingle(c =>
@@ -522,7 +521,6 @@ public class TicketTests : BaseDomainTest
 
         // Assert
         ticket.Histories.Should().ContainSingle();
-        ticket.Histories.First().TicketId.Should().Be(ticket.Id);
         ticket.Histories.First().ActorId.Should().Be(UserContext.Id);
         ticket.Histories.First().Action.Should().Be(TicketHistoryAction.TicketUpdated);
         ticket.Histories.First().Changes.Should().HaveCount(2);

@@ -235,7 +235,7 @@ public sealed class Ticket : Entity
 
     public TicketComment AddComment(Guid authorId, string content, Guid createdBy)
     {
-        var comment = new TicketComment(Id, authorId, content, createdBy, _clock);
+        var comment = new TicketComment(authorId, content, createdBy, _clock);
         _comments.Add(comment);
         return comment;
     }
@@ -288,7 +288,6 @@ public sealed class Ticket : Entity
         if (!_pendingChanges.Any()) return;
 
         var history = new TicketHistory(
-            Id,
             actorId,
             _clock.Now,
             action,

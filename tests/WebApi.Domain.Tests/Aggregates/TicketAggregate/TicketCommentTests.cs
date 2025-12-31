@@ -25,17 +25,6 @@ public class TicketCommentTests : BaseDomainTest
     }
 
     [Fact]
-    public void 異常系_インスタンス生成_TicketIdが空の場合()
-    {
-        // Arrange & Act
-        var act = () => _commentBuilder.WithTicketId(Guid.Empty).Build();
-
-        // Assert
-        var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("DOMAIN.TICKET_ID_REQUIRED");
-    }
-
-    [Fact]
     public void 異常系_インスタンス生成_AuthorIdが空の場合()
     {
         // Arrange & Act
