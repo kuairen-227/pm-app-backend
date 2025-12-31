@@ -61,11 +61,15 @@ public class UpdateTicketService : BaseCommandHandler
                 ticket.Unassign(UserContext.Id);
             }
         }
-        // TODO: 見直し
         if (request.StartDate.HasValue || request.EndDate.HasValue)
         {
-            var startDate = request.StartDate.Value;
-            var endDate = request.EndDate.Value;
+            var startDate = request.StartDate.HasValue
+                ? request.StartDate.Value
+                : ticket.Schedule.StartDate;
+            var endDate = request.EndDate.HasValue
+                ? request.EndDate.Value
+                : ticket.Schedule.EndDate;
+
             ticket.ChangeSchedule(startDate, endDate, UserContext.Id);
         }
         if (request.Status.HasValue)
