@@ -13,11 +13,10 @@ public sealed class TicketHistoryChangeValue
 
     public static TicketHistoryChangeValue? From(object? value)
     {
-        if (value is null) return null;
-
         return new TicketHistoryChangeValue(
             value switch
             {
+                null => null,
                 ITicketHistoryPrimitive primitive => primitive.ToPrimitive(),
                 _ => value.ToString()!,
             }

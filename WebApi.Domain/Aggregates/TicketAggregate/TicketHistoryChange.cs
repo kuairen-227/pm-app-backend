@@ -13,7 +13,7 @@ public sealed class TicketHistoryChange : ValueObject
         TicketHistoryChangeValue? before,
         TicketHistoryChangeValue? after)
     {
-        if (before?.Value?.Equals(after?.Value) == true)
+        if (Equals(before?.Value, after?.Value))
         {
             throw new DomainException(
                 "NO_CHANGE_IN_HISTORY",

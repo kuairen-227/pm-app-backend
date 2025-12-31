@@ -7,7 +7,6 @@ namespace WebApi.Domain.Tests.Aggregates.TicketAggregate;
 public class TicketHistoryChangeTests
 {
     [Theory]
-    [InlineData(null, null)]
     [InlineData("Old Value", null)]
     [InlineData(null, "New Value")]
     [InlineData("Old Value", "New Value")]
@@ -27,7 +26,7 @@ public class TicketHistoryChangeTests
     }
 
     [Fact]
-    public void 異常系_インスタンス生成()
+    public void 異常系_インスタンス生成_値が同じ場合()
     {
         // Arrange
         var before = "Same Value";
