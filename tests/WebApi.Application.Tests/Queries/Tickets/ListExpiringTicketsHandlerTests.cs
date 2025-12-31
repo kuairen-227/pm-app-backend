@@ -30,7 +30,11 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
                     StartDate = t.Schedule.StartDate,
                     EndDate = t.Schedule.EndDate,
                     Status = t.Status.Value.ToString(),
-                    CompletionCriteria = t.CompletionCriteria,
+                    CompletionCriteria = t.CompletionCriteria.Select(c => new TicketCompletionCriterionDto
+                    {
+                        Criterion = c.Criterion,
+                        IsCompleted = c.IsCompleted
+                    }).ToList(),
                     CreatedBy = t.AuditInfo.CreatedBy,
                     CreatedAt = t.AuditInfo.CreatedAt,
                     UpdatedBy = t.AuditInfo.UpdatedBy,
@@ -75,7 +79,11 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
                     StartDate = t.Schedule.StartDate,
                     EndDate = t.Schedule.EndDate,
                     Status = t.Status.Value.ToString(),
-                    CompletionCriteria = t.CompletionCriteria,
+                    CompletionCriteria = t.CompletionCriteria.Select(c => new TicketCompletionCriterionDto
+                    {
+                        Criterion = c.Criterion,
+                        IsCompleted = c.IsCompleted
+                    }).ToList(),
                     CreatedBy = t.AuditInfo.CreatedBy,
                     CreatedAt = t.AuditInfo.CreatedAt,
                     UpdatedBy = t.AuditInfo.UpdatedBy,
@@ -131,7 +139,11 @@ public class ListExpiringTicketsHandlerTests : BaseQueryHandlerTest
                     StartDate = t.Schedule.StartDate,
                     EndDate = t.Schedule.EndDate,
                     Status = t.Status.Value.ToString(),
-                    CompletionCriteria = t.CompletionCriteria,
+                    CompletionCriteria = t.CompletionCriteria.Select(c => new TicketCompletionCriterionDto
+                    {
+                        Criterion = c.Criterion,
+                        IsCompleted = c.IsCompleted
+                    }).ToList(),
                     CreatedBy = t.AuditInfo.CreatedBy,
                     CreatedAt = t.AuditInfo.CreatedAt,
                     UpdatedBy = t.AuditInfo.UpdatedBy,

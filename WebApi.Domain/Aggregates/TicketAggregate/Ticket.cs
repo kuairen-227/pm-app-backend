@@ -12,7 +12,9 @@ public sealed class Ticket : Entity
     public Guid? AssigneeId { get; private set; }
     public TicketSchedule Schedule { get; private set; } = null!;
     public TicketStatus Status { get; private set; } = null!;
-    public string? CompletionCriteria { get; private set; }
+
+    public readonly List<TicketCompletionCriterion> _completionCriteria = new();
+    public IReadOnlyList<TicketCompletionCriterion> CompletionCriteria => _completionCriteria.AsReadOnly();
 
     private readonly List<TicketComment> _comments = new();
     public IReadOnlyList<TicketComment> Comments => _comments.AsReadOnly();
@@ -30,7 +32,7 @@ public sealed class Ticket : Entity
         Guid? assigneeId,
         DateOnly? startDate,
         DateOnly? endDate,
-        string? completionCriteria,
+        List<string>? completionCriteria,
         Guid createdBy,
         IDateTimeProvider clock
     ) : base(createdBy, clock)
@@ -44,7 +46,19 @@ public sealed class Ticket : Entity
         AssigneeId = assigneeId;
         Schedule = TicketSchedule.Create(startDate, endDate);
         Status = TicketStatus.Create(TicketStatus.StatusType.Todo);
-        CompletionCriteria = completionCriteria;
+
+        if (completionCriteria != null)
+        {
+            foreach (var criterion in completionCriteria)
+            {
+                var completionCriterion = new TicketCompletionCriterion(
+                    criterion,
+                    createdBy,
+                    clock
+                );
+                _completionCriteria.Add(completionCriterion);
+            }
+        }
     }
 
     public void ChangeTitle(string title, Guid updatedBy)
@@ -144,19 +158,79 @@ public sealed class Ticket : Entity
         UpdateAuditInfo(updatedBy);
     }
 
-    public void SetCompletionCriteria(string completionCriteria, Guid updatedBy)
+    public void AddCompletionCriterion(string criterion, Guid createdBy)
     {
-        if (string.IsNullOrWhiteSpace(completionCriteria))
-            throw new DomainException("COMPLETION_CRITERIA_REQUIRED", "Completion criteria は必須です");
+        var newCriterion = new TicketCompletionCriterion(
+            criterion,
+            createdBy,
+            _clock
+        );
+        ChangeWithHistory(
+            TicketField.CompletionCriterion,
+            null,
+            criterion,
+            () => _completionCriteria.Add(newCriterion)
+        );
+    }
+
+    public void EditCompletionCriterion(Guid criterionId, string newCriterion, Guid updatedBy)
+    {
+        var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
+            ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
+
+        var before = criterion.Criterion;
 
         ChangeWithHistory(
-            TicketField.CompletionCriteria,
-            CompletionCriteria,
-            completionCriteria,
-            () => CompletionCriteria = completionCriteria
+            TicketField.CompletionCriterion,
+            before,
+            newCriterion,
+            () => criterion.EditCriterion(newCriterion, updatedBy)
+        );
+    }
+
+    public void RemoveCompletionCriterion(Guid criterionId, Guid deletedBy)
+    {
+        var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
+            ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
+
+        ChangeWithHistory(
+            TicketField.CompletionCriterion,
+            criterion.Criterion,
+            null,
+            () => _completionCriteria.Remove(criterion)
+        );
+    }
+
+    public void CompleteCriterion(Guid criterionId, Guid updatedBy)
+    {
+        var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
+            ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
+
+        ChangeWithHistory(
+            TicketField.CompletionCriterion,
+            false,
+            true,
+            () => criterion.Complete(updatedBy)
         );
 
-        UpdateAuditInfo(updatedBy);
+        if (_completionCriteria.All(c => c.IsCompleted))
+            ChangeStatus(TicketStatus.StatusType.Done, updatedBy);
+    }
+
+    public void ReopenCriterion(Guid criterionId, Guid updatedBy)
+    {
+        var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
+            ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
+
+        ChangeWithHistory(
+            TicketField.CompletionCriterion,
+            true,
+            false,
+            () => criterion.Reopen(updatedBy)
+        );
+
+        if (Status.Value.Equals(TicketStatus.StatusType.Done))
+            ChangeStatus(TicketStatus.StatusType.InProgress, updatedBy);
     }
 
     public TicketComment AddComment(Guid authorId, string content, Guid createdBy)

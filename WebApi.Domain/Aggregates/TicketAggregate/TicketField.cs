@@ -8,5 +8,5 @@ public enum TicketField
     EndDate,
     Status,
     Assignee,
-    CompletionCriteria
+    CompletionCriterion
 }

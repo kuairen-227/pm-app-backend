@@ -31,6 +31,18 @@ public class TicketTests : BaseDomainTest
     }
 
     [Fact]
+    public void 正常系_インスタンス生成_CompletionCriterionが1件以上の場合()
+    {
+        // Arrange & Act
+        var result = _ticketBuilder
+            .WithCompletionCriteria(["完了基準1", "完了基準2"])
+            .Build();
+
+        // Assert
+        result.CompletionCriteria.Should().HaveCount(2);
+    }
+
+    [Fact]
     public void 異常系_インスタンス生成_ProjectIdが空の場合()
     {
         // Assert & Build
@@ -175,34 +187,159 @@ public class TicketTests : BaseDomainTest
     }
 
     [Fact]
-    public void 正常系_SetCompletionCriteria()
+    public void 正常系_AddCompletionCriteria()
     {
         // Arrange
-        var ticket = _ticketBuilder.Build();
+        var ticket = _ticketBuilder.WithCompletionCriteria([]).Build();
         var criteria = "完了条件";
 
         // Act
-        ticket.SetCompletionCriteria(criteria, UserContext.Id);
+        ticket.AddCompletionCriterion(criteria, UserContext.Id);
 
         // Assert
-        ticket.CompletionCriteria.Should().Be(criteria);
+        ticket.CompletionCriteria.Should().ContainSingle();
+        ticket.CompletionCriteria.First().Criterion.Should().Be(criteria);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData(" ")]
-    public void 異常系_SetCompletionCriteria_空の場合(string? criteria)
+    [Fact]
+    public void 正常系_EditCompletionCriteria()
     {
         // Arrange
-        var ticket = _ticketBuilder.Build();
+        var ticket = _ticketBuilder.WithCompletionCriteria(["完了条件"]).Build();
 
         // Act
-        var act = () => ticket.SetCompletionCriteria(criteria!, UserContext.Id);
+        ticket.EditCompletionCriterion(ticket.CompletionCriteria.First().Id, "完了条件-編集", UserContext.Id);
+
+        // Assert
+        ticket.CompletionCriteria.Should().ContainSingle();
+        ticket.CompletionCriteria.First().Criterion.Should().Be("完了条件-編集");
+    }
+
+    [Fact]
+    public void 異常系_EditCompletionCriteria_存在しないCriteriaの場合()
+    {
+        // Arrange
+        var ticket = _ticketBuilder.WithCompletionCriteria([]).Build();
+
+        // Act
+        var act = () => ticket.EditCompletionCriterion(Guid.NewGuid(), "完了条件-編集", UserContext.Id);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
-        ex.Which.ErrorCode.Should().Be("DOMAIN.COMPLETION_CRITERIA_REQUIRED");
+        ex.Which.ErrorCode.Should().Be("DOMAIN.TICKET_COMPLETION_CRITERION_NOT_FOUND");
+    }
+
+    [Fact]
+    public void 正常系_RemoveCompletionCriterion()
+    {
+        // Arrange
+        var ticket = _ticketBuilder.WithCompletionCriteria(["完了条件"]).Build();
+
+        // Act
+        ticket.RemoveCompletionCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+
+        // Assert
+        ticket.CompletionCriteria.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void 異常系_RemoveCompletionCriterion_存在しないCriteriaの場合()
+    {
+        // Arrange
+        var ticket = _ticketBuilder.WithCompletionCriteria([]).Build();
+
+        // Act
+        var act = () => ticket.RemoveCompletionCriterion(Guid.NewGuid(), UserContext.Id);
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("DOMAIN.TICKET_COMPLETION_CRITERION_NOT_FOUND");
+    }
+
+    [Fact]
+    public void 正常系_CompleteCriterion()
+    {
+        // Arrange
+        var ticket = _ticketBuilder
+            .WithStatus(TicketStatus.StatusType.InProgress)
+            .WithCompletionCriteria(["完了条件1", "完了条件2"])
+            .Build();
+
+        // Act
+        ticket.CompleteCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+
+        // Assert
+        ticket.CompletionCriteria.First().IsCompleted.Should().BeTrue();
+        ticket.Status.Value.Should().Be(TicketStatus.StatusType.InProgress);
+    }
+
+    [Fact]
+    public void 正常系_CompleteCriterion_全てのCriterionが完了した場合()
+    {
+        // Arrange
+        var ticket = _ticketBuilder
+            .WithStatus(TicketStatus.StatusType.InProgress)
+            .WithCompletionCriteria(["完了条件1", "完了条件2"])
+            .Build();
+
+        // Act
+        ticket.CompleteCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+        ticket.CompleteCriterion(ticket.CompletionCriteria.Last().Id, UserContext.Id);
+
+        // Assert
+        ticket.CompletionCriteria.All(c => c.IsCompleted).Should().BeTrue();
+        ticket.Status.Value.Should().Be(TicketStatus.StatusType.Done);
+    }
+
+    [Fact]
+    public void 異常系_CompleteCriterion()
+    {
+        // Arrange
+        var ticket = _ticketBuilder.WithCompletionCriteria([]).Build();
+
+        // Act
+        var act = () => ticket.CompleteCriterion(Guid.NewGuid(), UserContext.Id);
+
+        // Assert
+        var ex = act.Should().Throw<DomainException>();
+        ex.Which.ErrorCode.Should().Be("DOMAIN.TICKET_COMPLETION_CRITERION_NOT_FOUND");
+    }
+
+    [Fact]
+    public void 正常系_ReopenCriterion()
+    {
+        // Arrange
+        var ticket = _ticketBuilder
+            .WithStatus(TicketStatus.StatusType.InProgress)
+            .WithCompletionCriteria(["完了条件1", "完了条件2"])
+            .Build();
+        ticket.CompleteCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+
+        // Act
+        ticket.ReopenCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+
+        // Assert
+        ticket.CompletionCriteria.First().IsCompleted.Should().BeFalse();
+        ticket.Status.Value.Should().Be(TicketStatus.StatusType.InProgress);
+    }
+
+    [Fact]
+    public void 正常系_ReopenCompletionCriterion_Statusが完了の場合()
+    {
+        // Arrange
+        var ticket = _ticketBuilder
+            .WithStatus(TicketStatus.StatusType.Done)
+            .WithCompletionCriteria(["完了条件1", "完了条件2"])
+            .Build();
+        ticket.CompleteCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+        ticket.CompleteCriterion(ticket.CompletionCriteria.Last().Id, UserContext.Id);
+
+        // Act
+        ticket.ReopenCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+
+        // Assert
+        ticket.CompletionCriteria.First().IsCompleted.Should().BeFalse();
+        ticket.Status.Value.Should().Be(TicketStatus.StatusType.InProgress);
     }
 
     [Fact]

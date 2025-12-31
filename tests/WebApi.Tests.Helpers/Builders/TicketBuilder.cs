@@ -12,7 +12,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
     private DateOnly? _startDate = null;
     private DateOnly? _endDate = null;
     private TicketStatus.StatusType _status = TicketStatus.StatusType.Todo;
-    private string? _completionCriteria = null;
+    private List<string> _criteria = new();
     private List<TicketComment> _comments = new();
     private List<TicketHistory> _histories = new();
 
@@ -58,9 +58,9 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
         return this;
     }
 
-    public TicketBuilder WithCompletionCriteria(string? completionCriteria)
+    public TicketBuilder WithCompletionCriteria(params string[] criteria)
     {
-        _completionCriteria = completionCriteria ?? "デフォルトの完了基準";
+        _criteria = criteria.ToList();
         return this;
     }
 
@@ -85,7 +85,7 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
             _assigneeId,
             _startDate,
             _endDate,
-            _completionCriteria,
+            _criteria,
             _createdBy,
             _clock
         );

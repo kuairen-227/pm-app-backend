@@ -30,7 +30,11 @@ public class GetTicketByIdTests : BaseQueryHandlerTest
                 StartDate = t.Schedule.StartDate,
                 EndDate = t.Schedule.EndDate,
                 Status = t.Status.Value.ToString(),
-                CompletionCriteria = t.CompletionCriteria,
+                CompletionCriteria = t.CompletionCriteria.Select(c => new TicketCompletionCriterionDto
+                {
+                    Criterion = c.Criterion,
+                    IsCompleted = c.IsCompleted
+                }).ToList(),
                 Comments = t.Comments.Select(c => new TicketCommentDto
                 {
                     AuthorId = c.AuthorId,
@@ -76,7 +80,7 @@ public class GetTicketByIdTests : BaseQueryHandlerTest
         result.StartDate.Should().Be(ticket.Schedule.StartDate);
         result.EndDate.Should().Be(ticket.Schedule.EndDate);
         result.Status.Should().Be(ticket.Status.Value.ToString());
-        result.CompletionCriteria.Should().Be(ticket.CompletionCriteria);
+        result.CompletionCriteria.Should().BeEquivalentTo(ticket.CompletionCriteria.Select(c => c.Criterion));
         result.Comments.Should().HaveCount(ticket.Comments.Count);
         result.Histories.Should().HaveCount(ticket.Histories.Count);
     }
