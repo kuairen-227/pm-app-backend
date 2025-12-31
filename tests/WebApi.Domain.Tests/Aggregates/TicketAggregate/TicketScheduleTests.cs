@@ -46,9 +46,11 @@ public class TicketScheduleTests : BaseDomainTest
     [Fact]
     public void 正常系_値が同じ場合()
     {
-        // Arrange & Act
+        // Arrange
         var startDate = DateOnly.Parse("2025-01-01");
         var endDate = DateOnly.Parse("2025-12-31");
+
+        // Act
         var result1 = TicketSchedule.Create(startDate, endDate);
         var result2 = TicketSchedule.Create(startDate, endDate);
 
@@ -61,11 +63,13 @@ public class TicketScheduleTests : BaseDomainTest
     [Fact]
     public void 正常系_値が異なる場合()
     {
-        // Assert & Act
+        // Assert
         var startDate1 = DateOnly.Parse("2025-01-01");
         var endDate1 = DateOnly.Parse("2025-12-31");
         var startDate2 = DateOnly.Parse("2025-02-01");
         var endDate2 = DateOnly.Parse("2025-11-30");
+
+        // Act
         var result1 = TicketSchedule.Create(startDate1, endDate1);
         var result2 = TicketSchedule.Create(startDate2, endDate2);
 
