@@ -35,11 +35,6 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
                     StartDate = t.Schedule.StartDate,
                     EndDate = t.Schedule.EndDate,
                     Status = t.Status.Value.ToString(),
-                    CompletionCriteria = t.CompletionCriteria.Select(c => new TicketCompletionCriterionDto
-                    {
-                        Criterion = c.Criterion,
-                        IsCompleted = c.IsCompleted
-                    }).ToList(),
                     CreatedBy = t.AuditInfo.CreatedBy,
                     CreatedAt = t.AuditInfo.CreatedAt,
                     UpdatedBy = t.AuditInfo.UpdatedBy,
@@ -85,7 +80,6 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
             result.Items.ElementAt(i).StartDate.Should().Be(tickets[i].Schedule.StartDate);
             result.Items.ElementAt(i).EndDate.Should().Be(tickets[i].Schedule.EndDate);
             result.Items.ElementAt(i).Status.Should().Be(tickets[i].Status.Value.ToString());
-            result.Items.ElementAt(i).CompletionCriteria.Should().BeEquivalentTo(tickets[i].CompletionCriteria.Select(c => c.Criterion));
         }
 
         _ticketRepository.Verify(r => r.ListByProjectIdAsync(

@@ -8,7 +8,6 @@ public abstract class TicketBaseDto
     public DateOnly? StartDate { get; init; }
     public DateOnly? EndDate { get; init; }
     public string Status { get; init; } = string.Empty;
-    public IReadOnlyList<TicketCompletionCriterionDto> CompletionCriteria { get; init; } = Array.Empty<TicketCompletionCriterionDto>();
     public Guid CreatedBy { get; init; }
     public DateTime CreatedAt { get; init; }
     public Guid UpdatedBy { get; init; }

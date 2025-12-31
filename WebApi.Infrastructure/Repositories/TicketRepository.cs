@@ -70,6 +70,7 @@ public class TicketRepository : ITicketRepository
     public async Task<Ticket?> GetByIdAsync(Guid ticketId, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Tickets
+            .Include(t => t.CompletionCriteria)
             .Include(t => t.Comments)
             .Include(t => t.Histories)
             .AsSplitQuery()
