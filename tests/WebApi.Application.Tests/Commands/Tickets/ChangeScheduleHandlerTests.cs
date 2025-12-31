@@ -14,9 +14,9 @@ using WebApi.Tests.Helpers.Builders;
 
 namespace WebApi.Application.Tests.Commands.Tickets;
 
-public class ChangeStatusHandlerTests : BaseCommandHandlerTest
+public class ChangeScheduleHandlerTests : BaseCommandHandlerTest
 {
-    private readonly ChangeStatusHandler _handler;
+    private readonly ChangeScheduleHandler _handler;
     private readonly Mock<ITicketRepository> _ticketRepository;
     private readonly Mock<IProjectRepository> _projectRepository;
     private readonly Mock<INotificationRepository> _notificationRepository;
@@ -25,7 +25,7 @@ public class ChangeStatusHandlerTests : BaseCommandHandlerTest
     private readonly ProjectBuilder _projectBuilder;
     private readonly ProjectMemberBuilder _projectMemberBuilder;
 
-    public ChangeStatusHandlerTests()
+    public ChangeScheduleHandlerTests()
     {
         _ticketRepository = new Mock<ITicketRepository>();
         _projectRepository = new Mock<IProjectRepository>();
@@ -35,7 +35,7 @@ public class ChangeStatusHandlerTests : BaseCommandHandlerTest
         _projectBuilder = new ProjectBuilder();
         _projectMemberBuilder = new ProjectMemberBuilder();
 
-        _handler = new ChangeStatusHandler(
+        _handler = new ChangeScheduleHandler(
             _ticketRepository.Object,
             _projectRepository.Object,
             _notificationRepository.Object,
@@ -59,7 +59,7 @@ public class ChangeStatusHandlerTests : BaseCommandHandlerTest
             .WithUserId(Guid.NewGuid())
             .WithRole(ProjectRole.RoleType.Member)
             .Build();
-        var project = _projectBuilder.WithMembers(member1, member2).Build();
+        var project = _projectBuilder.Build();
         var ticket = _ticketBuilder.WithProjectId(project.Id).Build();
 
         _ticketRepository
@@ -77,17 +77,19 @@ public class ChangeStatusHandlerTests : BaseCommandHandlerTest
             .Returns(Task.CompletedTask);
 
         // Act
-        var command = new ChangeStatusCommand(
+        var command = new ChangeScheduleCommand(
             ticket.ProjectId,
             ticket.Id,
-            TicketStatus.StatusType.Todo,
+            Clock.Today,
+            Clock.Today.AddDays(7),
             project.Members.Select(m => m.UserId).ToList()
         );
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
         result.Should().Be(Unit.Value);
-        ticket.Status.Value.Should().Be(command.Status);
+        ticket.Schedule.StartDate.Should().Be(Clock.Today);
+        ticket.Schedule.EndDate.Should().Be(Clock.Today.AddDays(7));
         ticket.AuditInfo.UpdatedBy.Should().Be(UserContext.Object.Id);
         ticket.AuditInfo.UpdatedAt.Should().Be(Clock.Now);
 
@@ -113,10 +115,11 @@ public class ChangeStatusHandlerTests : BaseCommandHandlerTest
     public async Task 異常系_Handle_Ticketが存在しない場合()
     {
         // Arrange
-        var command = new ChangeStatusCommand(
+        var command = new ChangeScheduleCommand(
             Guid.NewGuid(),
             Guid.NewGuid(),
-            TicketStatus.StatusType.Todo,
+            Clock.Today,
+            Clock.Today.AddDays(7),
             []
         );
         _ticketRepository
@@ -149,10 +152,11 @@ public class ChangeStatusHandlerTests : BaseCommandHandlerTest
             .ReturnsAsync((Project?)null);
 
         // Act
-        var command = new ChangeStatusCommand(
+        var command = new ChangeScheduleCommand(
             ticket.ProjectId,
             ticket.Id,
-            TicketStatus.StatusType.Todo,
+            Clock.Today,
+            Clock.Today.AddDays(7),
             []
         );
         var act = async () => await _handler.Handle(command, CancellationToken.None);
