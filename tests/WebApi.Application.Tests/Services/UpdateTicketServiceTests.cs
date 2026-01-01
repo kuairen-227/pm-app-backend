@@ -75,7 +75,8 @@ public class UpdateTicketServiceTests : BaseServiceHandlerTest
             startDate: Optional<DateOnly?>.NotSet(),
             endDate: Optional<DateOnly?>.NotSet(),
             status: Optional<string>.NotSet(),
-            completionCriteria: Optional<IReadOnlyList<string>?>.NotSet(),
+            completionCriterionOperations:
+                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.NotSet(),
             comment: Optional<string>.NotSet(),
             notificationRecipientIds: new List<Guid>()
         );
@@ -113,7 +114,8 @@ public class UpdateTicketServiceTests : BaseServiceHandlerTest
             startDate: Optional<DateOnly?>.NotSet(),
             endDate: Optional<DateOnly?>.NotSet(),
             status: Optional<string>.NotSet(),
-            completionCriteria: Optional<IReadOnlyList<string>?>.NotSet(),
+            completionCriterionOperations:
+                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.NotSet(),
             comment: Optional<string>.NotSet(),
             notificationRecipientIds: new List<Guid>()
         );
@@ -153,7 +155,8 @@ public class UpdateTicketServiceTests : BaseServiceHandlerTest
             startDate: Optional<DateOnly?>.NotSet(),
             endDate: Optional<DateOnly?>.NotSet(),
             status: Optional<string>.NotSet(),
-            completionCriteria: Optional<IReadOnlyList<string>?>.NotSet(),
+            completionCriterionOperations:
+                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.NotSet(),
             comment: Optional<string>.NotSet(),
             notificationRecipientIds: new List<Guid>()
         );
@@ -201,7 +204,8 @@ public class UpdateTicketServiceTests : BaseServiceHandlerTest
             startDate: Optional<DateOnly?>.NotSet(),
             endDate: Optional<DateOnly?>.NotSet(),
             status: Optional<string>.NotSet(),
-            completionCriteria: Optional<IReadOnlyList<string>?>.NotSet(),
+            completionCriterionOperations:
+                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.NotSet(),
             comment: Optional<string>.NotSet(),
             notificationRecipientIds: new List<Guid>()
         );

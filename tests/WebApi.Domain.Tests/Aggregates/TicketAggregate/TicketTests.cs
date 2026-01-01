@@ -230,26 +230,26 @@ public class TicketTests : BaseDomainTest
     }
 
     [Fact]
-    public void 正常系_RemoveCompletionCriterion()
+    public void 正常系_DeleteCompletionCriterion()
     {
         // Arrange
         var ticket = _ticketBuilder.WithCompletionCriteria(["完了条件"]).Build();
 
         // Act
-        ticket.RemoveCompletionCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+        ticket.DeleteCompletionCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
 
         // Assert
         ticket.CompletionCriteria.Should().BeEmpty();
     }
 
     [Fact]
-    public void 異常系_RemoveCompletionCriterion_存在しないCriteriaの場合()
+    public void 異常系_DeleteCompletionCriterion_存在しないCriteriaの場合()
     {
         // Arrange
         var ticket = _ticketBuilder.WithCompletionCriteria([]).Build();
 
         // Act
-        var act = () => ticket.RemoveCompletionCriterion(Guid.NewGuid(), UserContext.Id);
+        var act = () => ticket.DeleteCompletionCriterion(Guid.NewGuid(), UserContext.Id);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

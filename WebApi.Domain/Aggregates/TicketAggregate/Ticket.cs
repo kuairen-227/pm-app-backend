@@ -32,7 +32,7 @@ public sealed class Ticket : Entity
         Guid? assigneeId,
         DateOnly? startDate,
         DateOnly? endDate,
-        List<string>? completionCriteria,
+        IReadOnlyList<string>? completionCriteria,
         Guid createdBy,
         IDateTimeProvider clock
     ) : base(createdBy, clock)
@@ -189,7 +189,7 @@ public sealed class Ticket : Entity
         );
     }
 
-    public void RemoveCompletionCriterion(Guid criterionId, Guid deletedBy)
+    public void DeleteCompletionCriterion(Guid criterionId, Guid deletedBy)
     {
         var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
             ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
