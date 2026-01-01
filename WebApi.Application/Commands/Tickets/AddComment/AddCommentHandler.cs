@@ -1,7 +1,6 @@
 using MediatR;
 using WebApi.Application.Commands.Tickets.UpdateTicket;
 using WebApi.Application.Common;
-using WebApi.Domain.Aggregates.TicketAggregate;
 
 namespace WebApi.Application.Commands.Tickets.AddComment;
 
