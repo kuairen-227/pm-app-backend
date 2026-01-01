@@ -171,6 +171,7 @@ public sealed class Ticket : Entity
             criterion,
             () => _completionCriteria.Add(newCriterion)
         );
+        RecalculateStatus(createdBy);
     }
 
     public void EditCompletionCriterion(Guid criterionId, string newCriterion, Guid updatedBy)
@@ -192,45 +193,39 @@ public sealed class Ticket : Entity
     {
         var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
             ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
-
         ChangeWithHistory(
             TicketField.CompletionCriterion,
             criterion.Criterion,
             null,
             () => _completionCriteria.Remove(criterion)
         );
+        RecalculateStatus(deletedBy);
     }
 
     public void CompleteCriterion(Guid criterionId, Guid updatedBy)
     {
         var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
             ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
-
         ChangeWithHistory(
             TicketField.CompletionCriterion,
             false,
             true,
             () => criterion.Complete(updatedBy)
         );
-
-        if (_completionCriteria.All(c => c.IsCompleted))
-            ChangeStatus(TicketStatus.StatusType.Done, updatedBy);
+        RecalculateStatus(updatedBy);
     }
 
     public void ReopenCriterion(Guid criterionId, Guid updatedBy)
     {
         var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
             ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
-
         ChangeWithHistory(
             TicketField.CompletionCriterion,
             true,
             false,
             () => criterion.Reopen(updatedBy)
         );
-
-        if (Status.Value.Equals(TicketStatus.StatusType.Done))
-            ChangeStatus(TicketStatus.StatusType.InProgress, updatedBy);
+        RecalculateStatus(updatedBy);
     }
 
     public TicketComment AddComment(Guid authorId, string content, Guid createdBy)
@@ -302,4 +297,20 @@ public sealed class Ticket : Entity
         _pendingChanges.Clear();
     }
 
+    private void RecalculateStatus(Guid actorId)
+    {
+        if (_completionCriteria.Count == 0)
+            return;
+
+        if (_completionCriteria.All(c => c.IsCompleted))
+        {
+            if (Status.Value != TicketStatus.StatusType.Done)
+                ChangeStatus(TicketStatus.StatusType.Done, actorId);
+        }
+        else
+        {
+            if (Status.Value == TicketStatus.StatusType.Done)
+                ChangeStatus(TicketStatus.StatusType.InProgress, actorId);
+        }
+    }
 }

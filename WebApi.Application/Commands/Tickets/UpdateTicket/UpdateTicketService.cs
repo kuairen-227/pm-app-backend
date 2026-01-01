@@ -45,15 +45,17 @@ public class UpdateTicketService : BaseCommandHandler
         var project = await _projectRepository.GetByIdAsync(ticket.ProjectId)
             ?? throw new NotFoundException(nameof(Project), ticket.ProjectId);
 
-        if (request.Title.HasValue)
-            ticket.ChangeTitle(request.Title.Value, UserContext.Id);
+        // タイトル
+        if (request.Title.TryGetValue(out var title))
+            ticket.ChangeTitle(title, UserContext.Id);
 
-        if (request.Description.HasValue)
-            ticket.ChangeDescription(request.Description.Value, UserContext.Id);
+        // 説明
+        if (request.Description.TryGetValue(out var description))
+            ticket.ChangeDescription(description, UserContext.Id);
 
-        if (request.AssigneeId.HasValue)
+        // 担当者
+        if (request.AssigneeId.TryGetValue(out var assigneeId))
         {
-            var assigneeId = request.AssigneeId.Value;
             if (assigneeId.HasValue)
             {
                 var user = await _userRepository.GetByIdAsync(assigneeId.Value, cancellationToken)
@@ -67,47 +69,56 @@ public class UpdateTicketService : BaseCommandHandler
             }
         }
 
-        if (request.StartDate.HasValue || request.EndDate.HasValue)
-        {
-            var startDate = request.StartDate.HasValue
-                ? request.StartDate.Value
-                : ticket.Schedule.StartDate;
-            var endDate = request.EndDate.HasValue
-                ? request.EndDate.Value
-                : ticket.Schedule.EndDate;
+        // スケジュール
+        DateOnly? startDate = null;
+        DateOnly? endDate = null;
 
-            ticket.ChangeSchedule(startDate, endDate, UserContext.Id);
+        request.StartDate.TryGetValue(out startDate);
+        request.EndDate.TryGetValue(out endDate);
+
+        if (startDate.HasValue || endDate.HasValue)
+        {
+            var s = startDate ?? ticket.Schedule.StartDate;
+            var e = endDate ?? ticket.Schedule.EndDate;
+            ticket.ChangeSchedule(s, e, UserContext.Id);
         }
 
-        if (request.Status.HasValue)
+        // ステータス
+        if (request.Status.TryGetValue(out var statusString))
         {
-            var status = TicketStatus.Parse(request.Status.Value);
+            var status = TicketStatus.Parse(statusString);
             ticket.ChangeStatus(status, UserContext.Id);
         }
 
-        if (request.CompletionCriteria.HasValue)
+        // 完了条件
+        if (request.CompletionCriterionOperations.TryGetValue(out var operations))
         {
-            var newCriteria = request.CompletionCriteria.Value ?? new List<string>();
-            var existingCriteria = ticket.CompletionCriteria.ToList();
-
-            foreach (var criterion in existingCriteria)
+            foreach (var operation in operations)
             {
-                if (!newCriteria.Contains(criterion.Criterion))
+                switch (operation)
                 {
-                    ticket.RemoveCompletionCriterion(criterion.Id, UserContext.Id);
-                }
-            }
-            foreach (var criterion in newCriteria)
-            {
-                if (!existingCriteria.Any(c => c.Criterion == criterion))
-                {
-                    ticket.AddCompletionCriterion(criterion, UserContext.Id);
+                    case AddCompletionCriterionOperationDto add:
+                        ticket.AddCompletionCriterion(add.Criterion, UserContext.Id);
+                        break;
+                    case EditCompletionCriterionOperationDto edit:
+                        ticket.EditCompletionCriterion(edit.CriterionId, edit.Criterion, UserContext.Id);
+                        break;
+                    case DeleteCompletionCriterionOperationDto delete:
+                        ticket.DeleteCompletionCriterion(delete.CriterionId, UserContext.Id);
+                        break;
+                    case CompleteCompletionCriterionOperationDto complete:
+                        ticket.CompleteCriterion(complete.CriterionId, UserContext.Id);
+                        break;
+                    case ReopenCompletionCriterionOperationDto reopen:
+                        ticket.ReopenCriterion(reopen.CriterionId, UserContext.Id);
+                        break;
                 }
             }
         }
 
-        if (request.Comment.HasValue)
-            ticket.AddComment(UserContext.Id, request.Comment.Value, UserContext.Id);
+        // コメント
+        if (request.Comment.TryGetValue(out var comment))
+            ticket.AddComment(UserContext.Id, comment, UserContext.Id);
 
         // 2. 通知作成
         var notifications = request.NotificationRecipientIds
