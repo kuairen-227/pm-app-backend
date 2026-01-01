@@ -5,11 +5,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Api.Dtos;
 using WebApi.Api.Dtos.Tickets;
-using WebApi.Application.Commands.Tickets.AddComment;
+using WebApi.Application.Commands.Tickets.AddCompletionCriterion;
+using WebApi.Application.Commands.Tickets.CompleteCompletionCriterion;
 using WebApi.Application.Commands.Tickets.CreateTicket;
 using WebApi.Application.Commands.Tickets.DeleteComment;
+using WebApi.Application.Commands.Tickets.DeleteCompletionCriterion;
 using WebApi.Application.Commands.Tickets.DeleteTicket;
 using WebApi.Application.Commands.Tickets.EditComment;
+using WebApi.Application.Commands.Tickets.EditCompletionCriterion;
+using WebApi.Application.Commands.Tickets.ReopenCompletionCriterion;
 using WebApi.Application.Commands.Tickets.UpdateTicket;
 using WebApi.Application.Common.Pagination;
 using WebApi.Application.Queries.Projects.ListProjects;
@@ -119,6 +123,117 @@ public class TicketsController : ControllerBase
         Guid projectId, Guid ticketId, CancellationToken cancellationToken)
     {
         var command = new DeleteTicketCommand(projectId, ticketId);
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// チケット完了条件追加
+    /// </summary>
+    [HttpPost("{ticketId:guid}/completion-criteria")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> AddCompletionCriterionAsync(
+        Guid projectId,
+        Guid ticketId,
+        AddCompletionCriterionRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = (projectId, ticketId, request).Adapt<AddCompletionCriterionCommand>();
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// チケット完了条件編集
+    /// </summary>
+    [HttpPatch("{ticketId:guid}/completion-criteria/{criterionId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> EditCompletionCriterionAsync(
+        Guid projectId,
+        Guid ticketId,
+        Guid criterionId,
+        EditCompletionCriterionRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = (projectId, ticketId, criterionId, request)
+            .Adapt<EditCompletionCriterionCommand>();
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// チケット完了条件削除
+    /// </summary>
+    [HttpDelete("{ticketId:guid}/completion-criteria/{criterionId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteCompletionCriterionAsync(
+        Guid projectId,
+        Guid ticketId,
+        Guid criterionId,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteCompletionCriterionCommand(
+            projectId,
+            ticketId,
+            criterionId
+        );
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// チケット完了条件完了
+    /// </summary>
+    [HttpPost("{ticketId:guid}/completion-criteria/{criterionId:guid}/complete")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> CompleteCriterionAsync(
+        Guid projectId,
+        Guid ticketId,
+        Guid criterionId,
+        CancellationToken cancellationToken)
+    {
+        var command = new CompleteCompletionCriterionCommand(
+            projectId,
+            ticketId,
+            criterionId
+        );
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// チケット完了条件再オープン
+    /// </summary>
+    [HttpPost("{ticketId:guid}/completion-criteria/{criterionId:guid}/reopen")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> ReopenCriterionAsync(
+        Guid projectId,
+        Guid ticketId,
+        Guid criterionId,
+        CancellationToken cancellationToken)
+    {
+        var command = new ReopenCompletionCriterionCommand(
+            projectId,
+            ticketId,
+            criterionId
+        );
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }

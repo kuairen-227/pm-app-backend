@@ -23,6 +23,15 @@ public class ApiMappingConfig : IRegister
             .Map(dest => dest.ProjectId, src => src.projectId)
             .Map(dest => dest.TicketId, src => src.ticketId);
 
+        config.NewConfig<(Guid projectId, Guid ticketId, AddCompletionCriterionRequest), AddCompletionCriterionCommand>()
+            .Map(dest => dest.ProjectId, src => src.projectId)
+            .Map(dest => dest.TicketId, src => src.ticketId);
+
+        config.NewConfig<(Guid projectId, Guid ticketId, Guid criterionId, EditCompletionCriterionRequest), EditCompletionCriterionCommand>()
+            .Map(dest => dest.ProjectId, src => src.projectId)
+            .Map(dest => dest.TicketId, src => src.ticketId)
+            .Map(dest => dest.CriterionId, src => src.criterionId);
+
         config.NewConfig<(Guid projectId, Guid ticketId, AddTicketCommentRequest), AddCommentCommand>()
             .Map(dest => dest.ProjectId, src => src.projectId)
             .Map(dest => dest.TicketId, src => src.ticketId);
