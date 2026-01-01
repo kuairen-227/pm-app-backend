@@ -45,17 +45,15 @@ public class UpdateTicketService : BaseCommandHandler
         var project = await _projectRepository.GetByIdAsync(ticket.ProjectId)
             ?? throw new NotFoundException(nameof(Project), ticket.ProjectId);
 
-        // タイトル
-        if (request.Title.TryGetValue(out var title))
-            ticket.ChangeTitle(title, UserContext.Id);
+        if (request.Title.HasValue)
+            ticket.ChangeTitle(request.Title.Value, UserContext.Id);
 
-        // 説明
-        if (request.Description.TryGetValue(out var description))
-            ticket.ChangeDescription(description, UserContext.Id);
+        if (request.Description.HasValue)
+            ticket.ChangeDescription(request.Description.Value, UserContext.Id);
 
-        // 担当者
-        if (request.AssigneeId.TryGetValue(out var assigneeId))
+        if (request.AssigneeId.HasValue)
         {
+            var assigneeId = request.AssigneeId.Value;
             if (assigneeId.HasValue)
             {
                 var user = await _userRepository.GetByIdAsync(assigneeId.Value, cancellationToken)
@@ -69,31 +67,27 @@ public class UpdateTicketService : BaseCommandHandler
             }
         }
 
-        // スケジュール
-        DateOnly? startDate = null;
-        DateOnly? endDate = null;
-
-        request.StartDate.TryGetValue(out startDate);
-        request.EndDate.TryGetValue(out endDate);
-
-        if (startDate.HasValue || endDate.HasValue)
+        if (request.StartDate.HasValue || request.EndDate.HasValue)
         {
-            var s = startDate ?? ticket.Schedule.StartDate;
-            var e = endDate ?? ticket.Schedule.EndDate;
-            ticket.ChangeSchedule(s, e, UserContext.Id);
+            var startDate = request.StartDate.HasValue
+                ? request.StartDate.Value
+                : ticket.Schedule.StartDate;
+            var endDate = request.EndDate.HasValue
+                ? request.EndDate.Value
+                : ticket.Schedule.EndDate;
+
+            ticket.ChangeSchedule(startDate, endDate, UserContext.Id);
         }
 
-        // ステータス
-        if (request.Status.TryGetValue(out var statusString))
+        if (request.Status.HasValue)
         {
-            var status = TicketStatus.Parse(statusString);
+            var status = TicketStatus.Parse(request.Status.Value);
             ticket.ChangeStatus(status, UserContext.Id);
         }
 
-        // 完了条件
-        if (request.CompletionCriterionOperations.TryGetValue(out var operations))
+        if (request.CompletionCriterionOperations.HasValue)
         {
-            foreach (var operation in operations)
+            foreach (var operation in request.CompletionCriterionOperations.Value)
             {
                 switch (operation)
                 {
@@ -116,9 +110,8 @@ public class UpdateTicketService : BaseCommandHandler
             }
         }
 
-        // コメント
-        if (request.Comment.TryGetValue(out var comment))
-            ticket.AddComment(UserContext.Id, comment, UserContext.Id);
+        if (request.Comment.HasValue)
+            ticket.AddComment(UserContext.Id, request.Comment.Value, UserContext.Id);
 
         // 2. 通知作成
         var notifications = request.NotificationRecipientIds
