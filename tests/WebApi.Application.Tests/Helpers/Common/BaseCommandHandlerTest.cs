@@ -1,6 +1,5 @@
 using Moq;
 using WebApi.Application.Abstractions;
-using WebApi.Domain.Abstractions;
 using WebApi.Tests.Helpers.Fixtures;
 
 namespace WebApi.Application.Tests.Helpers.Common;
