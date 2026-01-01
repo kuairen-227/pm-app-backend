@@ -42,6 +42,8 @@ public class UpdateTicketService : BaseCommandHandler
         // 1. チケット更新
         var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
+        var project = await _projectRepository.GetByIdAsync(ticket.ProjectId)
+            ?? throw new NotFoundException(nameof(Project), ticket.ProjectId);
 
         if (request.Title.HasValue)
             ticket.ChangeTitle(request.Title.Value, UserContext.Id);
@@ -56,6 +58,7 @@ public class UpdateTicketService : BaseCommandHandler
             {
                 var user = await _userRepository.GetByIdAsync(assigneeId.Value, cancellationToken)
                     ?? throw new NotFoundException(nameof(User), assigneeId.Value);
+                project.EnsureMember(assigneeId.Value);
                 ticket.Assign(assigneeId.Value, user.Name, request.NotificationRecipientIds, UserContext.Id);
             }
             else
@@ -82,16 +85,31 @@ public class UpdateTicketService : BaseCommandHandler
             ticket.ChangeStatus(status, UserContext.Id);
         }
 
-        // TODO: 完了条件周りは見直し
         if (request.CompletionCriteria.HasValue)
-            ticket.SetCompletionCriteria(request.CompletionCriteria.Value, UserContext.Id);
+        {
+            var newCriteria = request.CompletionCriteria.Value ?? new List<string>();
+            var existingCriteria = ticket.CompletionCriteria.ToList();
+
+            foreach (var criterion in existingCriteria)
+            {
+                if (!newCriteria.Contains(criterion.Criterion))
+                {
+                    ticket.RemoveCompletionCriterion(criterion.Id, UserContext.Id);
+                }
+            }
+            foreach (var criterion in newCriteria)
+            {
+                if (!existingCriteria.Any(c => c.Criterion == criterion))
+                {
+                    ticket.AddCompletionCriterion(criterion, UserContext.Id);
+                }
+            }
+        }
 
         if (request.Comment.HasValue)
             ticket.AddComment(UserContext.Id, request.Comment.Value, UserContext.Id);
 
         // 2. 通知作成
-        var project = await _projectRepository.GetByIdAsync(ticket.ProjectId)
-            ?? throw new NotFoundException(nameof(Project), ticket.ProjectId);
         var notifications = request.NotificationRecipientIds
             .Select(recipientId =>
             {

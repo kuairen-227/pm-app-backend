@@ -6,7 +6,7 @@ public readonly struct Optional<T>
     public T Value { get; }
 
     // 値を持つ場合
-    public Optional(T value)
+    private Optional(T value)
     {
         HasValue = true;
         Value = value;
@@ -19,5 +19,6 @@ public readonly struct Optional<T>
         Value = default!;
     }
 
+    public static Optional<T> Of(T value) => new Optional<T>(value);
     public static Optional<T> NotSet() => new Optional<T>(false);
 }

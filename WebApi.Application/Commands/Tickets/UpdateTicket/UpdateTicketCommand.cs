@@ -16,7 +16,7 @@ public class UpdateTicketCommand : IRequest<Unit>, IProjectScopedRequest
     public Optional<DateOnly?> StartDate { get; init; }
     public Optional<DateOnly?> EndDate { get; init; }
     public Optional<string> Status { get; init; }
-    public Optional<string?> CompletionCriteria { get; init; }
+    public Optional<IReadOnlyList<string>?> CompletionCriteria { get; init; }
     public Optional<string> Comment { get; init; }
     public IReadOnlyCollection<Guid> NotificationRecipientIds { get; } = Array.Empty<Guid>();
 
@@ -29,7 +29,7 @@ public class UpdateTicketCommand : IRequest<Unit>, IProjectScopedRequest
         Optional<DateOnly?> startDate,
         Optional<DateOnly?> endDate,
         Optional<string> status,
-        Optional<string?> completionCriteria,
+        Optional<IReadOnlyList<string>?> completionCriteria,
         Optional<string> comment,
         IReadOnlyCollection<Guid> notificationRecipientIds
     )

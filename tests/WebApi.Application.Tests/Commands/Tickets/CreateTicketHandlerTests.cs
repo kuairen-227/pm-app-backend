@@ -85,7 +85,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
             ticket.AssigneeId,
             ticket.Schedule.StartDate,
             ticket.Schedule.EndDate,
-            ticket.CompletionCriteria,
+            ticket.CompletionCriteria.Select(c => c.Criterion).ToList(),
             project.Members.Select(m => m.UserId).ToList()
         );
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -99,7 +99,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
         capturedTicket.Schedule.StartDate.Should().Be(ticket.Schedule.StartDate);
         capturedTicket.Schedule.EndDate.Should().Be(ticket.Schedule.EndDate);
         capturedTicket.Status.Should().Be(ticket.Status);
-        capturedTicket.CompletionCriteria.Should().Be(ticket.CompletionCriteria);
+        capturedTicket.CompletionCriteria.Should().BeEquivalentTo(ticket.CompletionCriteria);
         capturedTicket.AuditInfo.CreatedBy.Should().Be(UserContext.Object.Id);
         capturedTicket.AuditInfo.CreatedAt.Should().Be(Clock.Now);
         capturedTicket.AuditInfo.UpdatedBy.Should().Be(UserContext.Object.Id);
@@ -149,7 +149,7 @@ public class CreateTicketHandlerTests : BaseCommandHandlerTest
             ticket.AssigneeId,
             ticket.Schedule.StartDate,
             ticket.Schedule.EndDate,
-            ticket.CompletionCriteria,
+            ticket.CompletionCriteria.Select(c => c.Criterion).ToList(),
             project.Members.Select(m => m.UserId).ToList()
         );
         var act = async () => await _handler.Handle(command, CancellationToken.None);
