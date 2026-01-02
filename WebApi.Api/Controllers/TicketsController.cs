@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Api.Dtos;
 using WebApi.Api.Dtos.Tickets;
+using WebApi.Application.Commands.Tickets.AddComment;
 using WebApi.Application.Commands.Tickets.AddCompletionCriterion;
 using WebApi.Application.Commands.Tickets.CompleteCompletionCriterion;
 using WebApi.Application.Commands.Tickets.CreateTicket;

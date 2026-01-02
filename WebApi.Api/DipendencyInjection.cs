@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using WebApi.Api.Common;
 
 namespace WebApi.Api;
 
@@ -61,6 +62,15 @@ public static class DependencyInjection
                             jwtSection["SecretKey"] ?? throw new InvalidOperationException("Jwt::SecretKey は必須です")))
                 };
             });
+
+        // PatchFieldJsonConverter
+        services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters
+                    .Add(new PatchFieldJsonConverterFactory());
+            });
+
 
         return services;
     }
