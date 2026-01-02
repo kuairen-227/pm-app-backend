@@ -18,13 +18,13 @@ public class AddCommentHandler : IRequestHandler<AddCommentCommand, Unit>
         var command = new UpdateTicketCommand(
             projectId: request.ProjectId,
             ticketId: request.TicketId,
-            title: Optional<string>.NotSet(),
-            description: Optional<string>.NotSet(),
+            title: Optional<string>.None(),
+            description: Optional<string>.None(),
             assigneeId: request.AssigneeId,
             startDate: request.StartDate,
             endDate: request.EndDate,
             status: request.Status,
-            completionCriterionOperations: Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.NotSet(),
+            completionCriterionOperations: Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.None(),
             comment: request.Comment,
             notificationRecipientIds: request.NotificationRecipientIds
         );

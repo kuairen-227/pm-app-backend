@@ -1,24 +1,19 @@
-namespace WebApi.Application.Common;
-
 public readonly struct Optional<T>
 {
+    private readonly T? _value;
     public bool HasValue { get; }
-    public T Value { get; }
 
-    // 値を持つ場合
-    private Optional(T value)
+    public T? Value =>
+        HasValue
+            ? _value
+            : throw new InvalidOperationException("No value");
+
+    private Optional(T? value)
     {
         HasValue = true;
-        Value = value;
+        _value = value;
     }
 
-    // 値を持たない場合
-    private Optional(bool hasValue)
-    {
-        HasValue = hasValue;
-        Value = default!;
-    }
-
-    public static Optional<T> Of(T value) => new Optional<T>(value);
-    public static Optional<T> NotSet() => new Optional<T>(false);
+    public static Optional<T> Of(T? value) => new(value);
+    public static Optional<T> None() => default;
 }

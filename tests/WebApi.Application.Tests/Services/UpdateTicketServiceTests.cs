@@ -70,14 +70,14 @@ public class UpdateTicketServiceTests : BaseServiceHandlerTest
             projectId: ticket.ProjectId,
             ticketId: ticket.Id,
             title: Optional<string>.Of(newTitle),
-            description: Optional<string>.NotSet(),
-            assigneeId: Optional<Guid?>.NotSet(),
-            startDate: Optional<DateOnly?>.NotSet(),
-            endDate: Optional<DateOnly?>.NotSet(),
-            status: Optional<string>.NotSet(),
+            description: Optional<string>.None(),
+            assigneeId: Optional<Guid?>.None(),
+            startDate: Optional<DateOnly?>.None(),
+            endDate: Optional<DateOnly?>.None(),
+            status: Optional<string>.None(),
             completionCriterionOperations:
-                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.NotSet(),
-            comment: Optional<string>.NotSet(),
+                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.None(),
+            comment: Optional<string>.None(),
             notificationRecipientIds: new List<Guid>()
         );
         var result = await _service.UpdateTicketAsync(command, CancellationToken.None);
@@ -108,15 +108,15 @@ public class UpdateTicketServiceTests : BaseServiceHandlerTest
         var command = new UpdateTicketCommand(
             projectId: Guid.NewGuid(),
             ticketId: Guid.NewGuid(),
-            title: Optional<string>.NotSet(),
-            description: Optional<string>.NotSet(),
-            assigneeId: Optional<Guid?>.NotSet(),
-            startDate: Optional<DateOnly?>.NotSet(),
-            endDate: Optional<DateOnly?>.NotSet(),
-            status: Optional<string>.NotSet(),
+            title: Optional<string>.None(),
+            description: Optional<string>.None(),
+            assigneeId: Optional<Guid?>.None(),
+            startDate: Optional<DateOnly?>.None(),
+            endDate: Optional<DateOnly?>.None(),
+            status: Optional<string>.None(),
             completionCriterionOperations:
-                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.NotSet(),
-            comment: Optional<string>.NotSet(),
+                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.None(),
+            comment: Optional<string>.None(),
             notificationRecipientIds: new List<Guid>()
         );
         var act = async () => await _service.UpdateTicketAsync(command, CancellationToken.None);
@@ -149,15 +149,15 @@ public class UpdateTicketServiceTests : BaseServiceHandlerTest
         var command = new UpdateTicketCommand(
             projectId: ticket.ProjectId,
             ticketId: ticket.Id,
-            title: Optional<string>.NotSet(),
-            description: Optional<string>.NotSet(),
+            title: Optional<string>.None(),
+            description: Optional<string>.None(),
             assigneeId: Optional<Guid?>.Of(member.UserId),
-            startDate: Optional<DateOnly?>.NotSet(),
-            endDate: Optional<DateOnly?>.NotSet(),
-            status: Optional<string>.NotSet(),
+            startDate: Optional<DateOnly?>.None(),
+            endDate: Optional<DateOnly?>.None(),
+            status: Optional<string>.None(),
             completionCriterionOperations:
-                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.NotSet(),
-            comment: Optional<string>.NotSet(),
+                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.None(),
+            comment: Optional<string>.None(),
             notificationRecipientIds: new List<Guid>()
         );
         var result = await _service.UpdateTicketAsync(command, CancellationToken.None);
@@ -198,15 +198,15 @@ public class UpdateTicketServiceTests : BaseServiceHandlerTest
         var command = new UpdateTicketCommand(
             projectId: ticket.ProjectId,
             ticketId: ticket.Id,
-            title: Optional<string>.NotSet(),
-            description: Optional<string>.NotSet(),
+            title: Optional<string>.None(),
+            description: Optional<string>.None(),
             assigneeId: Optional<Guid?>.Of(null),
-            startDate: Optional<DateOnly?>.NotSet(),
-            endDate: Optional<DateOnly?>.NotSet(),
-            status: Optional<string>.NotSet(),
+            startDate: Optional<DateOnly?>.None(),
+            endDate: Optional<DateOnly?>.None(),
+            status: Optional<string>.None(),
             completionCriterionOperations:
-                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.NotSet(),
-            comment: Optional<string>.NotSet(),
+                Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.None(),
+            comment: Optional<string>.None(),
             notificationRecipientIds: new List<Guid>()
         );
         var result = await _service.UpdateTicketAsync(command, CancellationToken.None);
