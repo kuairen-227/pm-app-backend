@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Application.Abstractions;
+using WebApi.Application.Commands.Tickets.UpdateTicket;
 using WebApi.Application.Common;
 using WebApi.Application.Common.Authorization;
 using WebApi.Application.Events.Projects.MemberRoleChanged;
@@ -22,6 +23,9 @@ public static class DependencyInjection
 
         // Permission Services
         services.AddScoped<IPermissionService, PermissionService>();
+
+        // UpdateTicketService
+        services.AddScoped<UpdateTicketService>();
 
         // Domain Events
         services.AddScoped<IDomainEventPublisher, DomainEventPublisher>();
