@@ -23,7 +23,10 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseOpenApi();
-    app.UseSwaggerUi();
+    app.UseSwaggerUi(config =>
+    {
+        config.DocumentTitle = "pm-app-backend Docs";
+    });
 }
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontEnd");

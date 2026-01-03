@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Api.Common;
@@ -22,7 +21,10 @@ public static class DependencyInjection
 
         // Swagger
         services.AddOpenApi();
-        services.AddOpenApiDocument();
+        services.AddOpenApiDocument(options =>
+        {
+            options.Title = "pm-app API";
+        });
 
         // CORS
         services.AddCors(options =>
