@@ -1,4 +1,5 @@
 using WebApi.Api;
+using WebApi.Api.Common;
 using WebApi.Api.Middlewares;
 using WebApi.Application;
 using WebApi.Domain;
@@ -15,6 +16,8 @@ builder.Services.AddInfrastructure(
         ?? throw new ArgumentNullException("DefaultConnection は必須です")
 );
 
+// ログ設定
+builder.Logging.AddAppLogging(builder.Environment);
 
 var app = builder.Build();
 

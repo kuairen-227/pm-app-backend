@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Application.Abstractions;
 using WebApi.Application.Commands.Tickets.UpdateTicket;
@@ -17,6 +18,7 @@ public static class DependencyInjection
     {
         // MediatR
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestLoggingBehavior<,>));
 
         // AutoMapper
         services.AddAutoMapper(cfg => { }, typeof(DependencyInjection).Assembly);

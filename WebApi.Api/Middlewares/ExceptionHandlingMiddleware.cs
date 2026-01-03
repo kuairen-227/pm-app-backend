@@ -25,9 +25,6 @@ public class ExceptionHandlingMiddleware
     /// <summary>
     /// ミドルウェア呼び出し
     /// </summary>
-    /// <remarks>
-    /// ASP.NET Coreのミドルウェアパイプラインから自動的に呼ばれる
-    /// </remarks>
     public async Task Invoke(HttpContext context)
     {
         try
