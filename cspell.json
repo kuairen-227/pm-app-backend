@@ -20,6 +20,8 @@
     "Npgsql",
     "reportgenerator",
     "reporttypes",
+    "schemaname",
+    "tablename",
     "targetdir"
   ],
   "ignoreWords": [],
