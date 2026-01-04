@@ -1,13 +1,13 @@
 namespace WebApi.IntegrationTests.Helpers;
 
 public abstract class BaseIntegrationTest
-    : IClassFixture<CustomWebApplicationFactory>, IAsyncLifetime
+    : IClassFixture<TestWebApplicationFactory>, IAsyncLifetime
 {
     protected HttpClient Client { get; }
     protected IServiceScope Scope { get; }
     protected AppDbContext DbContext { get; }
 
-    protected BaseIntegrationTest(CustomWebApplicationFactory factory)
+    protected BaseIntegrationTest(TestWebApplicationFactory factory)
     {
         Client = factory.CreateClient();
 
