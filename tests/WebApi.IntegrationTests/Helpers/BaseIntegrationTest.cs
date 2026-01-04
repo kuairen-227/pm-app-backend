@@ -26,6 +26,9 @@ public abstract class BaseIntegrationTest
         // Migration（初回のみ）
         await TestDbInitializer.EnsureInitializedAsync(DbContext);
 
+        // Clean
+        await DbCleaner.CleanAsync(DbContext);
+
         // Seed
         var userSeeder = new UserSeeder();
         var userId = await userSeeder.SeedAsync(DbContext);
