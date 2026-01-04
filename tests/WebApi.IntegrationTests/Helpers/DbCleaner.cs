@@ -1,4 +1,4 @@
-namespace WebApi.IntegrationTests;
+namespace WebApi.IntegrationTests.Helpers;
 
 public static class DbCleaner
 {
