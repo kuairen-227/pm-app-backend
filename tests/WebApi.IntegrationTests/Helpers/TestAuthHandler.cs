@@ -9,6 +9,7 @@ namespace WebApi.IntegrationTests.Helpers;
 public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     public const string TestScheme = "Test";
+    public static Guid UserId { get; set; }
 
     public TestAuthHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -22,15 +23,13 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, "test-user-id"),
-            new Claim(ClaimTypes.Role, "Admin")
+            new Claim(ClaimTypes.NameIdentifier, UserId.ToString()),
         };
 
         var identity = new ClaimsIdentity(claims, TestScheme);
         var principal = new ClaimsPrincipal(identity);
         var ticket = new AuthenticationTicket(principal, TestScheme);
 
-        return Task.FromResult(
-            AuthenticateResult.Success(ticket));
+        return Task.FromResult(AuthenticateResult.Success(ticket));
     }
 }

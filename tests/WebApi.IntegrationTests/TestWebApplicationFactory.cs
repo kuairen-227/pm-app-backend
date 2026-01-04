@@ -10,13 +10,16 @@ namespace WebApi.IntegrationTests;
 
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private static bool _initialized;
+    private static readonly object _lock = new();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
         {
+            // DbContext
             var descriptor = services.Single(
                 d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
-
             services.Remove(descriptor);
 
             services.AddDbContext<AppDbContext>(options =>
@@ -25,6 +28,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
                     "Host=localhost;Database=test;Username=postgres;Password=postgres");
             });
 
+            // Authentication
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = TestAuthHandler.TestScheme;
@@ -32,6 +36,21 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             })
             .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
                 TestAuthHandler.TestScheme, _ => { });
+
+            var sp = services.BuildServiceProvider();
+
+            lock (_lock)
+            {
+                if (_initialized) return;
+
+                using var scope = sp.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                db.Database.EnsureDeleted();
+                db.Database.Migrate();
+
+                _initialized = true;
+            }
         });
     }
 }
