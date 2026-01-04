@@ -23,15 +23,15 @@ public abstract class BaseIntegrationTest
 
     public async Task InitializeAsync()
     {
-        // Clean
-        await DbCleaner.CleanAsync(DbContext);
+        // Migration（初回のみ）
+        await TestDbInitializer.EnsureInitializedAsync(DbContext);
 
         // Seed
         var userSeeder = new UserSeeder();
-        userSeeder.SeedAsync(DbContext).GetAwaiter().GetResult();
+        var userId = await userSeeder.SeedAsync(DbContext);
 
         // HttpClient（認証込み）
-        TestAuthHandler.UserId = userSeeder.UserId;
+        TestAuthHandler.UserId = userId;
     }
 
     public Task DisposeAsync()

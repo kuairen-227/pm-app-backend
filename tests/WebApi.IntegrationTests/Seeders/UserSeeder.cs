@@ -10,14 +10,8 @@ public class UserSeeder
 {
     public Guid UserId { get; private set; }
 
-    public async Task SeedAsync(AppDbContext dbContext)
+    public async Task<Guid> SeedAsync(AppDbContext dbContext)
     {
-        if (await dbContext.Users.AnyAsync())
-        {
-            UserId = await dbContext.Users.Select(u => u.Id).FirstAsync();
-            return;
-        }
-
         var clock = new FakeDateTimeProvider();
 
         var user = new User(
@@ -32,6 +26,6 @@ public class UserSeeder
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
 
-        UserId = user.Id;
+        return user.Id;
     }
 }

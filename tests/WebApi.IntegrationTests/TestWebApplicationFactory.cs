@@ -10,9 +10,6 @@ namespace WebApi.IntegrationTests;
 
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private static bool _initialized;
-    private static readonly object _lock = new();
-
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -36,21 +33,6 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             })
             .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
                 TestAuthHandler.TestScheme, _ => { });
-
-            var sp = services.BuildServiceProvider();
-
-            lock (_lock)
-            {
-                if (_initialized) return;
-
-                using var scope = sp.CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-                db.Database.EnsureDeleted();
-                db.Database.Migrate();
-
-                _initialized = true;
-            }
         });
     }
 }
