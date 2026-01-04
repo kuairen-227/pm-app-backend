@@ -1,3 +1,11 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using WebApi.Infrastructure.Database;
+using WebApi.IntegrationTests.Helpers;
+
 namespace WebApi.IntegrationTests;
 
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
@@ -19,11 +27,11 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = TestAuthHandler.Scheme;
-                options.DefaultChallengeScheme = TestAuthHandler.Scheme;
+                options.DefaultAuthenticateScheme = TestAuthHandler.TestScheme;
+                options.DefaultChallengeScheme = TestAuthHandler.TestScheme;
             })
             .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                TestAuthHandler.Scheme, _ => { });
+                TestAuthHandler.TestScheme, _ => { });
         });
     }
 }

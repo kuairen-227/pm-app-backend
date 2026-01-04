@@ -1,3 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
+using WebApi.Infrastructure.Database;
+
 namespace WebApi.IntegrationTests.Helpers;
 
 public abstract class BaseIntegrationTest

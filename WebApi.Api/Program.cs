@@ -39,3 +39,8 @@ app.MapControllers();
 app.UseCustomMiddleware();
 
 app.Run();
+
+/// <summary>
+/// テスト用のエンドポイント
+/// </summary>
+public partial class Program { }

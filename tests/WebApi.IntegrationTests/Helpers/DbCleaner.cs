@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using WebApi.Infrastructure.Database;
+
 namespace WebApi.IntegrationTests.Helpers;
 
 public static class DbCleaner

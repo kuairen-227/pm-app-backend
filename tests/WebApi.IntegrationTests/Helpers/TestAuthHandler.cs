@@ -1,11 +1,14 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace WebApi.IntegrationTests.Helpers;
 
 public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
-    public const string Scheme = "Test";
+    public const string TestScheme = "Test";
 
     public TestAuthHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -23,9 +26,9 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
             new Claim(ClaimTypes.Role, "Admin")
         };
 
-        var identity = new ClaimsIdentity(claims, Scheme);
+        var identity = new ClaimsIdentity(claims, TestScheme);
         var principal = new ClaimsPrincipal(identity);
-        var ticket = new AuthenticationTicket(principal, Scheme);
+        var ticket = new AuthenticationTicket(principal, TestScheme);
 
         return Task.FromResult(
             AuthenticateResult.Success(ticket));
