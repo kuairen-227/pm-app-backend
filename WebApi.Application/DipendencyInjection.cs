@@ -1,11 +1,13 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Application.Abstractions;
+using WebApi.Application.Abstractions.AuthService;
 using WebApi.Application.Commands.Tickets.UpdateTicket;
 using WebApi.Application.Common;
 using WebApi.Application.Common.Authorization;
 using WebApi.Application.Events.Projects.MemberRoleChanged;
 using WebApi.Application.Events.Users.UserRegistered;
+using WebApi.Application.Services;
 using WebApi.Domain.Aggregates.ProjectAggregate.Events;
 using WebApi.Domain.Aggregates.UserAggregate.Events;
 using WebApi.Domain.Common.Authorization;
@@ -23,10 +25,9 @@ public static class DependencyInjection
         // AutoMapper
         services.AddAutoMapper(cfg => { }, typeof(DependencyInjection).Assembly);
 
-        // Permission Services
+        // Services
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPermissionService, PermissionService>();
-
-        // UpdateTicketService
         services.AddScoped<UpdateTicketService>();
 
         // Domain Events
