@@ -1,7 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Infrastructure.Database;
-using WebApi.IntegrationTests.Seeders;
 
 namespace WebApi.IntegrationTests.Helpers;
 
@@ -14,27 +12,18 @@ public abstract class BaseIntegrationTest
 
     protected BaseIntegrationTest(TestWebApplicationFactory factory)
     {
-        // DbContext
         Scope = factory.Services.CreateScope();
         DbContext = Scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
         Client = factory.CreateClient();
     }
 
     public async Task InitializeAsync()
     {
         // Migration（初回のみ）
-        await TestDbInitializer.EnsureInitializedAsync(DbContext);
+        await DbInitializer.EnsureInitializedAsync(DbContext);
 
         // Clean
         await DbCleaner.CleanAsync(DbContext);
-
-        // Seed
-        var userSeeder = new UserSeeder();
-        var userId = await userSeeder.SeedAsync(DbContext);
-
-        // HttpClient（認証込み）
-        TestAuthHandler.UserId = userId;
     }
 
     public Task DisposeAsync()

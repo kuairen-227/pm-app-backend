@@ -14,16 +14,25 @@ public class UserSeeder
     {
         var clock = new FakeDateTimeProvider();
 
+        var admin = new User(
+            name: "Test Admin",
+            email: "test-admin@example.com",
+            passwordHash: "hashed-password",
+            role: SystemRole.RoleType.Admin,
+            createdBy: Guid.Empty,
+            clock: clock
+        );
+
         var user = new User(
             name: "Test User",
-            email: "test@example.com",
+            email: "test-user@example.com",
             passwordHash: "hashed-password",
             role: SystemRole.RoleType.User,
             createdBy: Guid.Empty,
             clock: clock
         );
 
-        dbContext.Users.Add(user);
+        dbContext.Users.AddRange(admin, user);
         await dbContext.SaveChangesAsync();
 
         return user.Id;

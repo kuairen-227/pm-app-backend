@@ -6,12 +6,12 @@ using Microsoft.Extensions.Options;
 
 namespace WebApi.IntegrationTests.Helpers;
 
-public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+public class AuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     public const string TestScheme = "Test";
     public static Guid UserId { get; set; }
 
-    public TestAuthHandler(
+    public AuthHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder)

@@ -3,7 +3,7 @@ using WebApi.Infrastructure.Database;
 
 namespace WebApi.IntegrationTests.Helpers;
 
-public static class TestDbInitializer
+public static class DbInitializer
 {
     private static readonly SemaphoreSlim _lock = new(1, 1);
     private static bool _initialized;

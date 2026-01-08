@@ -28,11 +28,11 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             // Authentication
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = TestAuthHandler.TestScheme;
-                options.DefaultChallengeScheme = TestAuthHandler.TestScheme;
+                options.DefaultAuthenticateScheme = AuthHandler.TestScheme;
+                options.DefaultChallengeScheme = AuthHandler.TestScheme;
             })
-            .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                TestAuthHandler.TestScheme, _ => { });
+            .AddScheme<AuthenticationSchemeOptions, AuthHandler>(
+                AuthHandler.TestScheme, _ => { });
         });
     }
 }
