@@ -30,10 +30,10 @@ public class GenerateRefreshTokenHandler : BaseCommandHandler, IRequestHandler<G
         var token = _tokenService.GenerateSecureToken();
 
         var refreshToken = new RefreshToken(
-            userId: UserContext.Id,
+            userId: request.UserId,
             token: token,
             expiresAt: Clock.Now.AddDays(7),
-            createdBy: UserContext.Id,
+            createdBy: request.UserId,
             clock: Clock
         );
 

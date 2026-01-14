@@ -38,7 +38,7 @@ public class AuthService : IAuthService
 
         var accessToken = _jwtService.GenerateAccessToken(user.Id);
         var refreshToken = await _mediator.Send(
-            new GenerateRefreshTokenCommand(), cancellationToken);
+            new GenerateRefreshTokenCommand(user.Id), cancellationToken);
 
         return new AuthResult(user.Id, accessToken, refreshToken.RefreshToken);
     }

@@ -14,13 +14,15 @@ public class GenerateRefreshTokenHandlerTests : BaseCommandHandlerTest
     private readonly GenerateRefreshTokenHandler _handler;
     private readonly Mock<IRefreshTokenRepository> _refreshTokenRepository;
     private readonly Mock<ITokenService> _tokenService;
-    private readonly RefreshTokenBuilder refreshTokenBuilder;
+    private readonly RefreshTokenBuilder _refreshTokenBuilder;
+    private readonly UserBuilder _userBuilder;
 
     public GenerateRefreshTokenHandlerTests()
     {
         _refreshTokenRepository = new Mock<IRefreshTokenRepository>();
         _tokenService = new Mock<ITokenService>();
-        refreshTokenBuilder = new RefreshTokenBuilder();
+        _refreshTokenBuilder = new RefreshTokenBuilder();
+        _userBuilder = new UserBuilder();
 
         _handler = new GenerateRefreshTokenHandler(
             _refreshTokenRepository.Object,
@@ -36,7 +38,8 @@ public class GenerateRefreshTokenHandlerTests : BaseCommandHandlerTest
     public async Task 正常系_Handle()
     {
         // Arrange
-        var refreshToken = refreshTokenBuilder.Build();
+        var user = _userBuilder.Build();
+        var refreshToken = _refreshTokenBuilder.Build();
 
         _tokenService
             .Setup(x => x.GenerateSecureToken(It.IsAny<int>()))
@@ -49,7 +52,7 @@ public class GenerateRefreshTokenHandlerTests : BaseCommandHandlerTest
             .Returns(Task.CompletedTask);
 
         // Act
-        var command = new GenerateRefreshTokenCommand();
+        var command = new GenerateRefreshTokenCommand(user.Id);
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
@@ -57,10 +60,10 @@ public class GenerateRefreshTokenHandlerTests : BaseCommandHandlerTest
         result.RefreshToken.Should().Be(refreshToken.Token);
 
         capturedRefreshToken.Should().NotBeNull();
-        capturedRefreshToken.UserId.Should().Be(UserContext.Object.Id);
+        capturedRefreshToken.UserId.Should().Be(user.Id);
         capturedRefreshToken.Token.Should().NotBeNullOrEmpty(refreshToken.Token);
         capturedRefreshToken.ExpiresAt.Should().Be(Clock.Now.AddDays(7));
-        capturedRefreshToken.AuditInfo.CreatedBy.Should().Be(UserContext.Object.Id);
+        capturedRefreshToken.AuditInfo.CreatedBy.Should().Be(user.Id);
         capturedRefreshToken.AuditInfo.CreatedAt.Should().Be(Clock.Now);
     }
 }
