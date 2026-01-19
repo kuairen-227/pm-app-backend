@@ -35,7 +35,6 @@ public class AuthController : ControllerBase
     /// </summary>
     [HttpPost("login")]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<LoginResponse>> LoginAsync(
         [FromBody] LoginRequest request, CancellationToken cancellationToken)
@@ -58,7 +57,6 @@ public class AuthController : ControllerBase
     /// </summary>
     [HttpPost("refresh")]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<LoginResponse>> RefreshAsync(
         [FromBody] RefreshRequest request, CancellationToken cancellationToken)
