@@ -4,17 +4,12 @@ on:
   pull_request:
     branches:
       - main
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-  backend_ci_test:
+  unit_tests:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
-    permissions:
-      contents: read
-      pull-requests: write
-      checks: write
 
     steps:
       - uses: actions/checkout@v4
@@ -30,8 +25,10 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Test with coverage
-        run: dotnet test ./WebApi.sln --collect:"XPlat Code Coverage"
+      - name: Run Unit Tests with coverage
+        run: |
+          dotnet test tests/WebApi.Domain.Tests --no-build --collect:"XPlat Code Coverage"
+          dotnet test tests/WebApi.Application.Tests --no-build --collect:"XPlat Code Coverage"
 
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool
@@ -54,3 +51,41 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: coveragereport/SummaryGithub.md
+
+  integration_tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:14.3
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup ASP.NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run Integration Tests
+        env:
+          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres"
+        run: dotnet test tests/WebApi.IntegrationTests --no-build
