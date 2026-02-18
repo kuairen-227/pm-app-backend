@@ -55,7 +55,7 @@ public class TicketCompletionCriterionTests : BaseDomainTest
         var result = _criterionBuilder.Build();
 
         // Act
-        result.EditCriterion("編集後の完了基準内容", UserContext.Id);
+        result.EditCriterion("編集後の完了基準内容", UserContext.Id, Clock);
 
         // Assert
         result.Criterion.Should().Be("編集後の完了基準内容");
@@ -71,7 +71,7 @@ public class TicketCompletionCriterionTests : BaseDomainTest
         var ticketCompletionCriterion = _criterionBuilder.Build();
 
         // Act
-        var act = () => ticketCompletionCriterion.EditCriterion(criterion!, UserContext.Id);
+        var act = () => ticketCompletionCriterion.EditCriterion(criterion!, UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -85,7 +85,7 @@ public class TicketCompletionCriterionTests : BaseDomainTest
         var result = _criterionBuilder.WithIsCompleted(false).Build();
 
         // Act
-        result.Complete(UserContext.Id);
+        result.Complete(UserContext.Id, Clock);
 
         // Assert
         result.IsCompleted.Should().BeTrue();
@@ -98,7 +98,7 @@ public class TicketCompletionCriterionTests : BaseDomainTest
         var ticketCompletionCriterion = _criterionBuilder.WithIsCompleted(true).Build();
 
         // Act
-        var act = () => ticketCompletionCriterion.Complete(UserContext.Id);
+        var act = () => ticketCompletionCriterion.Complete(UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -112,7 +112,7 @@ public class TicketCompletionCriterionTests : BaseDomainTest
         var result = _criterionBuilder.WithIsCompleted(true).Build();
 
         // Act
-        result.Reopen(UserContext.Id);
+        result.Reopen(UserContext.Id, Clock);
 
         // Assert
         result.IsCompleted.Should().BeFalse();
@@ -125,7 +125,7 @@ public class TicketCompletionCriterionTests : BaseDomainTest
         var ticketCompletionCriterion = _criterionBuilder.WithIsCompleted(false).Build();
 
         // Act
-        var act = () => ticketCompletionCriterion.Reopen(UserContext.Id);
+        var act = () => ticketCompletionCriterion.Reopen(UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

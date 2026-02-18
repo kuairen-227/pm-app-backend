@@ -25,31 +25,32 @@ public sealed class Project : Entity
         Description = description;
     }
 
-    public void Rename(string newName, Guid updatedBy)
+    public void Rename(string newName, Guid updatedBy, IDateTimeProvider clock)
     {
         if (string.IsNullOrWhiteSpace(newName))
             throw new DomainException("PROJECT_NAME_REQUIRED", "Project Name は必須です");
 
         Name = newName;
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void ChangeDescription(string? newDescription, Guid updatedBy)
+    public void ChangeDescription(string? newDescription, Guid updatedBy, IDateTimeProvider clock)
     {
         Description = newDescription;
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void InviteMember(Guid userId, ProjectRole.RoleType roleType, Guid invitedBy)
+    public void InviteMember(
+        Guid userId, ProjectRole.RoleType roleType, Guid invitedBy, IDateTimeProvider clock)
     {
         if (_members.Any(m => m.UserId == userId))
             throw new DomainException("USER_ALREADY_JOINED", "User はすでにプロジェクトメンバーです");
 
         var role = ProjectRole.Create(roleType);
-        var member = new ProjectMember(userId, role, invitedBy, _clock);
+        var member = new ProjectMember(userId, role, invitedBy, clock);
         _members.Add(member);
 
-        AddDomainEvent(new ProjectMemberInvitedEvent(Id, Name, userId, _clock));
+        AddDomainEvent(new ProjectMemberInvitedEvent(Id, Name, userId, clock));
     }
 
     public void RemoveMember(Guid userId)
@@ -60,13 +61,14 @@ public sealed class Project : Entity
         _members.Remove(member);
     }
 
-    public void ChangeMemberRole(Guid userId, ProjectRole.RoleType newRoleType, Guid changedBy)
+    public void ChangeMemberRole(
+        Guid userId, ProjectRole.RoleType newRoleType, Guid changedBy, IDateTimeProvider clock)
     {
         var member = _members.FirstOrDefault(m => m.UserId == userId)
             ?? throw new DomainException("USER_NOT_PROJECT_MEMBER", "User はプロジェクトメンバーではありません");
 
-        member.ChangeRole(ProjectRole.Create(newRoleType), changedBy);
-        AddDomainEvent(new ProjectRoleChangedEvent(Id, userId, newRoleType, _clock));
+        member.ChangeRole(ProjectRole.Create(newRoleType), changedBy, clock);
+        AddDomainEvent(new ProjectRoleChangedEvent(Id, userId, newRoleType, clock));
     }
 
     public void EnsureMember(Guid userId)

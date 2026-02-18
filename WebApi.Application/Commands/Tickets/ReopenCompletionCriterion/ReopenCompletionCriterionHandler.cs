@@ -27,7 +27,7 @@ public class ReopenCompletionCriterionHandler : BaseCommandHandler, IRequestHand
         var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
-        ticket.ReopenCriterion(request.CriterionId, UserContext.Id);
+        ticket.ReopenCriterion(request.CriterionId, UserContext.Id, Clock);
         await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;

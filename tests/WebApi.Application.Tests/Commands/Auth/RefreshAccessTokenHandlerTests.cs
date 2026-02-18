@@ -39,7 +39,8 @@ public class RefreshAccessTokenHandlerTests : BaseCommandHandlerTest
         var refreshToken = _refreshTokenBuilder.Build();
 
         _refreshTokenRepository
-            .Setup(x => x.GetByTokenAsync(refreshToken.Token, It.IsAny<CancellationToken>()))
+            .Setup(x => x.GetByTokenAsync(
+                refreshToken.Token, Clock, It.IsAny<CancellationToken>()))
             .ReturnsAsync(refreshToken);
 
         _jwtService
@@ -64,7 +65,8 @@ public class RefreshAccessTokenHandlerTests : BaseCommandHandlerTest
         var refreshToken = _refreshTokenBuilder.Build();
 
         _refreshTokenRepository
-            .Setup(x => x.GetByTokenAsync(refreshToken.Token, It.IsAny<CancellationToken>()))
+            .Setup(x => x.GetByTokenAsync(
+                refreshToken.Token, Clock, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Domain.Aggregates.AuthAggregate.RefreshToken?)null);
 
         // Act

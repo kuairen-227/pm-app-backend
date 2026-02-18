@@ -1,11 +1,12 @@
 using FluentAssertions;
 using WebApi.Domain.Aggregates.UserAggregate;
 using WebApi.Domain.Common;
+using WebApi.Domain.Tests.Helpers;
 using WebApi.Tests.Helpers.Builders;
 
 namespace WebApi.Domain.Tests.Aggregates.UserAggregate;
 
-public class UserTests
+public class UserTests : BaseDomainTest
 {
     private readonly UserBuilder _userBuilder;
 
@@ -46,7 +47,7 @@ public class UserTests
 
         // Act
         var newName = "New Name";
-        user.ChangeName(newName);
+        user.ChangeName(newName, Clock);
 
         // Assert
         user.Name.Should().Be(newName);
@@ -62,7 +63,7 @@ public class UserTests
         var user = _userBuilder.Build();
 
         // Act
-        var act = () => user.ChangeName(name!);
+        var act = () => user.ChangeName(name!, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -77,7 +78,7 @@ public class UserTests
 
         // Act
         var newEmail = "new@example.com";
-        user.ChangeEmail(newEmail);
+        user.ChangeEmail(newEmail, Clock);
 
         // Assert
         user.Email.Value.Should().Be(newEmail);
@@ -91,7 +92,7 @@ public class UserTests
 
         // Act
         var newPasswordHash = "newPasswordHash";
-        user.ChangePassword(newPasswordHash);
+        user.ChangePassword(newPasswordHash, Clock);
 
         // Assert
         user.PasswordHash.Should().Be(newPasswordHash);
@@ -107,7 +108,7 @@ public class UserTests
         var user = _userBuilder.Build();
 
         // Act
-        var act = () => user.ChangePassword(password!);
+        var act = () => user.ChangePassword(password!, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -122,7 +123,7 @@ public class UserTests
 
         // Act
         var newRole = SystemRole.RoleType.Admin;
-        user.ChangeUserRole(newRole);
+        user.ChangeUserRole(newRole, Clock);
 
         // Assert
         user.Role.Value.Should().Be(newRole);

@@ -46,10 +46,10 @@ public class UpdateTicketService : BaseCommandHandler
             ?? throw new NotFoundException(nameof(Project), ticket.ProjectId);
 
         if (request.Title.HasValue)
-            ticket.ChangeTitle(request.Title.Value, UserContext.Id);
+            ticket.ChangeTitle(request.Title.Value, UserContext.Id, Clock);
 
         if (request.Description.HasValue)
-            ticket.ChangeDescription(request.Description.Value, UserContext.Id);
+            ticket.ChangeDescription(request.Description.Value, UserContext.Id, Clock);
 
         if (request.AssigneeId.HasValue)
         {
@@ -59,11 +59,17 @@ public class UpdateTicketService : BaseCommandHandler
                 var user = await _userRepository.GetByIdAsync(assigneeId.Value, cancellationToken)
                     ?? throw new NotFoundException(nameof(User), assigneeId.Value);
                 project.EnsureMember(assigneeId.Value);
-                ticket.Assign(assigneeId.Value, user.Name, request.NotificationRecipientIds, UserContext.Id);
+                ticket.Assign(
+                    assigneeId.Value,
+                    user.Name,
+                    request.NotificationRecipientIds,
+                    UserContext.Id,
+                    Clock
+                );
             }
             else
             {
-                ticket.Unassign(UserContext.Id);
+                ticket.Unassign(UserContext.Id, Clock);
             }
         }
 
@@ -76,13 +82,13 @@ public class UpdateTicketService : BaseCommandHandler
                 ? request.EndDate.Value
                 : ticket.Schedule.EndDate;
 
-            ticket.ChangeSchedule(startDate, endDate, UserContext.Id);
+            ticket.ChangeSchedule(startDate, endDate, UserContext.Id, Clock);
         }
 
         if (request.Status.HasValue)
         {
             var status = TicketStatus.Parse(request.Status.Value);
-            ticket.ChangeStatus(status, UserContext.Id);
+            ticket.ChangeStatus(status, UserContext.Id, Clock);
         }
 
         if (request.CompletionCriterionOperations.HasValue)
@@ -92,26 +98,26 @@ public class UpdateTicketService : BaseCommandHandler
                 switch (operation)
                 {
                     case AddCompletionCriterionOperationDto add:
-                        ticket.AddCompletionCriterion(add.Criterion, UserContext.Id);
+                        ticket.AddCompletionCriterion(add.Criterion, UserContext.Id, Clock);
                         break;
                     case EditCompletionCriterionOperationDto edit:
-                        ticket.EditCompletionCriterion(edit.CriterionId, edit.Criterion, UserContext.Id);
+                        ticket.EditCompletionCriterion(edit.CriterionId, edit.Criterion, UserContext.Id, Clock);
                         break;
                     case DeleteCompletionCriterionOperationDto delete:
-                        ticket.DeleteCompletionCriterion(delete.CriterionId, UserContext.Id);
+                        ticket.DeleteCompletionCriterion(delete.CriterionId, UserContext.Id, Clock);
                         break;
                     case CompleteCompletionCriterionOperationDto complete:
-                        ticket.CompleteCriterion(complete.CriterionId, UserContext.Id);
+                        ticket.CompleteCriterion(complete.CriterionId, UserContext.Id, Clock);
                         break;
                     case ReopenCompletionCriterionOperationDto reopen:
-                        ticket.ReopenCriterion(reopen.CriterionId, UserContext.Id);
+                        ticket.ReopenCriterion(reopen.CriterionId, UserContext.Id, Clock);
                         break;
                 }
             }
         }
 
         if (request.Comment.HasValue)
-            ticket.AddComment(UserContext.Id, request.Comment.Value, UserContext.Id);
+            ticket.AddComment(UserContext.Id, request.Comment.Value, UserContext.Id, Clock);
 
         // 2. 通知作成
         var notifications = request.NotificationRecipientIds

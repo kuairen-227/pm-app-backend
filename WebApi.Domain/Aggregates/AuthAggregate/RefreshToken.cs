@@ -34,6 +34,6 @@ public class RefreshToken : Entity
 
         IsRevoked = true;
         RevokedAt = clock.Now;
-        UpdateAuditInfo(revokedBy);
+        UpdateAuditInfo(revokedBy, clock);
     }
 }

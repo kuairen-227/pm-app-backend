@@ -22,12 +22,12 @@ public sealed class TicketComment : Entity
         Content = content;
     }
 
-    public void UpdateContent(string content, Guid updatedBy)
+    public void UpdateContent(string content, Guid updatedBy, IDateTimeProvider clock)
     {
         if (string.IsNullOrWhiteSpace(content))
             throw new DomainException("CONTENT_REQUIRED", "Content は必須です");
 
         Content = content;
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 }

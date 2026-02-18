@@ -27,7 +27,7 @@ public class AddCompletionCriterionHandler : BaseCommandHandler, IRequestHandler
         var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
-        ticket.AddCompletionCriterion(request.Criterion, UserContext.Id);
+        ticket.AddCompletionCriterion(request.Criterion, UserContext.Id, Clock);
         await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;

@@ -38,7 +38,8 @@ public class RevokeRefreshTokenHandlerTests : BaseCommandHandlerTest
         var refreshToken = _refreshTokenBuilder.Build();
 
         _refreshTokenRepository
-            .Setup(x => x.GetByTokenAsync(refreshToken.Token, It.IsAny<CancellationToken>()))
+            .Setup(x => x.GetByTokenAsync(
+                refreshToken.Token, Clock, It.IsAny<CancellationToken>()))
             .ReturnsAsync(refreshToken);
 
         // Act
@@ -59,7 +60,8 @@ public class RevokeRefreshTokenHandlerTests : BaseCommandHandlerTest
         var command = new RevokeRefreshTokenCommand("invalid_token");
 
         _refreshTokenRepository
-            .Setup(x => x.GetByTokenAsync(command.RefreshToken, It.IsAny<CancellationToken>()))
+            .Setup(x => x.GetByTokenAsync(
+                command.RefreshToken, Clock, It.IsAny<CancellationToken>()))
             .ReturnsAsync((RefreshToken?)null);
 
         // Act

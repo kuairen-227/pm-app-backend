@@ -23,7 +23,8 @@ public class RevokeRefreshTokenHandler : BaseCommandHandler, IRequestHandler<Rev
 
     public async Task<Unit> Handle(RevokeRefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var refreshToken = await _refreshTokenRepository.GetByTokenAsync(request.RefreshToken, cancellationToken)
+        var refreshToken =
+            await _refreshTokenRepository.GetByTokenAsync(request.RefreshToken, Clock, cancellationToken)
             ?? throw new AuthenticationException("INVALID_REFRESH_TOKEN", "リフレッシュトークンが無効です。");
 
         refreshToken.Revoke(UserContext.Id, Clock);

@@ -20,9 +20,9 @@ public sealed class ProjectMember : Entity
         Role = role;
     }
 
-    public void ChangeRole(ProjectRole newRole, Guid updatedBy)
+    public void ChangeRole(ProjectRole newRole, Guid updatedBy, IDateTimeProvider clock)
     {
         Role = newRole;
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 }

@@ -61,7 +61,7 @@ public sealed class Ticket : Entity
         }
     }
 
-    public void ChangeTitle(string title, Guid updatedBy)
+    public void ChangeTitle(string title, Guid updatedBy, IDateTimeProvider clock)
     {
         var newTitle = TicketTitle.Create(title);
         ChangeWithHistory(
@@ -70,10 +70,10 @@ public sealed class Ticket : Entity
             newTitle,
             () => Title = newTitle
         );
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void ChangeDescription(string description, Guid updatedBy)
+    public void ChangeDescription(string description, Guid updatedBy, IDateTimeProvider clock)
     {
         var newDescription = TicketDescription.Create(description);
         ChangeWithHistory(
@@ -82,10 +82,16 @@ public sealed class Ticket : Entity
             newDescription,
             () => Description = newDescription
         );
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void Assign(Guid assigneeId, string assigneeName, IReadOnlyCollection<Guid> notificationRecipientIds, Guid updatedBy)
+    public void Assign(
+        Guid assigneeId,
+        string assigneeName,
+        IReadOnlyCollection<Guid> notificationRecipientIds,
+        Guid updatedBy,
+        IDateTimeProvider clock
+    )
     {
         if (assigneeId == Guid.Empty)
             throw new DomainException("ASSIGNEE_ID_REQUIRED", "Assignee ID は必須です");
@@ -99,13 +105,13 @@ public sealed class Ticket : Entity
             () => AssigneeId = assigneeId
         );
 
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
         AddDomainEvent(new TicketMemberAssignedEvent(
-            notificationRecipientIds, Id, Title, assigneeId, assigneeName, ProjectId, _clock
+            notificationRecipientIds, Id, Title, assigneeId, assigneeName, ProjectId, clock
         ));
     }
 
-    public void Unassign(Guid updatedBy)
+    public void Unassign(Guid updatedBy, IDateTimeProvider clock)
     {
         if (AssigneeId is null)
             throw new DomainException("NOT_ASSIGNED", "現在割り当てられていません");
@@ -117,10 +123,11 @@ public sealed class Ticket : Entity
             () => AssigneeId = null
         );
 
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void ChangeSchedule(DateOnly? newStartDate, DateOnly? newEndDate, Guid updatedBy)
+    public void ChangeSchedule(
+        DateOnly? newStartDate, DateOnly? newEndDate, Guid updatedBy, IDateTimeProvider clock)
     {
         if (Schedule.StartDate != newStartDate)
         {
@@ -143,10 +150,11 @@ public sealed class Ticket : Entity
         }
 
         Schedule = TicketSchedule.Create(newStartDate, newEndDate);
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void ChangeStatus(TicketStatus.StatusType status, Guid updatedBy)
+    public void ChangeStatus(
+        TicketStatus.StatusType status, Guid updatedBy, IDateTimeProvider clock)
     {
         var newStatus = TicketStatus.Create(status);
         ChangeWithHistory(
@@ -155,15 +163,15 @@ public sealed class Ticket : Entity
             newStatus,
             () => Status = newStatus
         );
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void AddCompletionCriterion(string criterion, Guid createdBy)
+    public void AddCompletionCriterion(string criterion, Guid createdBy, IDateTimeProvider clock)
     {
         var newCriterion = new TicketCompletionCriterion(
             criterion,
             createdBy,
-            _clock
+            clock
         );
         ChangeWithHistory(
             TicketField.CompletionCriterion,
@@ -171,10 +179,11 @@ public sealed class Ticket : Entity
             criterion,
             () => _completionCriteria.Add(newCriterion)
         );
-        RecalculateStatus(createdBy);
+        RecalculateStatus(createdBy, clock);
     }
 
-    public void EditCompletionCriterion(Guid criterionId, string newCriterion, Guid updatedBy)
+    public void EditCompletionCriterion(
+        Guid criterionId, string newCriterion, Guid updatedBy, IDateTimeProvider clock)
     {
         var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
             ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
@@ -185,11 +194,12 @@ public sealed class Ticket : Entity
             TicketField.CompletionCriterion,
             before,
             newCriterion,
-            () => criterion.EditCriterion(newCriterion, updatedBy)
+            () => criterion.EditCriterion(newCriterion, updatedBy, clock)
         );
     }
 
-    public void DeleteCompletionCriterion(Guid criterionId, Guid deletedBy)
+    public void DeleteCompletionCriterion(
+        Guid criterionId, Guid deletedBy, IDateTimeProvider clock)
     {
         var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
             ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
@@ -199,10 +209,10 @@ public sealed class Ticket : Entity
             null,
             () => _completionCriteria.Remove(criterion)
         );
-        RecalculateStatus(deletedBy);
+        RecalculateStatus(deletedBy, clock);
     }
 
-    public void CompleteCriterion(Guid criterionId, Guid updatedBy)
+    public void CompleteCriterion(Guid criterionId, Guid updatedBy, IDateTimeProvider clock)
     {
         var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
             ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
@@ -210,12 +220,12 @@ public sealed class Ticket : Entity
             TicketField.CompletionCriterion,
             false,
             true,
-            () => criterion.Complete(updatedBy)
+            () => criterion.Complete(updatedBy, clock)
         );
-        RecalculateStatus(updatedBy);
+        RecalculateStatus(updatedBy, clock);
     }
 
-    public void ReopenCriterion(Guid criterionId, Guid updatedBy)
+    public void ReopenCriterion(Guid criterionId, Guid updatedBy, IDateTimeProvider clock)
     {
         var criterion = _completionCriteria.FirstOrDefault(c => c.Id == criterionId)
             ?? throw new DomainException("TICKET_COMPLETION_CRITERION_NOT_FOUND", "Ticket Completion Criterion が見つかりません");
@@ -223,20 +233,21 @@ public sealed class Ticket : Entity
             TicketField.CompletionCriterion,
             true,
             false,
-            () => criterion.Reopen(updatedBy)
+            () => criterion.Reopen(updatedBy, clock)
         );
-        RecalculateStatus(updatedBy);
+        RecalculateStatus(updatedBy, clock);
     }
 
-    public TicketComment AddComment(Guid authorId, string content, Guid createdBy)
+    public TicketComment AddComment(
+        Guid authorId, string content, Guid createdBy, IDateTimeProvider clock)
     {
-        var comment = new TicketComment(authorId, content, createdBy, _clock);
+        var comment = new TicketComment(authorId, content, createdBy, clock);
         _comments.Add(comment);
         return comment;
     }
 
     public void EditComment(
-        Guid commentId, Guid authorId, string newContent, Guid updatedBy)
+        Guid commentId, Guid authorId, string newContent, Guid updatedBy, IDateTimeProvider clock)
     {
         var comment = _comments.FirstOrDefault(c => c.Id == commentId)
             ?? throw new DomainException("TICKET_COMMENT_NOT_FOUND", "Ticket Comment が見つかりません");
@@ -244,7 +255,7 @@ public sealed class Ticket : Entity
         if (comment.AuthorId != authorId)
             throw new DomainException("NOT_TICKET_COMMENT_AUTHOR", "Ticket Comment の作成者のみが編集できます");
 
-        comment.UpdateContent(newContent, updatedBy);
+        comment.UpdateContent(newContent, updatedBy, clock);
     }
 
     public void DeleteComment(Guid commentId, Guid authorId)
@@ -277,17 +288,16 @@ public sealed class Ticket : Entity
     }
 
     public void CommitHistory(
-        TicketHistoryAction action,
-        Guid actorId)
+        TicketHistoryAction action, Guid actorId, IDateTimeProvider clock)
     {
         if (!_pendingChanges.Any()) return;
 
         var history = new TicketHistory(
             actorId,
-            _clock.Now,
+            clock.Now,
             action,
             actorId,
-            _clock
+            clock
         );
 
         foreach (var change in _pendingChanges)
@@ -297,7 +307,7 @@ public sealed class Ticket : Entity
         _pendingChanges.Clear();
     }
 
-    private void RecalculateStatus(Guid actorId)
+    private void RecalculateStatus(Guid actorId, IDateTimeProvider clock)
     {
         if (_completionCriteria.Count == 0)
             return;
@@ -305,12 +315,12 @@ public sealed class Ticket : Entity
         if (_completionCriteria.All(c => c.IsCompleted))
         {
             if (Status.Value != TicketStatus.StatusType.Done)
-                ChangeStatus(TicketStatus.StatusType.Done, actorId);
+                ChangeStatus(TicketStatus.StatusType.Done, actorId, clock);
         }
         else
         {
             if (Status.Value == TicketStatus.StatusType.Done)
-                ChangeStatus(TicketStatus.StatusType.InProgress, actorId);
+                ChangeStatus(TicketStatus.StatusType.InProgress, actorId, clock);
         }
     }
 }

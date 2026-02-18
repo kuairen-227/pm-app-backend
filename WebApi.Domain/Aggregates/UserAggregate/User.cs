@@ -30,36 +30,36 @@ public sealed class User : Entity
         AddDomainEvent(new UserRegisteredEvent(Id, Name, clock));
     }
 
-    public void ChangeName(string name)
+    public void ChangeName(string name, IDateTimeProvider clock)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new DomainException("USER_NAME_REQUIRED", "Name は必須です");
 
         Name = name;
-        UpdateAuditInfo(Id);
-        AddDomainEvent(new UserUpdatedEvent(Id, _clock));
+        UpdateAuditInfo(Id, clock);
+        AddDomainEvent(new UserUpdatedEvent(Id, clock));
     }
 
-    public void ChangeEmail(string newEmail)
+    public void ChangeEmail(string newEmail, IDateTimeProvider clock)
     {
         Email = Email.Create(newEmail);
-        UpdateAuditInfo(Id);
-        AddDomainEvent(new UserUpdatedEvent(Id, _clock));
+        UpdateAuditInfo(Id, clock);
+        AddDomainEvent(new UserUpdatedEvent(Id, clock));
     }
 
-    public void ChangePassword(string newPasswordHash)
+    public void ChangePassword(string newPasswordHash, IDateTimeProvider clock)
     {
         if (string.IsNullOrWhiteSpace(newPasswordHash))
             throw new DomainException("USER_PASSWORD_REQUIRED", "PasswordHash は必須です");
 
         PasswordHash = newPasswordHash;
-        UpdateAuditInfo(Id);
+        UpdateAuditInfo(Id, clock);
     }
 
-    public void ChangeUserRole(SystemRole.RoleType newRole)
+    public void ChangeUserRole(SystemRole.RoleType newRole, IDateTimeProvider clock)
     {
         Role = SystemRole.Create(newRole);
-        UpdateAuditInfo(Id);
-        AddDomainEvent(new UserUpdatedEvent(Id, _clock));
+        UpdateAuditInfo(Id, clock);
+        AddDomainEvent(new UserUpdatedEvent(Id, clock));
     }
 }

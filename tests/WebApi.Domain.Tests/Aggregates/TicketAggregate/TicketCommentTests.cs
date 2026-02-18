@@ -56,7 +56,7 @@ public class TicketCommentTests : BaseDomainTest
         var result = _commentBuilder.Build();
 
         // Act
-        result.UpdateContent("編集コメント", UserContext.Id);
+        result.UpdateContent("編集コメント", UserContext.Id, Clock);
 
         // Assert
         result.Content.Should().Be("編集コメント");
@@ -72,7 +72,7 @@ public class TicketCommentTests : BaseDomainTest
         var ticketComment = _commentBuilder.Build();
 
         // Act
-        var act = () => ticketComment.UpdateContent(content!, UserContext.Id);
+        var act = () => ticketComment.UpdateContent(content!, UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

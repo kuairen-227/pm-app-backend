@@ -92,12 +92,13 @@ public class TicketBuilder : BaseBuilder<TicketBuilder, Ticket>
 
         if (_status != TicketStatus.StatusType.Todo)
         {
-            ticket.ChangeStatus(_status, _createdBy);
+            ticket.ChangeStatus(_status, _createdBy, _clock);
         }
 
         foreach (var comment in _comments)
         {
-            ticket.AddComment(comment.AuthorId, comment.Content, comment.AuditInfo.CreatedBy);
+            ticket.AddComment(
+                comment.AuthorId, comment.Content, comment.AuditInfo.CreatedBy, _clock);
         }
 
         foreach (var history in _histories)

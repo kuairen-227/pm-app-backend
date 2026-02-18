@@ -52,7 +52,7 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var result = _projectBuilder.Build();
-        result.Rename(newName, Guid.NewGuid());
+        result.Rename(newName, Guid.NewGuid(), Clock);
 
         // Assert
         result.Name.Should().Be(newName);
@@ -68,7 +68,7 @@ public class ProjectTests : BaseDomainTest
         var result = _projectBuilder.Build();
 
         // Act
-        var act = () => result.Rename(newName!, Guid.NewGuid());
+        var act = () => result.Rename(newName!, Guid.NewGuid(), Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -83,7 +83,7 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var result = _projectBuilder.Build();
-        result.ChangeDescription(newDescription, Guid.NewGuid());
+        result.ChangeDescription(newDescription, Guid.NewGuid(), Clock);
 
         // Assert
         result.Description.Should().Be(newDescription);
@@ -98,7 +98,7 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var result = _projectBuilder.Build();
-        result.InviteMember(user.Id, role, UserContext.Id);
+        result.InviteMember(user.Id, role, UserContext.Id, Clock);
 
         // Assert
         result.Members.Count.Should().Be(1);
@@ -119,7 +119,8 @@ public class ProjectTests : BaseDomainTest
         var project = _projectBuilder.WithMembers(member).Build();
 
         // Act
-        var act = () => project.InviteMember(user.Id, role.Value, UserContext.Id);
+        var act = () => project.InviteMember(
+            user.Id, role.Value, UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -173,7 +174,7 @@ public class ProjectTests : BaseDomainTest
 
         // Act
         var newRole = ProjectRole.RoleType.ProjectManager;
-        result.ChangeMemberRole(user.Id, newRole, UserContext.Id);
+        result.ChangeMemberRole(user.Id, newRole, UserContext.Id, Clock);
 
         // Assert
         result.Members.Count.Should().Be(1);
@@ -188,7 +189,7 @@ public class ProjectTests : BaseDomainTest
         var role = ProjectRole.RoleType.Member;
 
         // Act
-        var act = () => project.ChangeMemberRole(Guid.NewGuid(), role, UserContext.Id);
+        var act = () => project.ChangeMemberRole(Guid.NewGuid(), role, UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();

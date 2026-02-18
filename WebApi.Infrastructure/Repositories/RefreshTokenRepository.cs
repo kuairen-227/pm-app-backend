@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WebApi.Domain.Abstractions;
 using WebApi.Domain.Abstractions.Repositories;
 using WebApi.Domain.Aggregates.AuthAggregate;
 using WebApi.Infrastructure.Database;
@@ -14,10 +15,16 @@ public class RefreshTokenRepository : IRefreshTokenRepository
         _dbContext = dbContext;
     }
 
-    public async Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken cancellationToken = default)
+    public async Task<RefreshToken?> GetByTokenAsync(
+        string token, IDateTimeProvider clock, CancellationToken cancellationToken = default)
     {
         return await _dbContext.RefreshTokens
-            .FirstOrDefaultAsync(rt => rt.Token == token, cancellationToken);
+            .FirstOrDefaultAsync(
+                rt => rt.Token == token
+                && rt.IsRevoked == false
+                && rt.ExpiresAt > clock.Now
+                , cancellationToken
+        );
     }
 
     public async Task AddAsync(RefreshToken token, CancellationToken cancellationToken = default)

@@ -27,7 +27,8 @@ public class RefreshAccessTokenHandler : BaseCommandHandler, IRequestHandler<Ref
 
     public async Task<AuthResult> Handle(RefreshAccessTokenCommand request, CancellationToken cancellationToken)
     {
-        var refreshToken = await _refreshTokenRepository.GetByTokenAsync(request.RefreshToken, cancellationToken)
+        var refreshToken =
+            await _refreshTokenRepository.GetByTokenAsync(request.RefreshToken, Clock, cancellationToken)
             ?? throw new AuthenticationException("INVALID_REFRESH_TOKEN", "リフレッシュトークンが無効です。");
 
         var accessToken = _jwtService.GenerateAccessToken(refreshToken.UserId);

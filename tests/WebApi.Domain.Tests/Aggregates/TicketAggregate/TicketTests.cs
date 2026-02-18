@@ -61,7 +61,7 @@ public class TicketTests : BaseDomainTest
 
         // Act
         var result = _ticketBuilder.Build();
-        result.ChangeTitle(title, UserContext.Id);
+        result.ChangeTitle(title, UserContext.Id, Clock);
 
         // Assert
         result.Title.Value.Should().Be(title);
@@ -77,7 +77,7 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        var act = () => ticket.ChangeTitle(title!, UserContext.Id);
+        var act = () => ticket.ChangeTitle(title!, UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -92,7 +92,8 @@ public class TicketTests : BaseDomainTest
 
         // Act
         var result = _ticketBuilder.Build();
-        result.Assign(user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id);
+        result.Assign(
+            user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id, Clock);
 
         // Assert
         result.AssigneeId.Should().Be(user.Id);
@@ -105,7 +106,8 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        var act = () => ticket.Assign(Guid.Empty, "テスト 太郎", [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id);
+        var act = () => ticket.Assign(
+            Guid.Empty, "テスト 太郎", [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -118,10 +120,12 @@ public class TicketTests : BaseDomainTest
         // Arrange
         var ticket = _ticketBuilder.Build();
         var user = _userBuilder.Build();
-        ticket.Assign(user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id);
+        ticket.Assign(
+            user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id, Clock);
 
         // Act
-        var act = () => ticket.Assign(user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id);
+        var act = () => ticket.Assign(
+            user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -134,10 +138,11 @@ public class TicketTests : BaseDomainTest
         // Arrange
         var ticket = _ticketBuilder.Build();
         var user = _userBuilder.Build();
-        ticket.Assign(user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id);
+        ticket.Assign(
+            user.Id, user.Name, [Guid.NewGuid(), Guid.NewGuid()], UserContext.Id, Clock);
 
         // Act
-        ticket.Unassign(UserContext.Id);
+        ticket.Unassign(UserContext.Id, Clock);
 
         // Assert
         ticket.AssigneeId.Should().BeNull();
@@ -150,7 +155,7 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        var act = () => ticket.Unassign(UserContext.Id);
+        var act = () => ticket.Unassign(UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -166,7 +171,7 @@ public class TicketTests : BaseDomainTest
         var endDate = DateOnly.Parse("2025-12-31");
 
         // Act
-        ticket.ChangeSchedule(startDate, endDate, UserContext.Id);
+        ticket.ChangeSchedule(startDate, endDate, UserContext.Id, Clock);
 
         // Assert
         ticket.Schedule.StartDate.Should().Be(startDate);
@@ -180,7 +185,8 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        ticket.ChangeStatus(TicketStatus.StatusType.InProgress, UserContext.Id);
+        ticket.ChangeStatus(
+            TicketStatus.StatusType.InProgress, UserContext.Id, Clock);
 
         // Assert
         ticket.Status.Value.Should().Be(TicketStatus.StatusType.InProgress);
@@ -194,7 +200,7 @@ public class TicketTests : BaseDomainTest
         var criteria = "完了条件";
 
         // Act
-        ticket.AddCompletionCriterion(criteria, UserContext.Id);
+        ticket.AddCompletionCriterion(criteria, UserContext.Id, Clock);
 
         // Assert
         ticket.CompletionCriteria.Should().ContainSingle();
@@ -208,7 +214,8 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.WithCompletionCriteria(["完了条件"]).Build();
 
         // Act
-        ticket.EditCompletionCriterion(ticket.CompletionCriteria.First().Id, "完了条件-編集", UserContext.Id);
+        ticket.EditCompletionCriterion(
+            ticket.CompletionCriteria.First().Id, "完了条件-編集", UserContext.Id, Clock);
 
         // Assert
         ticket.CompletionCriteria.Should().ContainSingle();
@@ -222,7 +229,8 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.WithCompletionCriteria([]).Build();
 
         // Act
-        var act = () => ticket.EditCompletionCriterion(Guid.NewGuid(), "完了条件-編集", UserContext.Id);
+        var act = () => ticket.EditCompletionCriterion(
+            Guid.NewGuid(), "完了条件-編集", UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -236,7 +244,8 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.WithCompletionCriteria(["完了条件"]).Build();
 
         // Act
-        ticket.DeleteCompletionCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+        ticket.DeleteCompletionCriterion(
+            ticket.CompletionCriteria.First().Id, UserContext.Id, Clock);
 
         // Assert
         ticket.CompletionCriteria.Should().BeEmpty();
@@ -249,7 +258,7 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.WithCompletionCriteria([]).Build();
 
         // Act
-        var act = () => ticket.DeleteCompletionCriterion(Guid.NewGuid(), UserContext.Id);
+        var act = () => ticket.DeleteCompletionCriterion(Guid.NewGuid(), UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -266,7 +275,7 @@ public class TicketTests : BaseDomainTest
             .Build();
 
         // Act
-        ticket.CompleteCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+        ticket.CompleteCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id, Clock);
 
         // Assert
         ticket.CompletionCriteria.First().IsCompleted.Should().BeTrue();
@@ -283,8 +292,8 @@ public class TicketTests : BaseDomainTest
             .Build();
 
         // Act
-        ticket.CompleteCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
-        ticket.CompleteCriterion(ticket.CompletionCriteria.Last().Id, UserContext.Id);
+        ticket.CompleteCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id, Clock);
+        ticket.CompleteCriterion(ticket.CompletionCriteria.Last().Id, UserContext.Id, Clock);
 
         // Assert
         ticket.CompletionCriteria.All(c => c.IsCompleted).Should().BeTrue();
@@ -298,7 +307,7 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.WithCompletionCriteria([]).Build();
 
         // Act
-        var act = () => ticket.CompleteCriterion(Guid.NewGuid(), UserContext.Id);
+        var act = () => ticket.CompleteCriterion(Guid.NewGuid(), UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -313,10 +322,12 @@ public class TicketTests : BaseDomainTest
             .WithStatus(TicketStatus.StatusType.InProgress)
             .WithCompletionCriteria(["完了条件1", "完了条件2"])
             .Build();
-        ticket.CompleteCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+        ticket.CompleteCriterion(
+            ticket.CompletionCriteria.First().Id, UserContext.Id, Clock);
 
         // Act
-        ticket.ReopenCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
+        ticket.ReopenCriterion(
+            ticket.CompletionCriteria.First().Id, UserContext.Id, Clock);
 
         // Assert
         ticket.CompletionCriteria.First().IsCompleted.Should().BeFalse();
@@ -331,12 +342,14 @@ public class TicketTests : BaseDomainTest
             .WithStatus(TicketStatus.StatusType.Done)
             .WithCompletionCriteria(["完了条件1", "完了条件2"])
             .Build();
-        ticket.CompleteCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
-        ticket.CompleteCriterion(ticket.CompletionCriteria.Last().Id, UserContext.Id);
+        ticket.CompleteCriterion(
+            ticket.CompletionCriteria.First().Id, UserContext.Id, Clock);
+        ticket.CompleteCriterion(
+            ticket.CompletionCriteria.Last().Id, UserContext.Id, Clock);
 
         // Act
-        ticket.ReopenCriterion(ticket.CompletionCriteria.First().Id, UserContext.Id);
-
+        ticket.ReopenCriterion(
+            ticket.CompletionCriteria.First().Id, UserContext.Id, Clock);
         // Assert
         ticket.CompletionCriteria.First().IsCompleted.Should().BeFalse();
         ticket.Status.Value.Should().Be(TicketStatus.StatusType.InProgress);
@@ -352,7 +365,7 @@ public class TicketTests : BaseDomainTest
         var createdBy = author.Id;
 
         // Act
-        ticket.AddComment(author.Id, content, createdBy);
+        ticket.AddComment(author.Id, content, createdBy, Clock);
 
         // Assert
         ticket.Comments.Should().ContainSingle();
@@ -372,8 +385,8 @@ public class TicketTests : BaseDomainTest
         var createdBys = new[] { authors[0].Id, authors[1].Id };
 
         // Act
-        ticket.AddComment(authors[0].Id, contents[0], createdBys[0]);
-        ticket.AddComment(authors[1].Id, contents[1], createdBys[1]);
+        ticket.AddComment(authors[0].Id, contents[0], createdBys[0], Clock);
+        ticket.AddComment(authors[1].Id, contents[1], createdBys[1], Clock);
 
         // Assert
         ticket.Comments.Should().HaveCount(2);
@@ -392,10 +405,12 @@ public class TicketTests : BaseDomainTest
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        var comment = ticket.AddComment(Guid.NewGuid(), "コメント1", Guid.NewGuid());
+        var comment = ticket.AddComment(
+            Guid.NewGuid(), "コメント1", Guid.NewGuid(), Clock);
 
         // Act
-        ticket.EditComment(comment.Id, comment.AuthorId, "コメント1-編集", UserContext.Id);
+        ticket.EditComment(
+            comment.Id, comment.AuthorId, "コメント1-編集", UserContext.Id, Clock);
 
         // Assert
         ticket.Comments.Should().ContainSingle();
@@ -411,7 +426,7 @@ public class TicketTests : BaseDomainTest
 
         // Act
         var act = () => ticket.EditComment(
-            comment.Id, comment.AuthorId, "コメント1-編集", UserContext.Id);
+            comment.Id, comment.AuthorId, "コメント1-編集", UserContext.Id, Clock);
 
         // Assert
         var ex = act.Should().Throw<DomainException>();
@@ -423,12 +438,12 @@ public class TicketTests : BaseDomainTest
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        var comment = ticket.AddComment(Guid.NewGuid(), "コメント", Guid.NewGuid());
+        var comment = ticket.AddComment(
+            Guid.NewGuid(), "コメント", Guid.NewGuid(), Clock);
 
         // Act
         var act = () => ticket.EditComment(
-            comment.Id, Guid.NewGuid(), "コメント-編集", UserContext.Id);
-
+            comment.Id, Guid.NewGuid(), "コメント-編集", UserContext.Id, Clock);
         // Assert
         var ex = act.Should().Throw<DomainException>();
         ex.Which.ErrorCode.Should().Be("DOMAIN.NOT_TICKET_COMMENT_AUTHOR");
@@ -439,8 +454,10 @@ public class TicketTests : BaseDomainTest
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        var comment1 = ticket.AddComment(Guid.NewGuid(), "コメント1", Guid.NewGuid());
-        var comment2 = ticket.AddComment(Guid.NewGuid(), "コメント2", Guid.NewGuid());
+        var comment1 = ticket.AddComment(
+            Guid.NewGuid(), "コメント1", Guid.NewGuid(), Clock);
+        var comment2 = ticket.AddComment(
+            Guid.NewGuid(), "コメント2", Guid.NewGuid(), Clock);
 
         // Act
         ticket.DeleteComment(comment1.Id, comment1.AuthorId);
@@ -470,7 +487,8 @@ public class TicketTests : BaseDomainTest
     {
         // Arrange
         var ticket = _ticketBuilder.Build();
-        var comment = ticket.AddComment(Guid.NewGuid(), "コメント", Guid.NewGuid());
+        var comment = ticket.AddComment(
+            Guid.NewGuid(), "コメント", Guid.NewGuid(), Clock);
 
         // Act
         var act = () => ticket.DeleteComment(comment.Id, Guid.NewGuid());
@@ -489,8 +507,8 @@ public class TicketTests : BaseDomainTest
         var afterTitle = "新しいタイトル";
 
         // Act
-        ticket.ChangeTitle(afterTitle, UserContext.Id);
-        ticket.CommitHistory(TicketHistoryAction.TicketCreated, UserContext.Id);
+        ticket.ChangeTitle(afterTitle, UserContext.Id, Clock);
+        ticket.CommitHistory(TicketHistoryAction.TicketCreated, UserContext.Id, Clock);
 
         // Assert
         ticket.Histories.Should().ContainSingle();
@@ -515,9 +533,9 @@ public class TicketTests : BaseDomainTest
         var afterStatus = TicketStatus.StatusType.Done;
 
         // Act
-        ticket.ChangeDescription(afterDescription, UserContext.Id);
-        ticket.ChangeStatus(afterStatus, UserContext.Id);
-        ticket.CommitHistory(TicketHistoryAction.TicketUpdated, UserContext.Id);
+        ticket.ChangeDescription(afterDescription, UserContext.Id, Clock);
+        ticket.ChangeStatus(afterStatus, UserContext.Id, Clock);
+        ticket.CommitHistory(TicketHistoryAction.TicketUpdated, UserContext.Id, Clock);
 
         // Assert
         ticket.Histories.Should().ContainSingle();
@@ -543,7 +561,7 @@ public class TicketTests : BaseDomainTest
         var ticket = _ticketBuilder.Build();
 
         // Act
-        ticket.CommitHistory(TicketHistoryAction.TicketUpdated, UserContext.Id);
+        ticket.CommitHistory(TicketHistoryAction.TicketUpdated, UserContext.Id, Clock);
 
         // Assert
         ticket.Histories.Should().BeEmpty();

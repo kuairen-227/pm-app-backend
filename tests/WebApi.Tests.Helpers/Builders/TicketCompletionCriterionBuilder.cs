@@ -30,7 +30,7 @@ public class TicketCompletionCriterionBuilder : BaseBuilder<TicketCompletionCrit
 
         if (_isCompleted)
         {
-            criterion.Complete(_createdBy);
+            criterion.Complete(_createdBy, _clock);
         }
 
         return criterion;

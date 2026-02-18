@@ -23,30 +23,30 @@ public sealed class TicketCompletionCriterion : Entity
         IsCompleted = false;
     }
 
-    public void EditCriterion(string criterion, Guid updatedBy)
+    public void EditCriterion(string criterion, Guid updatedBy, IDateTimeProvider clock)
     {
         if (string.IsNullOrWhiteSpace(criterion))
             throw new DomainException("COMPLETION_CRITERION_REQUIRED", "Completion Criterion は必須です");
 
         Criterion = criterion;
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void Complete(Guid updatedBy)
+    public void Complete(Guid updatedBy, IDateTimeProvider clock)
     {
         if (IsCompleted)
             throw new DomainException("ALREADY_COMPLETED", "Completion Criteria は既に完了しています");
 
         IsCompleted = true;
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 
-    public void Reopen(Guid updatedBy)
+    public void Reopen(Guid updatedBy, IDateTimeProvider clock)
     {
         if (!IsCompleted)
             throw new DomainException("NOT_COMPLETED", "Completion Criteria は完了していません");
 
         IsCompleted = false;
-        UpdateAuditInfo(updatedBy);
+        UpdateAuditInfo(updatedBy, clock);
     }
 }

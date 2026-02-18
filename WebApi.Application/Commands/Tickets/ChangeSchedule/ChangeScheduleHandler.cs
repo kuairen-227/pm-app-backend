@@ -38,7 +38,7 @@ public class ChangeScheduleHandler : BaseCommandHandler, IRequestHandler<ChangeS
         // 1. スケジュールの変更
         var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
-        ticket.ChangeSchedule(request.StartDate, request.EndDate, UserContext.Id);
+        ticket.ChangeSchedule(request.StartDate, request.EndDate, UserContext.Id, Clock);
 
         // 2. 通知作成
         var project = await _projectRepository.GetByIdAsync(ticket.ProjectId)

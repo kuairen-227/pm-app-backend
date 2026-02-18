@@ -27,7 +27,7 @@ public class DeleteCompletionCriterionHandler : BaseCommandHandler, IRequestHand
         var ticket = await _ticketRepository.GetByIdAsync(request.TicketId, cancellationToken)
             ?? throw new NotFoundException(nameof(Ticket), request.TicketId);
 
-        ticket.DeleteCompletionCriterion(request.CriterionId, UserContext.Id);
+        ticket.DeleteCompletionCriterion(request.CriterionId, UserContext.Id, Clock);
         await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
 
         return Unit.Value;

@@ -56,7 +56,7 @@ public class ProjectMemberTests : BaseDomainTest
         var updatedBy = Guid.NewGuid();
 
         // Act
-        projectMember.ChangeRole(newRole, updatedBy);
+        projectMember.ChangeRole(newRole, updatedBy, Clock);
 
         // Assert
         projectMember.Role.Should().Be(newRole);

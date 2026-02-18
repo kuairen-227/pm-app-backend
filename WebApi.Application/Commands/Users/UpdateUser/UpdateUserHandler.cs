@@ -32,13 +32,13 @@ public class UpdateUserHandler : BaseCommandHandler, IRequestHandler<UpdateUserC
             ?? throw new NotFoundException(nameof(User), request.UserId);
 
         if (request.Name is not null)
-            user.ChangeName(request.Name);
+            user.ChangeName(request.Name, Clock);
         if (request.Email is not null)
-            user.ChangeEmail(request.Email);
+            user.ChangeEmail(request.Email, Clock);
         if (request.Password is not null)
-            user.ChangePassword(_passwordHashService.Hash(request.Password));
+            user.ChangePassword(_passwordHashService.Hash(request.Password), Clock);
         if (request.Role is not null)
-            user.ChangeUserRole(request.Role.Value);
+            user.ChangeUserRole(request.Role.Value, Clock);
 
         await UnitOfWork.SaveChangesAsync(DomainEventPublisher, cancellationToken);
         return Unit.Value;

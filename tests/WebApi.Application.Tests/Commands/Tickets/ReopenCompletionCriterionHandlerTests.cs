@@ -38,7 +38,8 @@ public class ReopenCompletionCriterionHandlerTests : BaseCommandHandlerTest
         var ticket = _ticketBuilder
             .WithCompletionCriteria(["完了条件"])
             .Build();
-        ticket.CompleteCriterion(ticket.CompletionCriteria[0].Id, UserContext.Object.Id);
+        ticket.CompleteCriterion(
+            ticket.CompletionCriteria[0].Id, UserContext.Object.Id, Clock);
 
         _ticketRepository
             .Setup(x => x.GetByIdAsync(ticket.Id, It.IsAny<CancellationToken>()))
