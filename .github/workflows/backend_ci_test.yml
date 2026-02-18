@@ -40,17 +40,10 @@ jobs:
             -targetdir:coveragereport \
             -reporttypes:"MarkdownSummaryGithub"
 
-      - name: Upload coverage summary
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-summary
-          path: coveragereport/SummaryGithub.md
-
-      - name: Add coverage to PR
-        if: github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          path: coveragereport/SummaryGithub.md
+      - name: Publish Coverage to Job Summary
+        run: |
+          echo "## 📊 Unit Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          cat coveragereport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
 
   integration_tests:
     runs-on: ubuntu-latest
