@@ -1,25 +1,26 @@
 {
-    "name": "pm-app-backend",
-    "dockerComposeFile": "docker-compose.yml",
-    "service": "app",
-    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-                "ms-dotnettools.csdevkit",
-                "mtxr.sqltools",
-                "mtxr.sqltools-driver-pg",
-				"esbenp.prettier-vscode",
-                "streetsidesoftware.code-spell-checker"
-            ]
-		}
-	},
-	"forwardPorts": [5000, 5001, 5432],
-	"portsAttributes": {
-			"5001": {
-				"protocol": "https"
-			}
-	},
-    "postCreateCommand": "dotnet --info",
-	"remoteUser": "root"
+  "name": "pm-app-backend",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "github.vscode-github-actions",
+        "ms-dotnettools.csdevkit",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker"
+      ]
+    }
+  },
+  "forwardPorts": [5000, 5001, 5432],
+  "portsAttributes": {
+    "5001": {
+      "protocol": "https"
+    }
+  },
+  "postCreateCommand": "dotnet --info",
+  "remoteUser": "root"
 }
