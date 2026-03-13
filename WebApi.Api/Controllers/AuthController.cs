@@ -56,15 +56,15 @@ public class AuthController : ControllerBase
     /// トークンのリフレッシュ
     /// </summary>
     [HttpPost("refresh")]
-    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RefreshResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<LoginResponse>> RefreshAsync(
+    public async Task<ActionResult<RefreshResponse>> RefreshAsync(
         [FromBody] RefreshRequest request, CancellationToken cancellationToken)
     {
         var command = request.Adapt<RefreshAccessTokenCommand>();
         var result = await _mediator.Send(command, cancellationToken);
 
-        var response = new LoginResponse
+        var response = new RefreshResponse
         {
             UserId = result.UserId,
             AccessToken = result.AccessToken,

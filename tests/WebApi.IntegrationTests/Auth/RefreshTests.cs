@@ -49,7 +49,7 @@ public sealed class RefreshTests : BaseIntegrationTest
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var body = await response.Content.ReadFromJsonAsync<LoginResponse>();
+        var body = await response.Content.ReadFromJsonAsync<RefreshResponse>();
         body.Should().NotBeNull();
         body.UserId.Should().Be(user.User.Id);
         body.AccessToken.Should().NotBeNullOrWhiteSpace();
