@@ -10,9 +10,10 @@
   },
   // 拡張機能設定
   "conventionalCommits.scopes": [
-    // Folder
+    // Technical
     "api",
     "application",
+    "docs",
     "domain",
     "infrastructure",
     "workspace",
@@ -20,7 +21,6 @@
     "package",
     // Domain
     "auth",
-    "docs",
     "user",
     "project",
     "ticket",
