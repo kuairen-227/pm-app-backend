@@ -18,14 +18,16 @@ namespace WebApi.Api.Controllers;
 [Route("api/v{version:apiVersion}/auth")]
 public class AuthController : ControllerBase
 {
+    private readonly IHostEnvironment _env;
     private readonly IMediator _mediator;
     private readonly IAuthService _authService;
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    public AuthController(IMediator mediator, IAuthService authService)
+    public AuthController(IHostEnvironment env, IMediator mediator, IAuthService authService)
     {
+        _env = env;
         _mediator = mediator;
         _authService = authService;
     }
@@ -42,21 +44,14 @@ public class AuthController : ControllerBase
         var result = await _authService.LoginAsync(
             request.Email, request.Password, cancellationToken);
 
-        Response.Cookies.Append("access_token", result.AccessToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddMinutes(15)
-        });
-
-        Response.Cookies.Append("refresh_token", result.RefreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(7)
-        });
+        Response.Cookies.Append(
+            "access_token",
+            result.AccessToken,
+            CreateCookieOptions(DateTime.UtcNow.AddMinutes(15)));
+        Response.Cookies.Append(
+            "refresh_token",
+            result.RefreshToken,
+            CreateCookieOptions(DateTime.UtcNow.AddDays(7)));
 
         var response = new LoginResponse
         {
@@ -83,13 +78,10 @@ public class AuthController : ControllerBase
         var command = new RefreshAccessTokenCommand(refreshToken);
         var result = await _mediator.Send(command, cancellationToken);
 
-        Response.Cookies.Append("access_token", result.AccessToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddMinutes(15)
-        });
+        Response.Cookies.Append(
+            "access_token",
+            result.AccessToken,
+            CreateCookieOptions(DateTime.UtcNow.AddMinutes(15)));
 
         var response = new RefreshResponse
         {
@@ -121,5 +113,16 @@ public class AuthController : ControllerBase
         Response.Cookies.Delete("refresh_token");
 
         return NoContent();
+    }
+
+    private CookieOptions CreateCookieOptions(DateTime expires)
+    {
+        return new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = _env.IsProduction(),
+            SameSite = SameSiteMode.Lax,
+            Expires = expires
+        };
     }
 }
