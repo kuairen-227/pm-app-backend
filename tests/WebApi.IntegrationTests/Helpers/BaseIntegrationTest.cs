@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Application.Abstractions.AuthService;
 using WebApi.Infrastructure.Database;
@@ -37,9 +38,7 @@ public abstract class BaseIntegrationTest
 
     public Task DisposeAsync()
     {
-        DbContext.Dispose();
         Scope.Dispose();
-        Client.Dispose();
         return Task.CompletedTask;
     }
 }
