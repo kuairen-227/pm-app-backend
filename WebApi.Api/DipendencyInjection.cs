@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Api.Common;
+using WebApi.Infrastructure.Services.AuthService;
 
 namespace WebApi.Api;
 
@@ -38,7 +39,8 @@ public static class DependencyInjection
             {
                 policy.WithOrigins()
                       .AllowAnyHeader()
-                      .AllowAnyMethod();
+                      .AllowAnyMethod()
+                      .AllowCredentials();
             });
         });
 
@@ -51,6 +53,9 @@ public static class DependencyInjection
             options.ReportApiVersions = true;
             options.DefaultApiVersion = new ApiVersion(1, 0);
         });
+
+        // JWT Settings
+        services.Configure<JwtSettings>(jwtSection);
 
         // Authentication
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
