@@ -9,7 +9,7 @@ namespace WebApi.IntegrationTests.Auth;
 
 public sealed class LoginTests : BaseIntegrationTest
 {
-    private readonly static string BaseUrl = "/api/v1/auth/login";
+    private const string BaseUrl = "/api/v1/auth/login";
 
     public LoginTests(TestWebApplicationFactory factory)
         : base(factory)
@@ -42,10 +42,10 @@ public sealed class LoginTests : BaseIntegrationTest
         body.Should().NotBeNull();
         body.UserId.Should().Be(user.User.Id);
 
-        response.Headers.Should().Contain(h => h.Key == "Set-Cookie");
         var cookies = response.Headers.GetValues("Set-Cookie");
         cookies.Should().Contain(c => c.StartsWith("access_token="));
         cookies.Should().Contain(c => c.StartsWith("refresh_token="));
+        cookies.Should().Contain(c => c.Contains("httponly"));
     }
 
     [Fact]

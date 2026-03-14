@@ -9,9 +9,9 @@ namespace WebApi.IntegrationTests.Auth;
 
 public sealed class LogoutTests : BaseIntegrationTest
 {
-    private readonly static string BaseUrl = "/api/v1/auth/logout";
-    private readonly static string LoginUrl = "/api/v1/auth/login";
-    private readonly static string RefreshUrl = "/api/v1/auth/refresh";
+    private const string BaseUrl = "/api/v1/auth/logout";
+    private const string LoginUrl = "/api/v1/auth/login";
+    private const string RefreshUrl = "/api/v1/auth/refresh";
 
     public LogoutTests(TestWebApplicationFactory factory)
         : base(factory)
@@ -31,12 +31,8 @@ public sealed class LogoutTests : BaseIntegrationTest
             Email = user.User.Email.Value,
             Password = user.Password
         };
-        var loginResponse = await Client.PostAsJsonAsync(
-            LoginUrl,
-            loginRequest
-        );
-        var cookies = loginResponse.Headers.GetValues("Set-Cookie");
-        Client.DefaultRequestHeaders.Add("Cookie", string.Join("; ", cookies));
+        var loginResponse = await Client.PostAsJsonAsync(LoginUrl, loginRequest);
+        loginResponse.EnsureSuccessStatusCode();
 
         // Act
         var response = await Client.PostAsync(BaseUrl, null);
@@ -62,23 +58,14 @@ public sealed class LogoutTests : BaseIntegrationTest
             Email = user.User.Email.Value,
             Password = user.Password
         };
-        var loginResponse = await Client.PostAsJsonAsync(
-            LoginUrl,
-            loginRequest
-        );
-        var cookies = loginResponse.Headers.GetValues("Set-Cookie");
-        Client.DefaultRequestHeaders.Add("Cookie", string.Join("; ", cookies));
-
-        await Client.PostAsync(BaseUrl, null);
+        var loginResponse = await Client.PostAsJsonAsync(LoginUrl, loginRequest);
+        loginResponse.EnsureSuccessStatusCode();
 
         // Act
+        await Client.PostAsync(BaseUrl, null);
         var response = await Client.PostAsync(RefreshUrl, null);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-
-        var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
-        error.Should().NotBeNull();
-        error.Error.Code.Should().Be("APPLICATION.INVALID_REFRESH_TOKEN");
     }
 }

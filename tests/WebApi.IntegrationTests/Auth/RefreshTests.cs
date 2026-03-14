@@ -9,8 +9,8 @@ namespace WebApi.IntegrationTests.Auth;
 
 public sealed class RefreshTests : BaseIntegrationTest
 {
-    private readonly static string BaseUrl = "/api/v1/auth/refresh";
-    private readonly static string LoginUrl = "/api/v1/auth/login";
+    private const string BaseUrl = "/api/v1/auth/refresh";
+    private const string LoginUrl = "/api/v1/auth/login";
 
     public RefreshTests(TestWebApplicationFactory factory)
         : base(factory)
@@ -30,13 +30,7 @@ public sealed class RefreshTests : BaseIntegrationTest
             Email = user.User.Email.Value,
             Password = user.Password
         };
-        var loginResponse = await Client.PostAsJsonAsync(
-            LoginUrl,
-            loginRequest
-        );
-        var cookie = loginResponse.Headers.GetValues("Set-Cookie")
-            .First(c => c.StartsWith("refresh_token"));
-        Client.DefaultRequestHeaders.Add("Cookie", cookie);
+        await Client.PostAsJsonAsync(LoginUrl, loginRequest);
 
         // Act
         var response = await Client.PostAsync(BaseUrl, null);
