@@ -9,7 +9,7 @@ namespace WebApi.IntegrationTests.Auth;
 
 public sealed class LoginTests : BaseIntegrationTest
 {
-    private readonly static string baseUrl = "/api/v1/auth/login";
+    private readonly static string BaseUrl = "/api/v1/auth/login";
 
     public LoginTests(TestWebApplicationFactory factory)
         : base(factory)
@@ -31,7 +31,7 @@ public sealed class LoginTests : BaseIntegrationTest
             Password = user.Password
         };
         var response = await Client.PostAsJsonAsync(
-            baseUrl,
+            BaseUrl,
             request
         );
 
@@ -41,8 +41,11 @@ public sealed class LoginTests : BaseIntegrationTest
         var body = await response.Content.ReadFromJsonAsync<LoginResponse>();
         body.Should().NotBeNull();
         body.UserId.Should().Be(user.User.Id);
-        body.AccessToken.Should().NotBeNullOrWhiteSpace();
-        body.RefreshToken.Should().NotBeNullOrWhiteSpace();
+
+        response.Headers.Should().Contain(h => h.Key == "Set-Cookie");
+        var cookies = response.Headers.GetValues("Set-Cookie");
+        cookies.Should().Contain(c => c.StartsWith("access_token="));
+        cookies.Should().Contain(c => c.StartsWith("refresh_token="));
     }
 
     [Fact]
@@ -60,7 +63,7 @@ public sealed class LoginTests : BaseIntegrationTest
             Password = "invalid" + user.Password
         };
         var response = await Client.PostAsJsonAsync(
-            baseUrl,
+            BaseUrl,
             request
         );
 

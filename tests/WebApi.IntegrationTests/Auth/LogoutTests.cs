@@ -9,9 +9,9 @@ namespace WebApi.IntegrationTests.Auth;
 
 public sealed class LogoutTests : BaseIntegrationTest
 {
-    private readonly static string baseUrl = "/api/v1/auth/logout";
-    private readonly static string loginUrl = "/api/v1/auth/login";
-    private readonly static string refreshUrl = "/api/v1/auth/refresh";
+    private readonly static string BaseUrl = "/api/v1/auth/logout";
+    private readonly static string LoginUrl = "/api/v1/auth/login";
+    private readonly static string RefreshUrl = "/api/v1/auth/refresh";
 
     public LogoutTests(TestWebApplicationFactory factory)
         : base(factory)
@@ -32,23 +32,21 @@ public sealed class LogoutTests : BaseIntegrationTest
             Password = user.Password
         };
         var loginResponse = await Client.PostAsJsonAsync(
-            loginUrl,
+            LoginUrl,
             loginRequest
         );
-        var loginBody = await loginResponse.Content.ReadFromJsonAsync<LoginResponse>();
+        var cookies = loginResponse.Headers.GetValues("Set-Cookie");
+        Client.DefaultRequestHeaders.Add("Cookie", string.Join("; ", cookies));
 
         // Act
-        var request = new LogoutRequest
-        {
-            RefreshToken = loginBody!.RefreshToken
-        };
-        var response = await Client.PostAsJsonAsync(
-            baseUrl,
-            request
-        );
+        var response = await Client.PostAsync(BaseUrl, null);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        var setCookies = response.Headers.GetValues("Set-Cookie");
+        setCookies.Should().Contain(c => c.Contains("access_token=;"));
+        setCookies.Should().Contain(c => c.Contains("refresh_token=;"));
     }
 
     [Fact]
@@ -65,29 +63,16 @@ public sealed class LogoutTests : BaseIntegrationTest
             Password = user.Password
         };
         var loginResponse = await Client.PostAsJsonAsync(
-            loginUrl,
+            LoginUrl,
             loginRequest
         );
-        var loginBody = await loginResponse.Content.ReadFromJsonAsync<LoginResponse>();
+        var cookies = loginResponse.Headers.GetValues("Set-Cookie");
+        Client.DefaultRequestHeaders.Add("Cookie", string.Join("; ", cookies));
 
-        var logoutRequest = new LogoutRequest
-        {
-            RefreshToken = loginBody!.RefreshToken
-        };
-        await Client.PostAsJsonAsync(
-            baseUrl,
-            logoutRequest
-        );
+        await Client.PostAsync(BaseUrl, null);
 
         // Act
-        var request = new RefreshRequest
-        {
-            RefreshToken = loginBody!.RefreshToken
-        };
-        var response = await Client.PostAsJsonAsync(
-            refreshUrl,
-            request
-        );
+        var response = await Client.PostAsync(RefreshUrl, null);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);

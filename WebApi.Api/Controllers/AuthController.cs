@@ -1,6 +1,6 @@
 using Asp.Versioning;
-using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Api.Dtos;
 using WebApi.Api.Dtos.Auth;
@@ -42,11 +42,25 @@ public class AuthController : ControllerBase
         var result = await _authService.LoginAsync(
             request.Email, request.Password, cancellationToken);
 
+        Response.Cookies.Append("access_token", result.AccessToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddMinutes(15)
+        });
+
+        Response.Cookies.Append("refresh_token", result.RefreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(7)
+        });
+
         var response = new LoginResponse
         {
             UserId = result.UserId,
-            AccessToken = result.AccessToken,
-            RefreshToken = result.RefreshToken
         };
 
         return Ok(response);
@@ -56,19 +70,30 @@ public class AuthController : ControllerBase
     /// トークンのリフレッシュ
     /// </summary>
     [HttpPost("refresh")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(RefreshResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<RefreshResponse>> RefreshAsync(
-        [FromBody] RefreshRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<RefreshResponse>> RefreshAsync(CancellationToken cancellationToken)
     {
-        var command = request.Adapt<RefreshAccessTokenCommand>();
+        if (!Request.Cookies.TryGetValue("refresh_token", out var refreshToken))
+        {
+            return Unauthorized();
+        }
+
+        var command = new RefreshAccessTokenCommand(refreshToken);
         var result = await _mediator.Send(command, cancellationToken);
+
+        Response.Cookies.Append("access_token", result.AccessToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddMinutes(15)
+        });
 
         var response = new RefreshResponse
         {
-            UserId = result.UserId,
-            AccessToken = result.AccessToken,
-            RefreshToken = result.RefreshToken
+            UserId = result.UserId
         };
 
         return Ok(response);
@@ -78,14 +103,23 @@ public class AuthController : ControllerBase
     /// ログアウト
     /// </summary>
     [HttpPost("logout")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> LogoutAsync(
-        [FromBody] LogoutRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> LogoutAsync(CancellationToken cancellationToken)
     {
-        var command = request.Adapt<RevokeRefreshTokenCommand>();
+        if (!Request.Cookies.TryGetValue("refresh_token", out var refreshToken))
+        {
+            return BadRequest();
+        }
+
+        var command = new RevokeRefreshTokenCommand(refreshToken);
         await _mediator.Send(command, cancellationToken);
+
+        Response.Cookies.Delete("access_token");
+        Response.Cookies.Delete("refresh_token");
+
         return NoContent();
     }
 }

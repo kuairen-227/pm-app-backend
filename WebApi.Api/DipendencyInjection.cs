@@ -17,7 +17,12 @@ public static class DependencyInjection
         this IServiceCollection services, IConfigurationSection jwtSection)
     {
         // Controllers
-        services.AddControllers();
+        services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters
+                    .Add(new PatchFieldJsonConverterFactory());
+            });
 
         // Swagger
         services.AddOpenApi();
@@ -63,16 +68,20 @@ public static class DependencyInjection
                         System.Text.Encoding.UTF8.GetBytes(
                             jwtSection["SecretKey"] ?? throw new InvalidOperationException("Jwt::SecretKey は必須です")))
                 };
-            });
 
-        // PatchFieldJsonConverter
-        services.AddControllers()
-            .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.Converters
-                    .Add(new PatchFieldJsonConverterFactory());
-            });
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Cookies.TryGetValue("access_token", out var token))
+                        {
+                            context.Token = token;
+                        }
 
+                        return Task.CompletedTask;
+                    }
+                };
+            });
 
         return services;
     }

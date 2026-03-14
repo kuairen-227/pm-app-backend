@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using WebApi.Infrastructure.Database;
 using WebApi.Infrastructure.Services.AuthService;
 using WebApi.IntegrationTests.Helpers;
@@ -16,9 +17,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         builder.ConfigureServices(services =>
         {
             // DbContext
-            var descriptor = services.Single(
-                d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
-            services.Remove(descriptor);
+            services.RemoveAll<DbContextOptions<AppDbContext>>();
 
             services.AddDbContext<AppDbContext>(options =>
             {
@@ -41,7 +40,8 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
                 options.SecretKey = "INTEGRATION_TEST_SECRET_KEY_1234567890";
                 options.Issuer = "TestIssuer";
                 options.Audience = "TestAudience";
-                options.AccessTokenExpirationMinutes = 99999999;
+                options.AccessTokenExpirationMinutes = 60;
+                options.RefreshTokenExpirationDays = 7;
             });
         });
     }

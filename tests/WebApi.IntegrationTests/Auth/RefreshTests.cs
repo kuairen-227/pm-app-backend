@@ -9,8 +9,8 @@ namespace WebApi.IntegrationTests.Auth;
 
 public sealed class RefreshTests : BaseIntegrationTest
 {
-    private readonly static string baseUrl = "/api/v1/auth/refresh";
-    private readonly static string loginUrl = "/api/v1/auth/login";
+    private readonly static string BaseUrl = "/api/v1/auth/refresh";
+    private readonly static string LoginUrl = "/api/v1/auth/login";
 
     public RefreshTests(TestWebApplicationFactory factory)
         : base(factory)
@@ -31,20 +31,15 @@ public sealed class RefreshTests : BaseIntegrationTest
             Password = user.Password
         };
         var loginResponse = await Client.PostAsJsonAsync(
-            loginUrl,
+            LoginUrl,
             loginRequest
         );
-        var loginBody = await loginResponse.Content.ReadFromJsonAsync<LoginResponse>();
+        var cookie = loginResponse.Headers.GetValues("Set-Cookie")
+            .First(c => c.StartsWith("refresh_token"));
+        Client.DefaultRequestHeaders.Add("Cookie", cookie);
 
         // Act
-        var request = new RefreshRequest
-        {
-            RefreshToken = loginBody!.RefreshToken
-        };
-        var response = await Client.PostAsJsonAsync(
-            baseUrl,
-            request
-        );
+        var response = await Client.PostAsync(BaseUrl, null);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -52,22 +47,17 @@ public sealed class RefreshTests : BaseIntegrationTest
         var body = await response.Content.ReadFromJsonAsync<RefreshResponse>();
         body.Should().NotBeNull();
         body.UserId.Should().Be(user.User.Id);
-        body.AccessToken.Should().NotBeNullOrWhiteSpace();
-        body.RefreshToken.Should().NotBeNullOrWhiteSpace();
+
+        response.Headers.GetValues("Set-Cookie")
+            .Should().Contain(c => c.StartsWith("access_token"));
     }
 
     [Fact]
     public async Task 異常系_リフレッシュ_401()
     {
         // Arrange & Act
-        var request = new RefreshRequest
-        {
-            RefreshToken = "invalid-token"
-        };
-        var response = await Client.PostAsJsonAsync(
-            baseUrl,
-            request
-        );
+        Client.DefaultRequestHeaders.Add("Cookie", "refresh_token=invalid_token");
+        var response = await Client.PostAsync(BaseUrl, null);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
