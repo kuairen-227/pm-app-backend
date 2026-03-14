@@ -20,7 +20,10 @@ public abstract class BaseIntegrationTest
         PasswordHashService = Scope.ServiceProvider
             .GetRequiredService<IPasswordHashService>();
 
-        Client = factory.CreateClient();
+        Client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            HandleCookies = true
+        });
     }
 
     public async Task InitializeAsync()
