@@ -29,7 +29,7 @@ jobs:
 
       - name: Fetch swagger.json
         run: |
-          curl http://localhost:5000/swagger/v1/swagger.json \
+          curl http://localhost:5079/swagger/v1/swagger.json \
             -o swagger.json
 
       - name: Upload artifact
