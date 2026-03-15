@@ -22,15 +22,17 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Run API
-        run: |
-          dotnet run --project src/WebApi/WebApi.csproj &
-          sleep 10
+      - name: Install NSwag
+        run: dotnet tool install --global NSwag.ConsoleCore
 
-      - name: Fetch swagger.json
+      - name: Add tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Generate OpenAPI
         run: |
-          curl http://localhost:5079/swagger/v1/swagger.json \
-            -o swagger.json
+          nswag aspnetcore2openapi \
+            /assembly:bin/Release/net9.0/WebApi.dll \
+            /output:swagger.json
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
