@@ -38,3 +38,11 @@ jobs:
         with:
           name: swagger
           path: swagger.json
+
+      - name: Trigger frontend
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/kuairen-227/pm-app-frontend/dispatches \
+            -d '{"event_type":"backend-updated"}'
