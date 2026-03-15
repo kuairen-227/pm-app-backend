@@ -1,10 +1,6 @@
 {
   "version": "0.2",
-  "ignorePaths": [
-    ".devcontainer/devcontainer.json",
-    "*.csproj",
-    ".gitignore"
-  ],
+  "ignorePaths": [".devcontainer/devcontainer.json", "*.csproj", ".gitignore"],
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": [
@@ -24,10 +20,8 @@
     "reportgenerator",
     "reporttypes",
     "schemaname",
-    "Swashbuckle",
     "tablename",
-    "targetdir",
-    "tofile"
+    "targetdir"
   ],
   "ignoreWords": [],
   "import": []

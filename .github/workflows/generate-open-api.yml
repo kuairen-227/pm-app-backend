@@ -22,25 +22,18 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Install swagger cli
-        run: dotnet tool install --global Swashbuckle.AspNetCore.Cli
-
-      - name: Generate swagger.json
+      - name: Run API
         run: |
-          dotnet swagger tofile \
-            --output swagger.json \
-            bin/Release/net9.0/WebApi.dll v1
+          dotnet run --project src/WebApi/WebApi.csproj &
+          sleep 10
+
+      - name: Fetch swagger.json
+        run: |
+          curl http://localhost:5000/swagger/v1/swagger.json \
+            -o swagger.json
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: swagger
           path: swagger.json
-
-      - name: Trigger frontend
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/kuairen-227/pm-app-frontend/dispatches \
-            -d '{"event_type":"backend-updated"}'
