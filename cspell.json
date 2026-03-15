@@ -24,8 +24,10 @@
     "reportgenerator",
     "reporttypes",
     "schemaname",
+    "Swashbuckle",
     "tablename",
-    "targetdir"
+    "targetdir",
+    "tofile"
   ],
   "ignoreWords": [],
   "import": []
