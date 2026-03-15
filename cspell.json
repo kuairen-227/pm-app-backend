@@ -17,6 +17,7 @@
     "Mediat",
     "noninteractive",
     "Npgsql",
+    "nswag",
     "reportgenerator",
     "reporttypes",
     "schemaname",

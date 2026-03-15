@@ -31,7 +31,7 @@ jobs:
       - name: Generate OpenAPI
         run: |
           nswag aspnetcore2openapi \
-            /assembly:bin/Release/net9.0/WebApi.dll \
+            /project:WebApi.Api/WebApi.Api.csproj \
             /output:swagger.json
 
       - name: Upload artifact
