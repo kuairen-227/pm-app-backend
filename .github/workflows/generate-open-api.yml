@@ -45,5 +45,5 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.FRONTEND_DISPATCH_TOKEN }}" \
             -H "X-GitHub-Api-Version: 2026-03-10" \
-            https://api.github.com/repos/kuairen-227/pm-app-frontend/actions/workflows/update-open-api.yml/dispatches \
-            -d '{"ref":"main"}'
+            https://api.github.com/repos/kuairen-227/pm-app-frontend/dispatches \
+            -d '{"event_type":"backend-updated"}'
