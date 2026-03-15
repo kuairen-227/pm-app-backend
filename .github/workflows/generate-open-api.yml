@@ -22,16 +22,16 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Restore tools
-        run: dotnet tool restore
+      - name: Install NSwag
+        run: dotnet tool install --global NSwag.ConsoleCore --version 14.0.0
 
       - name: Generate OpenAPI
         run: |
-          dotnet tool run nswag aspnetcore2openapi \
+          ~/.dotnet/tools/nswag aspnetcore2openapi \
             /project:WebApi.Api/WebApi.Api.csproj \
             /output:swagger.json
 
-      - name: Upload artifact
+      - name: Upload swagger
         uses: actions/upload-artifact@v4
         with:
           name: swagger
