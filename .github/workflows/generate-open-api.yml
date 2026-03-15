@@ -25,12 +25,12 @@ jobs:
       - name: Install NSwag
         run: dotnet tool install --global NSwag.ConsoleCore
 
-      - name: Add tools to PATH
-        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+      - name: Restore tools
+        run: dotnet tool restore
 
       - name: Generate OpenAPI
         run: |
-          nswag aspnetcore2openapi \
+          dotnet tool run nswag aspnetcore2openapi \
             /project:WebApi.Api/WebApi.Api.csproj \
             /output:swagger.json
 
