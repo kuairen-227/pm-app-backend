@@ -26,6 +26,8 @@ jobs:
         run: dotnet tool install --global NSwag.ConsoleCore --version 14.0.0
 
       - name: Generate OpenAPI
+        env:
+          ConnectionStrings__DefaultConnection: "Host=localhost;Database=dummy;Username=dummy;Password=dummy"
         run: |
           ~/.dotnet/tools/nswag aspnetcore2openapi \
             /project:WebApi.Api/WebApi.Api.csproj \
