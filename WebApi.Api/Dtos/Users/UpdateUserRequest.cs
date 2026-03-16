@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace WebApi.Api.Dtos.Users;
 
 /// <summary>

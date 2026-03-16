@@ -7,6 +7,8 @@ using WebApi.Api.Dtos.Auth;
 using WebApi.Application.Abstractions.AuthService;
 using WebApi.Application.Commands.Auth.RefreshAccessToken;
 using WebApi.Application.Commands.Auth.RevokeRefreshToken;
+using WebApi.Application.Queries.Auth.GetCurrentUser;
+using WebApi.Application.Queries.Users.Dtos;
 
 namespace WebApi.Api.Controllers;
 
@@ -113,6 +115,20 @@ public class AuthController : ControllerBase
         Response.Cookies.Delete("refresh_token");
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// ログインユーザーの取得
+    /// </summary>
+    [HttpGet("me")]
+    [Authorize]
+    [ProducesResponseType<UserDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetMe(CancellationToken cancellationToken)
+    {
+        var query = new GetCurrentUserQuery();
+        var result = await _mediator.Send(query, cancellationToken);
+        return Ok(result);
     }
 
     private CookieOptions CreateCookieOptions(DateTime expires)
