@@ -1,6 +1,11 @@
 {
   "version": "0.2",
-  "ignorePaths": [".devcontainer/devcontainer.json", "*.csproj", ".gitignore"],
+  "ignorePaths": [
+    ".devcontainer/devcontainer.json",
+    ".github/CODEOWNERS",
+    "*.csproj",
+    ".gitignore"
+  ],
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": [
