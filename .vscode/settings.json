@@ -16,9 +16,10 @@
     "docs",
     "domain",
     "infrastructure",
-    "workspace",
-    "tests",
     "package",
+    "security",
+    "tests",
+    "workspace",
     // Domain
     "auth",
     "user",
