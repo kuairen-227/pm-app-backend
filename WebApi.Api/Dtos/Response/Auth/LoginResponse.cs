@@ -1,0 +1,12 @@
+namespace WebApi.Api.Dtos.Response.Auth;
+
+/// <summary>
+/// ログインレスポンスDTO
+/// </summary>
+public class LoginResponse
+{
+    /// <summary>
+    /// ユーザーID
+    /// </summary>
+    public Guid UserId { get; set; }
+}

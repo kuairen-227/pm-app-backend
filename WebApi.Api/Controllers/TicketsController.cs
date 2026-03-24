@@ -3,8 +3,10 @@ using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Api.Dtos;
-using WebApi.Api.Dtos.Tickets;
+using WebApi.Api.Common;
+using WebApi.Api.Dtos.Common;
+using WebApi.Api.Dtos.Request.Tickets;
+using WebApi.Api.Dtos.Response.Tickets;
 using WebApi.Application.Commands.Tickets.AddComment;
 using WebApi.Application.Commands.Tickets.AddCompletionCriterion;
 using WebApi.Application.Commands.Tickets.CompleteCompletionCriterion;
@@ -16,9 +18,7 @@ using WebApi.Application.Commands.Tickets.EditComment;
 using WebApi.Application.Commands.Tickets.EditCompletionCriterion;
 using WebApi.Application.Commands.Tickets.ReopenCompletionCriterion;
 using WebApi.Application.Commands.Tickets.UpdateTicket;
-using WebApi.Application.Common.Pagination;
 using WebApi.Application.Queries.Projects.ListProjects;
-using WebApi.Application.Queries.Tickets.Dtos;
 using WebApi.Application.Queries.Tickets.GetTicketById;
 
 namespace WebApi.Api.Controllers;
@@ -46,30 +46,32 @@ public class TicketsController : ControllerBase
     /// チケット一覧取得
     /// </summary>
     [HttpGet]
-    [ProducesResponseType(typeof(PagedResultDto<TicketDto>), 200)]
+    [ProducesResponseType(typeof(PaginatedResponse<TicketResponse>), 200)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<PagedResultDto<TicketDto>>> ListAsync(CancellationToken cancellationToken)
+    public async Task<ActionResult<PaginatedResponse<TicketResponse>>> ListAsync(CancellationToken cancellationToken)
     {
         var query = new ListProjectsQuery();
-        var result = await _mediator.Send(query, cancellationToken);
-        return Ok(result);
+        var dto = await _mediator.Send(query, cancellationToken);
+        var response = dto.Adapt<PaginatedResponse<TicketResponse>>();
+        return Ok(response);
     }
 
     /// <summary>
     /// チケット詳細取得
     /// </summary>
     [HttpGet("{ticketId:guid}")]
-    [ProducesResponseType(typeof(TicketDetailDto), 200)]
+    [ProducesResponseType(typeof(TicketDetailResponse), 200)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TicketDetailDto>> GetByIdAsync(
+    public async Task<ActionResult<TicketDetailResponse>> GetByIdAsync(
         Guid projectId, Guid ticketId, CancellationToken cancellationToken)
     {
         var query = new GetTicketByIdQuery(projectId, ticketId);
-        var result = await _mediator.Send(query, cancellationToken);
-        return Ok(result);
+        var dto = await _mediator.Send(query, cancellationToken);
+        var response = dto.Adapt<TicketDetailResponse>();
+        return Ok(response);
     }
 
     /// <summary>

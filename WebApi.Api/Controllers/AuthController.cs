@@ -1,14 +1,15 @@
 using Asp.Versioning;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Api.Dtos;
-using WebApi.Api.Dtos.Auth;
+using WebApi.Api.Dtos.Common;
+using WebApi.Api.Dtos.Response.Auth;
 using WebApi.Application.Abstractions.AuthService;
 using WebApi.Application.Commands.Auth.RefreshAccessToken;
 using WebApi.Application.Commands.Auth.RevokeRefreshToken;
 using WebApi.Application.Queries.Auth.GetCurrentUser;
-using WebApi.Application.Queries.Users.Dtos;
 
 namespace WebApi.Api.Controllers;
 
@@ -122,13 +123,14 @@ public class AuthController : ControllerBase
     /// </summary>
     [HttpGet("me")]
     [Authorize]
-    [ProducesResponseType<UserDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<MeResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetMe(CancellationToken cancellationToken)
     {
         var query = new GetCurrentUserQuery();
-        var result = await _mediator.Send(query, cancellationToken);
-        return Ok(result);
+        var dto = await _mediator.Send(query, cancellationToken);
+        var response = dto.Adapt<MeResponse>();
+        return Ok(response);
     }
 
     private CookieOptions CreateCookieOptions(DateTime expires)

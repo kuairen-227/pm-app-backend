@@ -3,15 +3,15 @@ using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Api.Dtos;
-using WebApi.Api.Dtos.Projects;
+using WebApi.Api.Dtos.Common;
+using WebApi.Api.Dtos.Request.Projects;
+using WebApi.Api.Dtos.Response.Projects;
 using WebApi.Application.Commands.Projects.ChangeMemberRole;
 using WebApi.Application.Commands.Projects.DeleteProject;
 using WebApi.Application.Commands.Projects.InviteMember;
 using WebApi.Application.Commands.Projects.LaunchProject;
 using WebApi.Application.Commands.Projects.RemoveMember;
 using WebApi.Application.Commands.Projects.UpdateProject;
-using WebApi.Application.Queries.Projects.Dtos;
 using WebApi.Application.Queries.Projects.GetProjectById;
 using WebApi.Application.Queries.Projects.ListProjects;
 
@@ -40,28 +40,30 @@ public class ProjectsController : ControllerBase
     /// プロジェクト一覧取得
     /// </summary>
     [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<ProjectDto>), 200)]
+    [ProducesResponseType(typeof(IReadOnlyList<ProjectResponse>), 200)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<IReadOnlyList<ProjectDto>>> ListAsync(CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyList<ProjectResponse>>> ListAsync(CancellationToken cancellationToken)
     {
         var query = new ListProjectsQuery();
-        var result = await _mediator.Send(query, cancellationToken);
-        return Ok(result);
+        var dto = await _mediator.Send(query, cancellationToken);
+        var response = dto.Adapt<IReadOnlyList<ProjectResponse>>();
+        return Ok(response);
     }
 
     /// <summary>
     /// プロジェクト単体取得
     /// </summary>
     [HttpGet("{projectId:guid}")]
-    [ProducesResponseType(typeof(ProjectDetailDto), 200)]
+    [ProducesResponseType(typeof(ProjectDetailResponse), 200)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ProjectDetailDto>> GetByIdAsync(Guid projectId, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProjectDetailResponse>> GetByIdAsync(Guid projectId, CancellationToken cancellationToken)
     {
         var query = new GetProjectByIdQuery(projectId);
-        var result = await _mediator.Send(query, cancellationToken);
-        return Ok(result);
+        var dto = await _mediator.Send(query, cancellationToken);
+        var response = dto.Adapt<ProjectDetailResponse>();
+        return Ok(response);
     }
 
     /// <summary>

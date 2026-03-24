@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
-using WebApi.Api.Dtos.Auth;
+using Microsoft.AspNetCore.Identity.Data;
 using WebApi.Application.Queries.Users.Dtos;
 using WebApi.IntegrationTests.Helpers;
 

@@ -3,12 +3,12 @@ using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Api.Dtos;
-using WebApi.Api.Dtos.Users;
+using WebApi.Api.Dtos.Common;
+using WebApi.Api.Dtos.Request.Users;
+using WebApi.Api.Dtos.Response.Users;
 using WebApi.Application.Commands.Users.DeleteUser;
 using WebApi.Application.Commands.Users.RegisterUser;
 using WebApi.Application.Commands.Users.UpdateUser;
-using WebApi.Application.Queries.Users.Dtos;
 using WebApi.Application.Queries.Users.ListUsers;
 
 namespace WebApi.Api.Controllers;
@@ -36,13 +36,14 @@ public class UsersController : ControllerBase
     /// ユーザー一覧取得
     /// </summary>
     [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IReadOnlyList<UserResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<IReadOnlyList<UserDto>>> ListAllAsync(CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyList<UserResponse>>> ListAllAsync(CancellationToken cancellationToken)
     {
         var query = new ListUsersQuery();
-        var result = await _mediator.Send(query, cancellationToken);
-        return Ok(result);
+        var dto = await _mediator.Send(query, cancellationToken);
+        var response = dto.Adapt<IReadOnlyList<UserResponse>>();
+        return Ok(response);
     }
 
     /// <summary>
