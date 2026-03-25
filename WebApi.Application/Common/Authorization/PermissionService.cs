@@ -36,7 +36,7 @@ public class PermissionService : IPermissionService
             var membership = project.Members.FirstOrDefault(m => m.UserId == user.Id)
                 ?? throw new AuthorizationException("FORBIDDEN", "プロジェクトに所属していません");
 
-            if (ProjectRolePermissions.Map.TryGetValue(membership.Role.Value, out var projectPermissions)
+            if (ProjectRolePermissions.Map.TryGetValue(membership.ProjectRole.Value, out var projectPermissions)
                 && projectPermissions.Contains(permissionCode))
             {
                 return true;

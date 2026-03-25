@@ -27,7 +27,7 @@ public class ProjectMemberTests : BaseDomainTest
 
         // Assert
         result.UserId.Should().Be(userId);
-        result.Role.Should().Be(role);
+        result.ProjectRole.Should().Be(role);
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public class ProjectMemberTests : BaseDomainTest
     }
 
     [Fact]
-    public void 正常系_ChangeRole()
+    public void 正常系_ChangeProjectRole()
     {
         // Arrange
         var projectMember = _projectMemberBuilder
@@ -56,9 +56,9 @@ public class ProjectMemberTests : BaseDomainTest
         var updatedBy = Guid.NewGuid();
 
         // Act
-        projectMember.ChangeRole(newRole, updatedBy, Clock);
+        projectMember.ChangeProjectRole(newRole, updatedBy, Clock);
 
         // Assert
-        projectMember.Role.Should().Be(newRole);
+        projectMember.ProjectRole.Should().Be(newRole);
     }
 }

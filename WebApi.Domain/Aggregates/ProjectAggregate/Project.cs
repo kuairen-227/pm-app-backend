@@ -67,7 +67,7 @@ public sealed class Project : Entity
         var member = _members.FirstOrDefault(m => m.UserId == userId)
             ?? throw new DomainException("USER_NOT_PROJECT_MEMBER", "User はプロジェクトメンバーではありません");
 
-        member.ChangeRole(ProjectRole.Create(newRoleType), changedBy, clock);
+        member.ChangeProjectRole(ProjectRole.Create(newRoleType), changedBy, clock);
         AddDomainEvent(new ProjectRoleChangedEvent(Id, userId, newRoleType, clock));
     }
 

@@ -26,7 +26,7 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
 
         builder.OwnsMany(p => p.Members, member =>
         {
-            member.OwnsOne(m => m.Role, role =>
+            member.OwnsOne(m => m.ProjectRole, role =>
             {
                 role.Property(r => r.Value)
                     .HasColumnName("role");

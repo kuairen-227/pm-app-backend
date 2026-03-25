@@ -103,7 +103,7 @@ public class ProjectTests : BaseDomainTest
         // Assert
         result.Members.Count.Should().Be(1);
         result.Members[0].UserId.Should().Be(user.Id);
-        result.Members[0].Role.Value.Should().Be(role);
+        result.Members[0].ProjectRole.Value.Should().Be(role);
     }
 
     [Fact]
@@ -178,7 +178,7 @@ public class ProjectTests : BaseDomainTest
 
         // Assert
         result.Members.Count.Should().Be(1);
-        result.Members[0].Role.Value.Should().Be(newRole);
+        result.Members[0].ProjectRole.Value.Should().Be(newRole);
     }
 
     [Fact]

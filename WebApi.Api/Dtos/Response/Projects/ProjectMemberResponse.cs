@@ -17,5 +17,5 @@ public class ProjectMemberResponse
     /// プロジェクトロール
     /// </summary>
     [Required]
-    public string Role { get; set; } = default!;
+    public string ProjectRole { get; set; } = default!;
 }
