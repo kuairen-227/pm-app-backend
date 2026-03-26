@@ -30,7 +30,9 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
                 tickets.Select(t => new TicketDto
                 {
                     Id = t.Id,
+                    ProjectId = t.ProjectId,
                     Title = t.Title.Value,
+                    Description = t.Description.Value,
                     AssigneeId = t.AssigneeId,
                     StartDate = t.Schedule.StartDate,
                     EndDate = t.Schedule.EndDate,
@@ -75,7 +77,9 @@ public class ListProjectTicketsHandlerTests : BaseQueryHandlerTest
         for (int i = 0; i < tickets.Count; i++)
         {
             result.Items.ElementAt(i).Id.Should().Be(tickets[i].Id);
+            result.Items.ElementAt(i).ProjectId.Should().Be(tickets[i].ProjectId);
             result.Items.ElementAt(i).Title.Should().Be(tickets[i].Title.Value);
+            result.Items.ElementAt(i).Description.Should().Be(tickets[i].Description.Value);
             result.Items.ElementAt(i).AssigneeId.Should().Be(tickets[i].AssigneeId);
             result.Items.ElementAt(i).StartDate.Should().Be(tickets[i].Schedule.StartDate);
             result.Items.ElementAt(i).EndDate.Should().Be(tickets[i].Schedule.EndDate);

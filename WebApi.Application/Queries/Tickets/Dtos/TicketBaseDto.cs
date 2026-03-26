@@ -5,6 +5,7 @@ public abstract class TicketBaseDto
     public Guid Id { get; init; }
     public Guid ProjectId { get; init; }
     public string Title { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
     public Guid? AssigneeId { get; init; }
     public DateOnly? StartDate { get; init; }
     public DateOnly? EndDate { get; init; }

@@ -25,7 +25,9 @@ public class GetTicketByIdTests : BaseQueryHandlerTest
             .Returns<Ticket>(t => new TicketDetailDto
             {
                 Id = t.Id,
+                ProjectId = t.ProjectId,
                 Title = t.Title.Value,
+                Description = t.Description.Value,
                 AssigneeId = t.AssigneeId,
                 StartDate = t.Schedule.StartDate,
                 EndDate = t.Schedule.EndDate,
@@ -75,7 +77,9 @@ public class GetTicketByIdTests : BaseQueryHandlerTest
         // Assert
         result.Should().NotBeNull();
         result.Id.Should().Be(ticket.Id);
+        result.ProjectId.Should().Be(ticket.ProjectId);
         result.Title.Should().Be(ticket.Title.Value);
+        result.Description.Should().Be(ticket.Description.Value);
         result.AssigneeId.Should().Be(ticket.AssigneeId);
         result.StartDate.Should().Be(ticket.Schedule.StartDate);
         result.EndDate.Should().Be(ticket.Schedule.EndDate);

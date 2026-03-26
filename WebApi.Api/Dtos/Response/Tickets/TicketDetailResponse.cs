@@ -27,6 +27,12 @@ public class TicketDetailResponse : AuditInfoResponse
     public string Title { get; set; } = default!;
 
     /// <summary>
+    /// チケット説明
+    /// </summary>
+    [Required]
+    public string Description { get; set; } = default!;
+
+    /// <summary>
     /// 担当者ID
     /// </summary>
     public Guid? AssigneeId { get; set; }
