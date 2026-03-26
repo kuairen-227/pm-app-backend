@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using WebApi.Api.Dtos.Common;
 
 namespace WebApi.Api.Dtos.Response.Projects;
 
 /// <summary>
 /// プロジェクトメンバーレスポンスDTO
 /// </summary>
-public class ProjectMemberResponse
+public class ProjectMemberResponse : AuditInfoResponse
 {
     /// <summary>
     /// ユーザーID
