@@ -15,6 +15,12 @@ public class TicketResponse : AuditInfoResponse
     public Guid Id { get; set; }
 
     /// <summary>
+    /// プロジェクトID
+    /// </summary>
+    [Required]
+    public Guid ProjectId { get; set; }
+
+    /// <summary>
     /// チケットタイトル
     /// </summary>
     [Required]

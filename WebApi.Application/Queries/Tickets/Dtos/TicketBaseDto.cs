@@ -3,6 +3,7 @@ namespace WebApi.Application.Queries.Tickets.Dtos;
 public abstract class TicketBaseDto
 {
     public Guid Id { get; init; }
+    public Guid ProjectId { get; init; }
     public string Title { get; init; } = string.Empty;
     public Guid? AssigneeId { get; init; }
     public DateOnly? StartDate { get; init; }
