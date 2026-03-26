@@ -42,6 +42,11 @@ jobs:
           name: swagger
           path: swagger.json
 
+      - name: Get latest commit message
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B | tr '\n' ' ' | sed 's/"/\\"/g')
+          echo "COMMIT_MSG=$COMMIT_MSG" >> $GITHUB_ENV
+
       - name: Trigger frontend CI
         run: |
           curl -X POST \
@@ -52,7 +57,7 @@ jobs:
             -d '{
               "event_type": "backend-updated",
               "client_payload": {
-                "commit_sha": "${GITHUB_SHA}",
-                "commit_message": "${GITHUB_COMMIT_MESSAGE:-Generated OpenAPI Update}"
+                "commit_sha": "'"${GITHUB_SHA}"'",
+                "commit_message": "'"${COMMIT_MSG}"'"
               }
             }'
