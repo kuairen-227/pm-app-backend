@@ -53,6 +53,6 @@ jobs:
               "event_type": "backend-updated",
               "client_payload": {
                 "commit_sha": "${GITHUB_SHA}",
-                "commit_message": "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE:-Generated OpenAPI Update}"
+                "commit_message": "${GITHUB_COMMIT_MESSAGE:-Generated OpenAPI Update}"
               }
             }'
