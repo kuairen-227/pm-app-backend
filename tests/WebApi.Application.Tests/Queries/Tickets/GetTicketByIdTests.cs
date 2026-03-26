@@ -44,6 +44,7 @@ public class GetTicketByIdTests : BaseQueryHandlerTest
                 }).ToList(),
                 Histories = t.Histories.Select(h => new TicketHistoryDto
                 {
+                    Id = h.Id,
                     ActorId = h.ActorId,
                     OccurredAt = h.OccurredAt,
                     Action = h.Action.ToString(),

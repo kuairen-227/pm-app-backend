@@ -8,6 +8,12 @@ namespace WebApi.Api.Dtos.Response.Tickets;
 public class TicketHistoryResponse
 {
     /// <summary>
+    /// チケット履歴ID
+    /// </summary>
+    [Required]
+    public Guid Id { get; set; }
+
+    /// <summary>
     /// 実行者ID
     /// </summary>
     [Required]
