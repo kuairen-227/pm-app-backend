@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using WebApi.Api.Dtos.Common;
 
 namespace WebApi.Api.Dtos.Response.Tickets;
 
 /// <summary>
 /// チケット履歴レスポンスDTO
 /// </summary>
-public class TicketHistoryResponse
+public class TicketHistoryResponse : AuditInfoResponse
 {
     /// <summary>
     /// チケット履歴ID
