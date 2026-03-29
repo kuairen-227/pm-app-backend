@@ -34,11 +34,13 @@ public class GetTicketByIdTests : BaseQueryHandlerTest
                 Status = t.Status.Value.ToString(),
                 CompletionCriteria = t.CompletionCriteria.Select(c => new TicketCompletionCriterionDto
                 {
+                    Id = c.Id,
                     Criterion = c.Criterion,
                     IsCompleted = c.IsCompleted
                 }).ToList(),
                 Comments = t.Comments.Select(c => new TicketCommentDto
                 {
+                    Id = c.Id,
                     AuthorId = c.AuthorId,
                     Content = c.Content,
                 }).ToList(),
