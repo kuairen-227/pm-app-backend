@@ -1,0 +1,45 @@
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using WebApi.Application.Abstractions.AuthService;
+using WebApi.Infrastructure.Database;
+
+namespace WebApi.IntegrationTests.Helpers;
+
+public abstract class BaseAuthIntegrationTest
+    : IClassFixture<TestWebApplicationFactory>, IAsyncLifetime
+{
+    protected HttpClient Client { get; }
+    protected IServiceScope Scope { get; }
+    protected AppDbContext DbContext { get; }
+    protected IPasswordHashService PasswordHashService { get; }
+
+    protected BaseAuthIntegrationTest(TestWebApplicationFactory factory)
+    {
+        factory.Authenticated = false;
+
+        Scope = factory.Services.CreateScope();
+        DbContext = Scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        PasswordHashService = Scope.ServiceProvider
+            .GetRequiredService<IPasswordHashService>();
+
+        Client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            HandleCookies = true
+        });
+    }
+
+    public async Task InitializeAsync()
+    {
+        // Migration（初回のみ）
+        await DbInitializer.EnsureInitializedAsync(DbContext);
+
+        // Clean
+        await DbCleaner.CleanAsync(DbContext);
+    }
+
+    public Task DisposeAsync()
+    {
+        Scope.Dispose();
+        return Task.CompletedTask;
+    }
+}

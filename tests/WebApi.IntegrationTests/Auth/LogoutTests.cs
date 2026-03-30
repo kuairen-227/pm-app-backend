@@ -6,7 +6,7 @@ using WebApi.IntegrationTests.Helpers;
 
 namespace WebApi.IntegrationTests.Auth;
 
-public sealed class LogoutTests : BaseIntegrationTest
+public sealed class LogoutTests : BaseAuthIntegrationTest
 {
     private const string BaseUrl = "/api/v1/auth/logout";
     private const string LoginUrl = "/api/v1/auth/login";

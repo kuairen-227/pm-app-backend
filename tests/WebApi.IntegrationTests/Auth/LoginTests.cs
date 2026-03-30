@@ -8,7 +8,7 @@ using WebApi.IntegrationTests.Helpers;
 
 namespace WebApi.IntegrationTests.Auth;
 
-public sealed class LoginTests : BaseIntegrationTest
+public sealed class LoginTests : BaseAuthIntegrationTest
 {
     private const string BaseUrl = "/api/v1/auth/login";
 

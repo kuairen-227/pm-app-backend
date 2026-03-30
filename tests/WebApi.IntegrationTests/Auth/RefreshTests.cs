@@ -8,7 +8,7 @@ using WebApi.IntegrationTests.Helpers;
 
 namespace WebApi.IntegrationTests.Auth;
 
-public sealed class RefreshTests : BaseIntegrationTest
+public sealed class RefreshTests : BaseAuthIntegrationTest
 {
     private const string BaseUrl = "/api/v1/auth/refresh";
     private const string LoginUrl = "/api/v1/auth/login";
