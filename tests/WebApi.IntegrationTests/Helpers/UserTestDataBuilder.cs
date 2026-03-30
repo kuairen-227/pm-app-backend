@@ -6,7 +6,7 @@ using WebApi.Tests.Helpers.Fixtures;
 
 namespace WebApi.IntegrationTests.Helpers;
 
-public class UserBuilder
+public class UserTestDataBuilder
 {
     private readonly IPasswordHashService _passwordHashService;
 
@@ -17,16 +17,16 @@ public class UserBuilder
     private Guid? _projectId;
     private ProjectRole.RoleType _projectRole = ProjectRole.RoleType.Member;
 
-    public UserBuilder(IPasswordHashService passwordHashService)
+    public UserTestDataBuilder(IPasswordHashService passwordHashService)
     {
         _passwordHashService = passwordHashService;
     }
 
-    public UserBuilder WithName(string name) { _name = name; return this; }
-    public UserBuilder WithEmail(string email) { _email = email; return this; }
-    public UserBuilder WithPassword(string password) { _password = password; return this; }
-    public UserBuilder WithSystemRole(SystemRole.RoleType role) { _systemRole = role; return this; }
-    public UserBuilder InProject(Guid projectId, ProjectRole.RoleType projectRole)
+    public UserTestDataBuilder WithName(string name) { _name = name; return this; }
+    public UserTestDataBuilder WithEmail(string email) { _email = email; return this; }
+    public UserTestDataBuilder WithPassword(string password) { _password = password; return this; }
+    public UserTestDataBuilder WithSystemRole(SystemRole.RoleType role) { _systemRole = role; return this; }
+    public UserTestDataBuilder InProject(Guid projectId, ProjectRole.RoleType projectRole)
     {
         _projectId = projectId;
         _projectRole = projectRole;

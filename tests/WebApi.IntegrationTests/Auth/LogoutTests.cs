@@ -21,7 +21,7 @@ public sealed class LogoutTests : BaseIntegrationTest
     public async Task 正常系_ログアウト_204()
     {
         // Arrange
-        var user = new UserBuilder(PasswordHashService)
+        var user = new UserTestDataBuilder(PasswordHashService)
             .Build(DbContext);
         await DbContext.SaveChangesAsync();
 
@@ -48,7 +48,7 @@ public sealed class LogoutTests : BaseIntegrationTest
     public async Task 異常系_ログアウト_401_ログアウト後はリフレッシュ不可()
     {
         // Arrange
-        var user = new UserBuilder(PasswordHashService)
+        var user = new UserTestDataBuilder(PasswordHashService)
             .Build(DbContext);
         await DbContext.SaveChangesAsync();
 

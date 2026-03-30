@@ -22,7 +22,7 @@ public sealed class RefreshTests : BaseIntegrationTest
     public async Task 正常系_リフレッシュ_200()
     {
         // Arrange
-        var user = new UserBuilder(PasswordHashService)
+        var user = new UserTestDataBuilder(PasswordHashService)
             .Build(DbContext);
         await DbContext.SaveChangesAsync();
 

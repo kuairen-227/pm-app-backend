@@ -21,7 +21,7 @@ public sealed class LoginTests : BaseIntegrationTest
     public async Task 正常系_ログイン_200()
     {
         // Arrange
-        var user = new UserBuilder(PasswordHashService)
+        var user = new UserTestDataBuilder(PasswordHashService)
             .Build(DbContext);
         await DbContext.SaveChangesAsync();
 
@@ -53,7 +53,7 @@ public sealed class LoginTests : BaseIntegrationTest
     public async Task 異常系_ログイン_401()
     {
         // Arrange
-        var user = new UserBuilder(PasswordHashService)
+        var user = new UserTestDataBuilder(PasswordHashService)
             .Build(DbContext);
         await DbContext.SaveChangesAsync();
 

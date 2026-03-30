@@ -21,7 +21,7 @@ public sealed class GetMeTests : BaseIntegrationTest
     public async Task 正常系_ログインユーザーの取得_200()
     {
         // Arrange
-        var user = new UserBuilder(PasswordHashService)
+        var user = new UserTestDataBuilder(PasswordHashService)
             .Build(DbContext);
         await DbContext.SaveChangesAsync();
 
