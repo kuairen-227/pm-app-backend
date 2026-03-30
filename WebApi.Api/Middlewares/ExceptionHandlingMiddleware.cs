@@ -1,4 +1,4 @@
-using WebApi.Api.Dtos.Common;
+using WebApi.Api.Dtos.Response.Common;
 using WebApi.Application.Common;
 using WebApi.Domain.Common;
 using ApplicationException = WebApi.Application.Common.ApplicationException;

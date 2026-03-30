@@ -2,8 +2,8 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity.Data;
-using WebApi.Api.Dtos.Common;
 using WebApi.Api.Dtos.Response.Auth;
+using WebApi.Api.Dtos.Response.Common;
 using WebApi.IntegrationTests.Helpers;
 
 namespace WebApi.IntegrationTests.Auth;
