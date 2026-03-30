@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.Api.Common;
+namespace WebApi.Api.Dtos.Response.Common;
 
 /// <summary>
 /// ページネーションレスポンスDTO

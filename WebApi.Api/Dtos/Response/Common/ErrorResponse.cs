@@ -1,4 +1,4 @@
-namespace WebApi.Api.Dtos.Common;
+namespace WebApi.Api.Dtos.Response.Common;
 
 /// <summary>
 /// エラーレスポンスDTO

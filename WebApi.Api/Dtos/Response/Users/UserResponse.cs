@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using WebApi.Api.Dtos.Common;
+using WebApi.Api.Dtos.Response.Common;
 
 namespace WebApi.Api.Dtos.Response.Users;
 
