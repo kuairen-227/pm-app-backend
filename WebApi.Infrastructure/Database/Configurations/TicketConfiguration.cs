@@ -85,8 +85,7 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
 
         builder.HasOne<User>()
             .WithMany()
-            .HasForeignKey(t => t.AssigneeId)
-            .IsRequired();
+            .HasForeignKey(t => t.AssigneeId);
 
         builder.HasOne<Project>()
             .WithMany()
