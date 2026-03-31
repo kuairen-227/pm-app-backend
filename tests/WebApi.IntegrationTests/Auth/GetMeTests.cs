@@ -43,8 +43,8 @@ public sealed class GetMeTests : BaseAuthIntegrationTest
         body.Should().NotBeNull();
         body.Id.Should().Be(user.User.Id);
         body.Name.Should().Be(user.User.Name);
-        body.Email.Should().Be(user.User.Email.ToString());
-        body.Role.Should().Be(user.User.Role.ToString());
+        body.Email.Should().Be(user.User.Email.Value);
+        body.Role.Should().Be(user.User.Role.Value.ToString());
     }
 
     [Fact]
