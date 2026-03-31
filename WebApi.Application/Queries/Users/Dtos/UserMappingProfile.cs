@@ -7,6 +7,8 @@ public class UserMappingProfile : Profile
 {
     public UserMappingProfile()
     {
-        CreateMap<User, UserDto>();
+        CreateMap<User, UserDto>()
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Value))
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Value));
     }
 }

@@ -7,6 +7,7 @@ public class NotificationMappingProfile : Profile
 {
     public NotificationMappingProfile()
     {
-        CreateMap<Notification, NotificationDto>();
+        CreateMap<Notification, NotificationDto>()
+            .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Value));
     }
 }

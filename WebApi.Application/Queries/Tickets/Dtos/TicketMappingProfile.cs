@@ -8,6 +8,8 @@ public class TicketMappingProfile : Profile
     public TicketMappingProfile()
     {
         CreateMap<Ticket, TicketDto>()
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Value))
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description.Value))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Value.ToString()))
             .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Schedule.StartDate != null ? src.Schedule.StartDate.Value : (DateOnly?)null))
             .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.Schedule.EndDate != null ? src.Schedule.EndDate.Value : (DateOnly?)null));
