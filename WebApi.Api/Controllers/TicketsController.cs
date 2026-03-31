@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +17,8 @@ using WebApi.Application.Commands.Tickets.EditComment;
 using WebApi.Application.Commands.Tickets.EditCompletionCriterion;
 using WebApi.Application.Commands.Tickets.ReopenCompletionCriterion;
 using WebApi.Application.Commands.Tickets.UpdateTicket;
-using WebApi.Application.Queries.Projects.ListProjects;
 using WebApi.Application.Queries.Tickets.GetTicketById;
+using WebApi.Application.Queries.Tickets.ListProjectTickets;
 
 namespace WebApi.Api.Controllers;
 
@@ -32,13 +32,15 @@ namespace WebApi.Api.Controllers;
 public class TicketsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    public TicketsController(IMediator mediator)
+    public TicketsController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -48,11 +50,14 @@ public class TicketsController : ControllerBase
     [ProducesResponseType(typeof(PaginatedResponse<TicketResponse>), 200)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<PaginatedResponse<TicketResponse>>> ListAsync(CancellationToken cancellationToken)
+    public async Task<ActionResult<PaginatedResponse<TicketResponse>>> ListAsync(
+        Guid projectId,
+        [FromQuery] ListProjectTicketsRequest request,
+        CancellationToken cancellationToken)
     {
-        var query = new ListProjectsQuery();
+        var query = _mapper.Map<ListProjectTicketsQuery>((projectId, request));
         var dto = await _mediator.Send(query, cancellationToken);
-        var response = dto.Adapt<PaginatedResponse<TicketResponse>>();
+        var response = _mapper.Map<PaginatedResponse<TicketResponse>>(dto);
         return Ok(response);
     }
 
@@ -69,7 +74,7 @@ public class TicketsController : ControllerBase
     {
         var query = new GetTicketByIdQuery(projectId, ticketId);
         var dto = await _mediator.Send(query, cancellationToken);
-        var response = dto.Adapt<TicketDetailResponse>();
+        var response = _mapper.Map<TicketDetailResponse>(dto);
         return Ok(response);
     }
 
@@ -84,7 +89,7 @@ public class TicketsController : ControllerBase
     public async Task<IActionResult> CreateAsync(
         Guid projectId, CreateTicketRequest request, CancellationToken cancellationToken)
     {
-        var command = (projectId, request).Adapt<CreateTicketCommand>();
+        var command = _mapper.Map<CreateTicketCommand>((projectId, request));
         var ticketId = await _mediator.Send(command, cancellationToken);
 
         return CreatedAtAction(
@@ -107,7 +112,7 @@ public class TicketsController : ControllerBase
     public async Task<IActionResult> UpdateAsync(
         Guid projectId, Guid ticketId, UpdateTicketRequest request, CancellationToken cancellationToken)
     {
-        var command = (projectId, ticketId, request).Adapt<UpdateTicketCommand>();
+        var command = _mapper.Map<UpdateTicketCommand>((projectId, ticketId, request));
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -124,7 +129,7 @@ public class TicketsController : ControllerBase
     public async Task<IActionResult> DeleteAsync(
         Guid projectId, Guid ticketId, CancellationToken cancellationToken)
     {
-        var command = new DeleteTicketCommand(projectId, ticketId);
+        var command = _mapper.Map<DeleteTicketCommand>((projectId, ticketId));
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -143,7 +148,7 @@ public class TicketsController : ControllerBase
         AddCompletionCriterionRequest request,
         CancellationToken cancellationToken)
     {
-        var command = (projectId, ticketId, request).Adapt<AddCompletionCriterionCommand>();
+        var command = _mapper.Map<AddCompletionCriterionCommand>((projectId, ticketId, request));
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -164,8 +169,7 @@ public class TicketsController : ControllerBase
         EditCompletionCriterionRequest request,
         CancellationToken cancellationToken)
     {
-        var command = (projectId, ticketId, criterionId, request)
-            .Adapt<EditCompletionCriterionCommand>();
+        var command = _mapper.Map<EditCompletionCriterionCommand>((projectId, ticketId, criterionId, request));
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -252,7 +256,7 @@ public class TicketsController : ControllerBase
     public async Task<IActionResult> AddCommentAsync(
         Guid projectId, Guid ticketId, AddTicketCommentRequest request, CancellationToken cancellationToken)
     {
-        var command = (projectId, ticketId, request).Adapt<AddCommentCommand>();
+        var command = _mapper.Map<AddCommentCommand>((projectId, ticketId, request));
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -273,7 +277,7 @@ public class TicketsController : ControllerBase
         EditTicketCommentRequest request,
         CancellationToken cancellationToken)
     {
-        var command = (projectId, ticketId, commentId, request).Adapt<EditCommentCommand>();
+        var command = _mapper.Map<EditCommentCommand>((projectId, ticketId, commentId, request));
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }

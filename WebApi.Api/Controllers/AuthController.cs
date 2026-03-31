@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
@@ -23,15 +23,18 @@ public class AuthController : ControllerBase
 {
     private readonly IHostEnvironment _env;
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
     private readonly IAuthService _authService;
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    public AuthController(IHostEnvironment env, IMediator mediator, IAuthService authService)
+    public AuthController(
+        IHostEnvironment env, IMediator mediator, IMapper mapper, IAuthService authService)
     {
         _env = env;
         _mediator = mediator;
+        _mapper = mapper;
         _authService = authService;
     }
 
@@ -129,7 +132,7 @@ public class AuthController : ControllerBase
     {
         var query = new GetCurrentUserQuery();
         var dto = await _mediator.Send(query, cancellationToken);
-        var response = dto.Adapt<MeResponse>();
+        var response = _mapper.Map<MeResponse>(dto);
         return Ok(response);
     }
 

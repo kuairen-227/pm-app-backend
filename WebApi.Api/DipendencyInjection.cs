@@ -1,4 +1,6 @@
 using Asp.Versioning;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Api.Common;
@@ -17,6 +19,12 @@ public static class DependencyInjection
     public static IServiceCollection AddApi(
         this IServiceCollection services, IConfigurationSection jwtSection)
     {
+        // Mapster
+        var config = new TypeAdapterConfig();
+        config.Scan(typeof(DependencyInjection).Assembly);
+        services.AddSingleton(config);
+        services.AddScoped<IMapper, ServiceMapper>();
+
         // Controllers
         services.AddControllers()
             .AddJsonOptions(options =>

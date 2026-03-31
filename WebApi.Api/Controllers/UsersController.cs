@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,13 +23,15 @@ namespace WebApi.Api.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    public UsersController(IMediator mediator)
+    public UsersController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -42,7 +44,7 @@ public class UsersController : ControllerBase
     {
         var query = new ListUsersQuery();
         var dto = await _mediator.Send(query, cancellationToken);
-        var response = dto.Adapt<IReadOnlyList<UserResponse>>();
+        var response = _mapper.Map<IReadOnlyList<UserResponse>>(dto);
         return Ok(response);
     }
 
@@ -57,7 +59,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> RegisterAsync(
         [FromBody] RegisterUserRequest request, CancellationToken cancellationToken)
     {
-        var command = request.Adapt<RegisterUserCommand>();
+        var command = _mapper.Map<RegisterUserCommand>(request);
         await _mediator.Send(command, cancellationToken);
         return Created();
     }
@@ -74,7 +76,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> UpdateAsync(
         Guid userId, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
     {
-        var command = request.Adapt<UpdateUserCommand>();
+        var command = _mapper.Map<UpdateUserCommand>(request);
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }

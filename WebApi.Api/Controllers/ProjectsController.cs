@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +27,15 @@ namespace WebApi.Api.Controllers;
 public class ProjectsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    public ProjectsController(IMediator mediator)
+    public ProjectsController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -46,7 +48,7 @@ public class ProjectsController : ControllerBase
     {
         var query = new ListProjectsQuery();
         var dto = await _mediator.Send(query, cancellationToken);
-        var response = dto.Adapt<IReadOnlyList<ProjectResponse>>();
+        var response = _mapper.Map<IReadOnlyList<ProjectResponse>>(dto);
         return Ok(response);
     }
 
@@ -62,7 +64,7 @@ public class ProjectsController : ControllerBase
     {
         var query = new GetProjectByIdQuery(projectId);
         var dto = await _mediator.Send(query, cancellationToken);
-        var response = dto.Adapt<ProjectDetailResponse>();
+        var response = _mapper.Map<ProjectDetailResponse>(dto);
         return Ok(response);
     }
 
@@ -77,7 +79,7 @@ public class ProjectsController : ControllerBase
     public async Task<IActionResult> LaunchAsync(
         [FromBody] LaunchProjectRequest request, CancellationToken cancellationToken)
     {
-        var command = request.Adapt<LaunchProjectCommand>();
+        var command = _mapper.Map<LaunchProjectCommand>(request);
         var projectId = await _mediator.Send(command, cancellationToken);
 
         return CreatedAtAction(
@@ -100,7 +102,7 @@ public class ProjectsController : ControllerBase
     public async Task<IActionResult> UpdateAsync(
         Guid projectId, [FromBody] UpdateProjectRequest request, CancellationToken cancellationToken)
     {
-        var command = (projectId, request).Adapt<UpdateProjectCommand>();
+        var command = _mapper.Map<UpdateProjectCommand>((projectId, request));
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -132,7 +134,7 @@ public class ProjectsController : ControllerBase
     public async Task<IActionResult> InviteMemberAsync(
         Guid projectId, [FromBody] InviteMemberRequest request, CancellationToken cancellationToken)
     {
-        var command = (projectId, request).Adapt<InviteMemberCommand>();
+        var command = _mapper.Map<InviteMemberCommand>((projectId, request));
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -149,7 +151,7 @@ public class ProjectsController : ControllerBase
     public async Task<IActionResult> ChangeMemberRoleAsync(
         Guid projectId, Guid userId, [FromBody] ChangeMemberRoleRequest request, CancellationToken cancellationToken)
     {
-        var command = (projectId, userId, request).Adapt<ChangeMemberRoleCommand>();
+        var command = _mapper.Map<ChangeMemberRoleCommand>((projectId, userId, request));
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
