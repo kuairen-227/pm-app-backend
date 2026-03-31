@@ -9,7 +9,7 @@ namespace WebApi.Application.Queries.Tickets.ListProjectTickets;
 public class ListProjectTicketsQuery : PagedQuery<TicketDto>, IProjectScopedRequest
 {
     public Guid ProjectId { get; }
-    public TicketFilter? Filter { get; init; }
+    public TicketFilter Filter { get; init; } = new();
 
     public ListProjectTicketsQuery(Guid projectId)
     {

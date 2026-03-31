@@ -5,6 +5,7 @@ using WebApi.Infrastructure.Database;
 
 namespace WebApi.IntegrationTests.Helpers;
 
+[Collection("IntegrationTests")]
 public abstract class BaseAuthIntegrationTest
     : IClassFixture<TestWebApplicationFactory>, IAsyncLifetime
 {
@@ -17,15 +18,15 @@ public abstract class BaseAuthIntegrationTest
     {
         factory.Authenticated = false;
 
-        Scope = factory.Services.CreateScope();
-        DbContext = Scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        PasswordHashService = Scope.ServiceProvider
-            .GetRequiredService<IPasswordHashService>();
-
         Client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             HandleCookies = true
         });
+
+        Scope = factory.Services.CreateScope();
+        DbContext = Scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        PasswordHashService = Scope.ServiceProvider
+            .GetRequiredService<IPasswordHashService>();
     }
 
     public async Task InitializeAsync()

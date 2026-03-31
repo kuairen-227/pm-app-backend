@@ -9,6 +9,7 @@ using WebApi.Application.Commands.Tickets.EditComment;
 using WebApi.Application.Commands.Tickets.EditCompletionCriterion;
 using WebApi.Application.Commands.Tickets.UpdateTicket;
 using WebApi.Application.Queries.Tickets.Dtos;
+using WebApi.Application.Queries.Tickets.ListProjectTickets;
 
 namespace WebApi.Api.Dtos.Mapping;
 
@@ -22,6 +23,21 @@ public class ApiMappingConfig : IRegister
     /// </summary>
     public void Register(TypeAdapterConfig config)
     {
+        // Request DTO → Query
+        config.NewConfig<(Guid projectId, ListProjectTicketsRequest request), ListProjectTicketsQuery>()
+            .ConstructUsing(src => new ListProjectTicketsQuery(src.projectId))
+            .Map(dest => dest.Pagination.PageNumber, src => src.request.PageNumber)
+            .Map(dest => dest.Pagination.PageSize, src => src.request.PageSize)
+            .Map(dest => dest.Sorting.SortBy, src => src.request.SortBy)
+            .Map(dest => dest.Sorting.SortOrder, src => src.request.SortOrder)
+            .Map(dest => dest.Filter.Title, src => src.request.Title)
+            .Map(dest => dest.Filter.AssigneeId, src => src.request.AssigneeId)
+            .Map(dest => dest.Filter.Status, src => src.request.Status)
+            .Map(dest => dest.Filter.StartDateFrom, src => src.request.StartDateFrom)
+            .Map(dest => dest.Filter.StartDateTo, src => src.request.StartDateTo)
+            .Map(dest => dest.Filter.EndDateFrom, src => src.request.EndDateFrom)
+            .Map(dest => dest.Filter.EndDateTo, src => src.request.EndDateTo);
+
         // Request DTO → Command
         config.NewConfig<(Guid projectId, CreateTicketRequest request), CreateTicketCommand>()
             .ConstructUsing(src => new CreateTicketCommand(
