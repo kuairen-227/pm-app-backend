@@ -4,6 +4,7 @@ using WebApi.Domain.Aggregates.NotificationAggregate;
 using WebApi.Domain.Common;
 using WebApi.Infrastructure.Database;
 using WebApi.Infrastructure.Repositories.Extensions;
+using WebApi.Infrastructure.Repositories.Extensions.SortingExtensions;
 
 namespace WebApi.Infrastructure.Repositories;
 
@@ -28,10 +29,11 @@ public class NotificationRepository : INotificationRepository
             .AsNoTracking()
             .Where(n => n.RecipientId == recipientId);
 
+        query = query.ApplyNotificationSorting(sortBy, sortOrder ?? SortOrder.Desc);
+
         var totalCount = await query.CountAsync(cancellationToken);
         var items = await query
             .ApplyPaging(skip, take)
-            .ApplySorting(sortBy, sortOrder)
             .ToListAsync(cancellationToken);
 
         return new PagedResult<Notification>(items, totalCount);
