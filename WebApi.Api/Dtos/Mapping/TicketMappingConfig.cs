@@ -23,43 +23,67 @@ public class ApiMappingConfig : IRegister
     public void Register(TypeAdapterConfig config)
     {
         // Request DTO → Command
-        config.NewConfig<(Guid projectId, CreateTicketRequest), CreateTicketCommand>()
-            .Map(dest => dest.ProjectId, src => src.projectId);
+        config.NewConfig<(Guid projectId, CreateTicketRequest request), CreateTicketCommand>()
+            .ConstructUsing(src => new CreateTicketCommand(
+                src.projectId,
+                src.request.Title,
+                src.request.Description,
+                src.request.AssigneeId,
+                src.request.StartDate,
+                src.request.EndDate,
+                src.request.CompletionCriteria,
+                src.request.NotificationRecipientIds
+            ));
 
         config.NewConfig<(Guid projectId, Guid ticketId, UpdateTicketRequest request), UpdateTicketCommand>()
-            .Map(dest => dest.ProjectId, src => src.projectId)
-            .Map(dest => dest.TicketId, src => src.ticketId)
-            .Map(dest => dest.Title, src => src.request.Title.ToOptional())
-            .Map(dest => dest.Description, src => src.request.Description.ToOptional())
-            .Map(dest => dest.AssigneeId, src => src.request.AssigneeId.ToOptional())
-            .Map(dest => dest.StartDate, src => src.request.StartDate.ToOptional())
-            .Map(dest => dest.EndDate, src => src.request.EndDate.ToOptional())
-            .Map(dest => dest.Status, src => src.request.Status.ToOptional())
-            .Map(dest => dest.CompletionCriterionOperations, src => src.request.CompletionCriterionOperations.ToOptional())
-            .Map(dest => dest.Comment, src => src.request.Comment.ToOptional());
+            .ConstructUsing(src => new UpdateTicketCommand(
+                src.projectId,
+                src.ticketId,
+                src.request.Title.ToOptional(),
+                src.request.Description.ToOptional(),
+                src.request.AssigneeId.ToOptional(),
+                src.request.StartDate.ToOptional(),
+                src.request.EndDate.ToOptional(),
+                src.request.Status.ToOptional(),
+                src.request.CompletionCriterionOperations.ToOptional(),
+                src.request.Comment.ToOptional(),
+                src.request.NotificationRecipientIds
+            ));
 
-        config.NewConfig<(Guid projectId, Guid ticketId, AddCompletionCriterionRequest), AddCompletionCriterionCommand>()
-            .Map(dest => dest.ProjectId, src => src.projectId)
-            .Map(dest => dest.TicketId, src => src.ticketId);
+        config.NewConfig<(Guid projectId, Guid ticketId, AddCompletionCriterionRequest request), AddCompletionCriterionCommand>()
+            .ConstructUsing(src => new AddCompletionCriterionCommand(
+                src.projectId,
+                src.ticketId,
+                src.request.Criterion
+            ));
 
-        config.NewConfig<(Guid projectId, Guid ticketId, Guid criterionId, EditCompletionCriterionRequest), EditCompletionCriterionCommand>()
-            .Map(dest => dest.ProjectId, src => src.projectId)
-            .Map(dest => dest.TicketId, src => src.ticketId)
-            .Map(dest => dest.CriterionId, src => src.criterionId);
+        config.NewConfig<(Guid projectId, Guid ticketId, Guid criterionId, EditCompletionCriterionRequest request), EditCompletionCriterionCommand>()
+            .ConstructUsing(src => new EditCompletionCriterionCommand(
+                src.projectId,
+                src.ticketId,
+                src.criterionId,
+                src.request.Criterion
+            ));
 
         config.NewConfig<(Guid projectId, Guid ticketId, AddTicketCommentRequest request), AddCommentCommand>()
-            .Map(dest => dest.ProjectId, src => src.projectId)
-            .Map(dest => dest.TicketId, src => src.ticketId)
-            .Map(dest => dest.AssigneeId, src => src.request.AssigneeId.ToOptional())
-            .Map(dest => dest.StartDate, src => src.request.StartDate.ToOptional())
-            .Map(dest => dest.EndDate, src => src.request.EndDate.ToOptional())
-            .Map(dest => dest.Status, src => src.request.Status.ToOptional())
-            .Map(dest => dest.Comment, src => src.request.Comment.ToOptional());
+            .ConstructUsing(src => new AddCommentCommand(
+                src.projectId,
+                src.ticketId,
+                src.request.AssigneeId.ToOptional(),
+                src.request.StartDate.ToOptional(),
+                src.request.EndDate.ToOptional(),
+                src.request.Status.ToOptional(),
+                src.request.Comment.ToOptional(),
+                src.request.NotificationRecipientIds
+            ));
 
-        config.NewConfig<(Guid projectId, Guid ticketId, Guid commentId, EditTicketCommentRequest), EditCommentCommand>()
-            .Map(dest => dest.ProjectId, src => src.projectId)
-            .Map(dest => dest.TicketId, src => src.ticketId)
-            .Map(dest => dest.CommentId, src => src.commentId);
+        config.NewConfig<(Guid projectId, Guid ticketId, Guid commentId, EditTicketCommentRequest request), EditCommentCommand>()
+            .ConstructUsing(src => new EditCommentCommand(
+                src.projectId,
+                src.ticketId,
+                src.commentId,
+                src.request.Content
+            ));
 
         // Application DTO → Response DTO
         config.NewConfig<TicketDto, TicketResponse>();

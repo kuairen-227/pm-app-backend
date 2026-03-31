@@ -20,9 +20,21 @@ public class UserMappingConfig : IRegister
     {
         // Request DTO → Command
         config.NewConfig<RegisterUserRequest, RegisterUserCommand>()
-            .Map(dest => dest.Role, src => SystemRoleMapper.Map(src.Role));
-        config.NewConfig<UpdateUserRequest, UpdateUserCommand>()
-            .Map(dest => dest.Role, src => SystemRoleMapper.Map(src.Role));
+            .ConstructUsing(src => new RegisterUserCommand(
+                src.Name,
+                src.Email,
+                src.Password,
+                SystemRoleMapper.Map(src.Role)
+            ));
+
+        config.NewConfig<(Guid userId, UpdateUserRequest request), UpdateUserCommand>()
+            .ConstructUsing(src => new UpdateUserCommand(
+                src.userId,
+                src.request.Name,
+                src.request.Email,
+                src.request.Password,
+                string.IsNullOrEmpty(src.request.Role) ? null : SystemRoleMapper.Map(src.request.Role)
+            ));
 
         // Application DTO → Response DTO
         config.NewConfig<UserDto, UserResponse>();

@@ -21,19 +21,32 @@ public class ProjectMappingConfig : IRegister
     public void Register(TypeAdapterConfig config)
     {
         // Request DTO → Command
-        config.NewConfig<LaunchProjectRequest, LaunchProjectCommand>();
+        config.NewConfig<LaunchProjectRequest, LaunchProjectCommand>()
+            .ConstructUsing(src => new LaunchProjectCommand(
+                src.Name,
+                src.Description
+            ));
 
-        config.NewConfig<(Guid projectId, UpdateProjectRequest), UpdateProjectCommand>()
-            .Map(dest => dest.ProjectId, src => src.projectId);
+        config.NewConfig<(Guid projectId, UpdateProjectRequest request), UpdateProjectCommand>()
+            .ConstructUsing(src => new UpdateProjectCommand(
+                src.projectId,
+                src.request.Name,
+                src.request.Description
+            ));
 
         config.NewConfig<(Guid projectId, InviteMemberRequest request), InviteMemberCommand>()
-            .Map(dest => dest.ProjectId, src => src.projectId)
-            .Map(dest => dest.ProjectRole, src => ProjectRoleMapper.Map(src.request.ProjectRole));
+            .ConstructUsing(src => new InviteMemberCommand(
+                src.projectId,
+                src.request.UserId,
+                ProjectRoleMapper.Map(src.request.ProjectRole)
+            ));
 
         config.NewConfig<(Guid projectId, Guid userId, ChangeMemberRoleRequest request), ChangeMemberRoleCommand>()
-            .Map(dest => dest.ProjectId, src => src.projectId)
-            .Map(dest => dest.UserId, src => src.userId)
-            .Map(dest => dest.ProjectRole, src => ProjectRoleMapper.Map(src.request.ProjectRole));
+            .ConstructUsing(src => new ChangeMemberRoleCommand(
+                src.projectId,
+                src.userId,
+                ProjectRoleMapper.Map(src.request.ProjectRole)
+            ));
 
         // Application DTO → Response DTO
         config.NewConfig<ProjectDto, ProjectResponse>();
