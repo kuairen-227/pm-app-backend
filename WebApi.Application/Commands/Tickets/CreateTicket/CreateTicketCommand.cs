@@ -13,7 +13,7 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
     public Guid? AssigneeId { get; }
     public DateOnly? StartDate { get; }
     public DateOnly? EndDate { get; }
-    public IReadOnlyList<string>? CompletionCriteria { get; private set; }
+    public IReadOnlyList<string>? CompletionCriteria { get; }
     public IReadOnlyCollection<Guid> NotificationRecipientIds { get; }
 
     public CreateTicketCommand(
