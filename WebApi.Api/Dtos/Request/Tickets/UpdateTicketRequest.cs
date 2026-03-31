@@ -9,12 +9,12 @@ namespace WebApi.Api.Dtos.Request.Tickets;
 public class UpdateTicketRequest
 {
     /// <summary>
-    /// タイトル
+    /// チケットタイトル
     /// </summary>
     public PatchField<string> Title { get; set; } = PatchField<string>.NotSpecified();
 
     /// <summary>
-    /// 説明文
+    /// チケット説明
     /// </summary>
     public PatchField<string> Description { get; set; } = PatchField<string>.NotSpecified();
 

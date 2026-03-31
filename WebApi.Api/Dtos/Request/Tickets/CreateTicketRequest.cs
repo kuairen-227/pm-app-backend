@@ -8,10 +8,16 @@ namespace WebApi.Api.Dtos.Request.Tickets;
 public class CreateTicketRequest
 {
     /// <summary>
-    /// タイトル
+    /// チケットタイトル
     /// </summary>
     [Required]
     public string Title { get; set; } = default!;
+
+    /// <summary>
+    /// チケット説明
+    /// </summary>
+    [Required]
+    public string Description { get; set; } = default!;
 
     /// <summary>
     /// 担当者
@@ -19,14 +25,19 @@ public class CreateTicketRequest
     public Guid? AssigneeId { get; set; }
 
     /// <summary>
-    /// 期限日
+    /// 開始日
     /// </summary>
-    public DateOnly? Deadline { get; set; }
+    public DateOnly? StartDate { get; set; }
+
+    /// <summary>
+    /// 終了日
+    /// </summary>
+    public DateOnly? EndDate { get; set; }
 
     /// <summary>
     /// 完了条件
     /// </summary>
-    public string? CompletionCriteria { get; set; }
+    public IReadOnlyCollection<string>? CompletionCriteria { get; set; }
 
     /// <summary>
     /// 通知対象ユーザー
