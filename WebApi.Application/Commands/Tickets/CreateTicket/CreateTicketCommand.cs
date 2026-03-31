@@ -13,8 +13,8 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
     public Guid? AssigneeId { get; }
     public DateOnly? StartDate { get; }
     public DateOnly? EndDate { get; }
-    public IReadOnlyList<string>? CompletionCriteria { get; }
-    public IReadOnlyCollection<Guid> NotificationRecipientIds { get; }
+    public IReadOnlyList<string> CompletionCriteria { get; }
+    public IReadOnlyList<Guid> NotificationRecipientIds { get; }
 
     public CreateTicketCommand(
         Guid projectId,
@@ -23,8 +23,8 @@ public class CreateTicketCommand : IRequest<Guid>, IProjectScopedRequest
         Guid? assigneeId,
         DateOnly? startDate,
         DateOnly? endDate,
-        IReadOnlyList<string>? completionCriteria,
-        IReadOnlyCollection<Guid> notificationRecipientIds
+        IReadOnlyList<string> completionCriteria,
+        IReadOnlyList<Guid> notificationRecipientIds
     )
     {
         ProjectId = projectId;

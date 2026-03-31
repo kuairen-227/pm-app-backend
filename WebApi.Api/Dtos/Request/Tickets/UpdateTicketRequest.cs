@@ -36,7 +36,7 @@ public class UpdateTicketRequest
     /// <summary>
     /// ステータス
     /// </summary>
-    public PatchField<string> Status { get; set; } = PatchField<string>.NotSpecified();
+    public PatchField<string?> Status { get; set; } = PatchField<string?>.NotSpecified();
 
     /// <summary>
     /// 完了条件
@@ -52,5 +52,5 @@ public class UpdateTicketRequest
     /// <summary>
     /// 通知対象ユーザー
     /// </summary>
-    public required IReadOnlyCollection<Guid> NotificationRecipientIds { get; set; }
+    public required IReadOnlyList<Guid> NotificationRecipientIds { get; set; }
 }

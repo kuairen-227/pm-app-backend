@@ -15,10 +15,10 @@ public class UpdateTicketCommand : IRequest<Unit>, IProjectScopedRequest
     public Optional<Guid?> AssigneeId { get; init; }
     public Optional<DateOnly?> StartDate { get; init; }
     public Optional<DateOnly?> EndDate { get; init; }
-    public Optional<string> Status { get; init; }
-    public Optional<IReadOnlyList<ICompletionCriterionOperationDto>> CompletionCriterionOperations { get; init; }
-    public Optional<string> Comment { get; init; }
-    public IReadOnlyCollection<Guid> NotificationRecipientIds { get; } = Array.Empty<Guid>();
+    public Optional<string?> Status { get; init; }
+    public Optional<IReadOnlyList<ICompletionCriterionOperationDto>?> CompletionCriterionOperations { get; init; }
+    public Optional<string?> Comment { get; init; }
+    public IReadOnlyList<Guid> NotificationRecipientIds { get; } = Array.Empty<Guid>();
 
     public UpdateTicketCommand(
         Guid projectId,
@@ -28,10 +28,10 @@ public class UpdateTicketCommand : IRequest<Unit>, IProjectScopedRequest
         Optional<Guid?> assigneeId,
         Optional<DateOnly?> startDate,
         Optional<DateOnly?> endDate,
-        Optional<string> status,
-        Optional<IReadOnlyList<ICompletionCriterionOperationDto>> completionCriterionOperations,
-        Optional<string> comment,
-        IReadOnlyCollection<Guid> notificationRecipientIds
+        Optional<string?> status,
+        Optional<IReadOnlyList<ICompletionCriterionOperationDto>?> completionCriterionOperations,
+        Optional<string?> comment,
+        IReadOnlyList<Guid> notificationRecipientIds
     )
     {
         ProjectId = projectId;

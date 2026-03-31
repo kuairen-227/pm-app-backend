@@ -13,9 +13,9 @@ public class AddCommentCommand : IRequest<Unit>, IProjectScopedRequest
     public Optional<Guid?> AssigneeId { get; }
     public Optional<DateOnly?> StartDate { get; }
     public Optional<DateOnly?> EndDate { get; }
-    public Optional<string> Status { get; }
-    public Optional<string> Comment { get; }
-    public IReadOnlyCollection<Guid> NotificationRecipientIds { get; } = Array.Empty<Guid>();
+    public Optional<string?> Status { get; }
+    public Optional<string?> Comment { get; }
+    public IReadOnlyList<Guid> NotificationRecipientIds { get; } = Array.Empty<Guid>();
 
     public AddCommentCommand(
         Guid projectId,
@@ -23,9 +23,9 @@ public class AddCommentCommand : IRequest<Unit>, IProjectScopedRequest
         Optional<Guid?> assigneeId,
         Optional<DateOnly?> startDate,
         Optional<DateOnly?> endDate,
-        Optional<string> status,
-        Optional<string> comment,
-        IReadOnlyCollection<Guid> notificationRecipientIds
+        Optional<string?> status,
+        Optional<string?> comment,
+        IReadOnlyList<Guid> notificationRecipientIds
     )
     {
         ProjectId = projectId;

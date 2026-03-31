@@ -11,13 +11,13 @@ public class ChangeStatusCommand : IRequest<Unit>, IProjectScopedRequest
     public Guid ProjectId { get; }
     public Guid TicketId { get; }
     public TicketStatus.StatusType Status { get; }
-    public IReadOnlyCollection<Guid> NotificationRecipientIds { get; }
+    public IReadOnlyList<Guid> NotificationRecipientIds { get; }
 
     public ChangeStatusCommand(
         Guid projectId,
         Guid ticketId,
         TicketStatus.StatusType status,
-        IReadOnlyCollection<Guid> notificationRecipientIds
+        IReadOnlyList<Guid> notificationRecipientIds
     )
     {
         ProjectId = projectId;

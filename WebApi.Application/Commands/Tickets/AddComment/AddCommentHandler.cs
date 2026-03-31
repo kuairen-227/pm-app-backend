@@ -24,7 +24,7 @@ public class AddCommentHandler : IRequestHandler<AddCommentCommand, Unit>
             startDate: request.StartDate,
             endDate: request.EndDate,
             status: request.Status,
-            completionCriterionOperations: Optional<IReadOnlyList<ICompletionCriterionOperationDto>>.None(),
+            completionCriterionOperations: Optional<IReadOnlyList<ICompletionCriterionOperationDto>?>.None(),
             comment: request.Comment,
             notificationRecipientIds: request.NotificationRecipientIds
         );

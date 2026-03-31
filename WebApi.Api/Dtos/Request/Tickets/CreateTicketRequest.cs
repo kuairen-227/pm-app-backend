@@ -37,10 +37,10 @@ public class CreateTicketRequest
     /// <summary>
     /// 完了条件
     /// </summary>
-    public IReadOnlyCollection<string>? CompletionCriteria { get; set; }
+    public required IReadOnlyList<string> CompletionCriteria { get; set; }
 
     /// <summary>
     /// 通知対象ユーザー
     /// </summary>
-    public required IReadOnlyCollection<Guid> NotificationRecipientIds { get; set; }
+    public required IReadOnlyList<Guid> NotificationRecipientIds { get; set; }
 }

@@ -11,14 +11,14 @@ public class ChangeScheduleCommand : IRequest<Unit>, IProjectScopedRequest
     public Guid TicketId { get; }
     public DateOnly? StartDate { get; }
     public DateOnly? EndDate { get; }
-    public IReadOnlyCollection<Guid> NotificationRecipientIds { get; }
+    public IReadOnlyList<Guid> NotificationRecipientIds { get; }
 
     public ChangeScheduleCommand(
         Guid projectId,
         Guid ticketId,
         DateOnly? startDate,
         DateOnly? endDate,
-        IReadOnlyCollection<Guid> notificationRecipientIds
+        IReadOnlyList<Guid> notificationRecipientIds
     )
     {
         ProjectId = projectId;

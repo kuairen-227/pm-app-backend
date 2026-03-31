@@ -32,7 +32,7 @@ public sealed class Ticket : Entity
         Guid? assigneeId,
         DateOnly? startDate,
         DateOnly? endDate,
-        IReadOnlyList<string>? completionCriteria,
+        IReadOnlyList<string> completionCriteria,
         Guid createdBy,
         IDateTimeProvider clock
     ) : base(createdBy, clock)

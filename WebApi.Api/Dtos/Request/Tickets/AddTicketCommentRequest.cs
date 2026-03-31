@@ -25,7 +25,7 @@ public class AddTicketCommentRequest
     /// <summary>
     /// ステータス
     /// </summary>
-    public PatchField<string> Status { get; set; } = PatchField<string>.NotSpecified();
+    public PatchField<string?> Status { get; set; } = PatchField<string?>.NotSpecified();
 
     /// <summary>
     /// コメント
@@ -35,5 +35,5 @@ public class AddTicketCommentRequest
     /// <summary>
     /// 通知対象ユーザー
     /// </summary>
-    public required IReadOnlyCollection<Guid> NotificationRecipientIds { get; set; }
+    public required IReadOnlyList<Guid> NotificationRecipientIds { get; set; }
 }
