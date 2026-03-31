@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Mapster;
 using MapsterMapper;
@@ -29,8 +30,9 @@ public static class DependencyInjection
         services.AddControllers()
             .AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.Converters
-                    .Add(new PatchFieldJsonConverterFactory());
+                var converters = options.JsonSerializerOptions.Converters;
+                converters.Add(new PatchFieldJsonConverterFactory());
+                converters.Add(new JsonStringEnumConverter());
             });
 
         // Swagger
