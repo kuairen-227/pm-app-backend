@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+&#xFEFF;<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\WebApi.Domain\WebApi.Domain.csproj" />
@@ -19,7 +19,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Scrutor" Version="6.1.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
-  <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.3" />
+    <!-- Security pin: 間接依存のセキュリティ脆弱性対応。上位の依存パッケージが 8.0.3+ を要求するようになったら削除可 -->
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.3" />
   </ItemGroup>
 
   <PropertyGroup>
